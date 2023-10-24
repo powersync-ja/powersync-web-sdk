@@ -1,0 +1,13 @@
+{
+  "name": "powersync-web-sdk",
+  "version": "0.0.0",
+  "description": "Monorepo for Powersync Web SDK",
+  "private": true,
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "prettier": "^3.0.3"
+  }
+}

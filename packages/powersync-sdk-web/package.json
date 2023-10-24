@@ -1,0 +1,36 @@
+{
+  "name": "powersync-sdk-web",
+  "version": "0.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": "https://github.com/journeyapps/powersync-web-sdk",
+  "bugs": {
+    "url": "https://github.com/journeyapps/powersync-web-sdk/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "restricted"
+  },
+  "homepage": "https://docs.powersync.co",
+  "scripts": {
+    "build": "tsc --build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "data sync",
+    "offline-first",
+    "sqlite",
+    "real-time data stream",
+    "live data"
+  ],
+  "author": "JOURNEYAPPS",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@journeyapps/powersync-sdk-common": "0.0.1",
+    "wa-sqlite": "link:../../../ja-wa-sqlite"
+  }
+}
