@@ -1,5 +1,3 @@
-import { open, QuickSQLite, QuickSQLiteConnection } from '@journeyapps/react-native-quick-sqlite';
-
 import {
   AbstractPowerSyncDatabase,
   AbstractPowerSyncDatabaseOpenFactory,

@@ -1,0 +1,1 @@
+# PowerSync Web SDK
