@@ -3,34 +3,60 @@ import _ from 'lodash';
 import React from 'react';
 import Logger from 'js-logger';
 import { PowerSyncContext } from '@journeyapps/powersync-react';
-import { AbstractPowerSyncDatabase, WASQLitePowerSyncDatabaseOpenFactory } from '@journeyapps/powersync-sdk-web';
+import { WASQLitePowerSyncDatabaseOpenFactory } from '@journeyapps/powersync-sdk-web';
 import { AppSchema } from '@/library/powersync/AppSchema';
 import { SupabaseConnector } from '@/library/powersync/SupabaseConnector';
+import { useRouter } from 'next/navigation';
 
-Logger.useDefaults();
-Logger.setLevel(Logger.DEBUG);
+const SupabaseContext = React.createContext<SupabaseConnector | null>(null);
+export const useSupabase = () => React.useContext(SupabaseContext);
+
+const PowerSync = new WASQLitePowerSyncDatabaseOpenFactory({
+  dbFilename: 'example.db',
+  schema: AppSchema
+}).getInstance();
+
+const connector = new SupabaseConnector();
 
 export default function ParentProvider({ children }: { children: React.ReactNode }) {
-  const ps = React.useRef<AbstractPowerSyncDatabase>();
+  const initialized = React.useRef(false);
+  const router = useRouter();
+
   React.useEffect(() => {
     /**
-     * NextJS uses React Strict mode by default. This causes useEffects to be executed
-     * twice in dev mode. This init should only be executed once.
-     * https://stackoverflow.com/questions/61254372/my-react-component-is-rendering-twice-because-of-strict-mode
+     * React Strict mode will execute these useEffect twice in dev mode. We only want this to execute once
      */
-    if (ps.current) {
+    if (initialized.current) {
       return;
     }
-    const factory = new WASQLitePowerSyncDatabaseOpenFactory({ dbFilename: 'example.db', schema: AppSchema });
-    const PowerSync = factory.getInstance();
+    initialized.current = true;
 
-    ps.current = PowerSync;
-    PowerSync.init().then(async () => {
-      const connector = new SupabaseConnector();
-      await connector.init();
-      await PowerSync.connect(connector);
+    Logger.useDefaults();
+    Logger.setLevel(Logger.DEBUG);
+
+    console.log('Initializing PowerSync');
+    PowerSync.init();
+
+    connector.registerListener({
+      initialized: () => {
+        if (connector.currentSession) {
+          PowerSync.connect(connector);
+          router.push('/todo-lists');
+        } else {
+          router.push('/auth/login');
+        }
+      },
+      sessionStarted: () => {
+        PowerSync.connect(connector);
+      }
     });
+
+    connector.init();
   }, []);
 
-  return <PowerSyncContext.Provider value={ps.current}>{children}</PowerSyncContext.Provider>;
+  return (
+    <PowerSyncContext.Provider value={PowerSync}>
+      <SupabaseContext.Provider value={connector}>{children}</SupabaseContext.Provider>
+    </PowerSyncContext.Provider>
+  );
 }

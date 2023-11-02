@@ -1,11 +1,12 @@
 import {
   AbstractPowerSyncDatabase,
+  BaseObserver,
   CrudEntry,
   PowerSyncBackendConnector,
   UpdateType
 } from '@journeyapps/powersync-sdk-web';
 
-import { SupabaseClient, createClient } from '@supabase/supabase-js';
+import { SupabaseClient, createClient, Session, PostgrestError } from '@supabase/supabase-js';
 
 export type SupabaseConfig = {
   supabaseUrl: string;
@@ -25,20 +26,29 @@ const FATAL_RESPONSE_CODES = [
   new RegExp('^42501$')
 ];
 
-export class SupabaseConnector implements PowerSyncBackendConnector {
-  private _supabaseClient: SupabaseClient | null;
+export type SupabaseConnectorListener = {
+  initialized: () => void;
+  sessionStarted: (session: Session) => void;
+};
+
+export class SupabaseConnector extends BaseObserver<SupabaseConnectorListener> implements PowerSyncBackendConnector {
+  private _client: SupabaseClient | null;
   private _config: SupabaseConfig | null;
 
+  currentSession: Session | null;
+
   constructor() {
-    this._supabaseClient = null;
+    super();
+    this._client = null;
     this._config = null;
+    this.currentSession = null;
   }
 
-  get supabaseClient(): SupabaseClient {
-    if (!this._supabaseClient) {
+  get client(): SupabaseClient {
+    if (!this._client) {
       throw new Error('Supabase client has not been initialized yet');
     }
-    return this._supabaseClient;
+    return this._client;
   }
 
   get config(): SupabaseConfig {
@@ -50,17 +60,24 @@ export class SupabaseConnector implements PowerSyncBackendConnector {
 
   async init() {
     const credentialsResponse = await fetch('/api/supabase');
-    // Handle errors here
-    const credentials: SupabaseConfig = await credentialsResponse.json();
-    this._supabaseClient = createClient(credentials.supabaseUrl, credentials.supabaseAnonKey, {
+    // TODO Handle errors here if necessary
+    this._config = await credentialsResponse.json();
+    this._client = createClient(this.config.supabaseUrl, this.config.supabaseAnonKey, {
       auth: {
         persistSession: true
       }
     });
+    const sessionResponse = await this.client.auth.getSession();
+    this.currentSession = sessionResponse.data.session;
+
+    this.iterateListeners((cb) => cb.initialized?.());
   }
 
   async login(username: string, password: string) {
-    const { data, error } = await this.supabaseClient.auth.signInWithPassword({
+    const {
+      data: { session },
+      error
+    } = await this.client.auth.signInWithPassword({
       email: username,
       password: password
     });
@@ -68,13 +85,17 @@ export class SupabaseConnector implements PowerSyncBackendConnector {
     if (error) {
       throw error;
     }
+
+    if (session) {
+      this.iterateListeners((cb) => cb.sessionStarted?.(session));
+    }
   }
 
   async fetchCredentials() {
     const {
       data: { session },
       error
-    } = await this.supabaseClient.auth.getSession();
+    } = await this.client.auth.getSession();
 
     if (!session || error) {
       throw new Error(`Could not fetch Supabase credentials: ${error}`);
@@ -83,11 +104,10 @@ export class SupabaseConnector implements PowerSyncBackendConnector {
     console.debug('session expires at', session.expires_at);
 
     return {
-      client: this.supabaseClient,
+      client: this.client,
       endpoint: this.config.powersyncUrl,
       token: session.access_token ?? '',
-      expiresAt: session.expires_at ? new Date(session.expires_at * 1000) : undefined,
-      userID: session.user.id
+      expiresAt: session.expires_at ? new Date(session.expires_at * 1000) : undefined
     };
   }
 
@@ -104,21 +124,23 @@ export class SupabaseConnector implements PowerSyncBackendConnector {
       // or edge functions to process the entire transaction in a single call.
       for (let op of transaction.crud) {
         lastOp = op;
-        const table = this.supabaseClient.from(op.table);
+        const table = this.client.from(op.table);
+        let result: any;
         switch (op.op) {
           case UpdateType.PUT:
             const record = { ...op.opData, id: op.id };
-            const { error } = await table.upsert(record);
-            if (error) {
-              throw new Error(`Could not upsert data to Supabase ${JSON.stringify(error)}`);
-            }
+            result = await table.upsert(record);
             break;
           case UpdateType.PATCH:
-            await table.update(op.opData).eq('id', op.id);
+            result = await table.update(op.opData).eq('id', op.id);
             break;
           case UpdateType.DELETE:
-            await table.delete().eq('id', op.id);
+            result = await table.delete().eq('id', op.id);
             break;
+        }
+
+        if (result.error) {
+          throw new Error(`Could not update Supabase. Received error: ${result.error.message}`);
         }
       }
 

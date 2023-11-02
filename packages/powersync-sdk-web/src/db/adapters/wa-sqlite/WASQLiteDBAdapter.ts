@@ -38,7 +38,6 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
 
   constructor(protected options: PowerSyncOpenFactoryOptions) {
     super();
-    // TODO link table update commands
     this._sqlite3 = null;
     this.db = null;
     this.initialized = this.init();
@@ -97,7 +96,10 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
     this._sqlite3 = SQLite.Factory(module);
 
     // TODO VFS
-    this.db = await this.sqlite3!.open_v2(this.options.dbFilename);
+    this.db = await this.sqlite3.open_v2(this.options.dbFilename);
+    this.sqlite3.register_table_onchange_hook(this.db, (opType, tableName, rowId) => {
+      this.iterateListeners((cb) => cb.tablesUpdated?.({ opType, table: tableName, rowId }));
+    });
   }
 
   async execute(query: string, params?: any[] | undefined): Promise<QueryResult> {
@@ -113,19 +115,19 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
    */
   private wrapTransaction<T>(cb: (tx: Transaction) => Promise<T>) {
     return async (tx: LockContext): Promise<T> => {
-      await this.execute('BEGIN TRANSACTION');
+      await this._execute('BEGIN TRANSACTION');
       let finalized = false;
       const commit = async (): Promise<QueryResult> => {
         if (finalized) {
           return { rowsAffected: 0 };
         }
         finalized = true;
-        return this.execute('COMMIT TRANSACTION');
+        return this._execute('COMMIT TRANSACTION');
       };
 
       const rollback = () => {
         finalized = true;
-        return this.execute('ROLLBACK');
+        return this._execute('ROLLBACK');
       };
 
       try {
@@ -140,6 +142,7 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
         }
         return result;
       } catch (ex) {
+        console.debug('caught ex in transaction', ex);
         await rollback();
         throw ex;
       }
@@ -150,7 +153,7 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
    * This executes SQL statements.
    * Note that this should be guarded with a lock to ensure only 1 query is executed concurrently.
    */
-  private _execute = async (sql: string | TemplateStringsArray, bindings?: any[]) => {
+  private _execute = async (sql: string | TemplateStringsArray, bindings?: any[]): Promise<QueryResult> => {
     await this.initialized;
     return navigator.locks.request('DBExecute', async () => {
       const results = [];
@@ -177,28 +180,38 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
 
         // When binding parameters, only a single statement is executed.
         if (bindings) {
-          return results;
+          break;
         }
       }
-      const rows = _.flatMap(results, ({ columns, rows }) =>
-        _.reduce(
-          columns,
-          (out: Record<string, any>, key: string, index) => {
-            out[key] = rows[index]?.[0];
-            return out;
-          },
-          {}
-        )
-      );
 
-      return {
-        rowsAffected: 1, // TODO,
+      const rows = _.chain(results)
+        .filter(({ rows }) => !!rows.length)
+        .flatMap(({ columns, rows }) =>
+          _.map(rows, (row) =>
+            _.reduce(
+              columns,
+              (out: Record<string, any>, key: string, index) => {
+                out[key] = row[index];
+                return out;
+              },
+              {}
+            )
+          )
+        )
+        .value();
+
+      const result = {
+        insertId: this.sqlite3.last_insert_id(this.db),
+        rowsAffected: this.sqlite3.changes(this.db),
         rows: {
           _array: rows,
           item: (index: number) => rows[index],
           length: rows.length
         }
       };
+
+      console.debug(sql, JSON.stringify(result));
+      return result;
     });
   };
 
