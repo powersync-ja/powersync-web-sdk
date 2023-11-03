@@ -32,7 +32,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@journeyapps/powersync-sdk-common": "0.0.0-dev-20231102132011",
+    "@journeyapps/powersync-sdk-common": "0.0.0-dev-20231103100139",
     "lodash": "^4.17.21",
     "wa-sqlite": "link:../../../ja-wa-sqlite"
   }
