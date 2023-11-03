@@ -91,11 +91,17 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
 
   async init() {
     // TODO setup Webworker
-    const { default: moduleFactory } = await import('wa-sqlite/dist/wa-sqlite.mjs');
+    const { default: moduleFactory } = await import('wa-sqlite/dist/wa-sqlite-async.mjs');
     const module = await moduleFactory();
     this._sqlite3 = SQLite.Factory(module);
 
-    // TODO VFS
+    // // TODO
+    // @ts-ignore
+    // const { IDBBatchAtomicVFS } = await import('wa-sqlite/src/examples/IDBBatchAtomicVFS.js');
+    // const vfs = new IDBBatchAtomicVFS(this.options.dbFilename);
+    // // @ts-ignore
+    // this.sqlite3.vfs_register(vfs, true);
+
     this.db = await this.sqlite3.open_v2(this.options.dbFilename);
     this.sqlite3.register_table_onchange_hook(this.db, (opType, tableName, rowId) => {
       this.iterateListeners((cb) => cb.tablesUpdated?.({ opType, table: tableName, rowId }));

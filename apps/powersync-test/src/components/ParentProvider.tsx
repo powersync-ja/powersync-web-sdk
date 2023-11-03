@@ -12,7 +12,7 @@ const SupabaseContext = React.createContext<SupabaseConnector | null>(null);
 export const useSupabase = () => React.useContext(SupabaseContext);
 
 const PowerSync = new WASQLitePowerSyncDatabaseOpenFactory({
-  dbFilename: 'example.db',
+  dbFilename: 'exampledd.db',
   schema: AppSchema
 }).getInstance();
 

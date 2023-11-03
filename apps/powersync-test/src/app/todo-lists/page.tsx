@@ -78,6 +78,22 @@ export default function TodoLists() {
           ) : null}
         </S.QueryResultContainer>
       ) : null}
+
+      <Button
+        onClick={async (params) => {
+          await powerSync.execute('DELETE FROM lists WHERE name=?', ['new one']);
+        }}>
+        Delete some things
+      </Button>
+      <Button
+        onClick={async (params) => {
+          await powerSync.execute(
+            'INSERT INTO lists (id, created_at, name, owner_id) VALUES(uuid(), datetime(), ?, ?)',
+            ['new one', '9a183452-9c55-4855-afa4-50e22142240d']
+          );
+        }}>
+        Create a list
+      </Button>
     </S.MainContainer>
   );
 }

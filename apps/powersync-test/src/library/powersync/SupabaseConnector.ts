@@ -140,6 +140,7 @@ export class SupabaseConnector extends BaseObserver<SupabaseConnectorListener> i
         }
 
         if (result.error) {
+          console.error(result.error);
           throw new Error(`Could not update Supabase. Received error: ${result.error.message}`);
         }
       }
