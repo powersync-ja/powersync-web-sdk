@@ -3,4 +3,4 @@ export * from './db/PowerSyncDatabase';
 export * from './db/sync/WebRemote';
 export * from './db/sync/WebStreamingSyncImplementation';
 export * from './db/adapters/wa-sqlite/WASQLiteDBAdapter';
-export * from './db/adapters/wa-sqlite/WASQLiteDBOpenFactory';
+export * from './db/adapters/wa-sqlite/WASQLitePowerSyncDatabaseOpenFactory';

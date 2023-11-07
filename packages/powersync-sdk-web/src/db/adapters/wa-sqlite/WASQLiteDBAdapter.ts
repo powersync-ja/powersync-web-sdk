@@ -10,9 +10,10 @@ import {
   Transaction
 } from '@journeyapps/powersync-sdk-common';
 import _ from 'lodash';
-//@ts-ignore
+//@ts-ignore TODO add types to package
 import * as SQLite from 'wa-sqlite/src/sqlite-api.js';
 import 'wa-sqlite/src/types';
+import Logger, { ILogger } from 'js-logger';
 
 export type WASQLiteResults = {
   columns: string[];
@@ -31,6 +32,7 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
   private initialized: Promise<void>;
   private _sqlite3: SQLiteAPI | null;
   private db: number | null;
+  private logger: ILogger;
 
   getAll: <T>(sql: string, parameters?: any[]) => Promise<T[]>;
   getOptional: <T>(sql: string, parameters?: any[]) => Promise<T | null>;
@@ -40,6 +42,7 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
     super();
     this._sqlite3 = null;
     this.db = null;
+    this.logger = Logger.get('WASQLite');
     this.initialized = this.init();
 
     const topLevelUtils = this.generateDBHelpers({ execute: this._execute });
@@ -57,7 +60,9 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
 
   readLock<T>(fn: (tx: LockContext) => Promise<T>, options?: DBLockOptions | undefined): Promise<T> {
     return new Promise((resolve, reject) => {
-      navigator.locks.request('TODODBLock', async () => {
+      // This implementation currently only uses a single connection. Locking is ensured by navigator locks
+      // TODO add concurrent connections
+      navigator.locks.request('DBLock', async () => {
         try {
           const res = await fn(this.generateDBHelpers({ execute: this._execute }));
           resolve(res);
@@ -70,7 +75,9 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
 
   writeLock<T>(fn: (tx: LockContext) => Promise<T>, options?: DBLockOptions | undefined): Promise<T> {
     return new Promise((resolve, reject) => {
-      navigator.locks.request('TODODBLock', async () => {
+      // This implementation currently only uses a single connection. Locking is ensured by navigator locks
+      // TODO add concurrent connections
+      navigator.locks.request('DBLock', async () => {
         try {
           const res = await fn(this.generateDBHelpers({ execute: this._execute }));
           resolve(res);
@@ -148,7 +155,7 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
         }
         return result;
       } catch (ex) {
-        console.debug('caught ex in transaction', ex);
+        this.logger.debug('Caught ex in transaction', ex);
         await rollback();
         throw ex;
       }
@@ -161,6 +168,7 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
    */
   private _execute = async (sql: string | TemplateStringsArray, bindings?: any[]): Promise<QueryResult> => {
     await this.initialized;
+    // Running multiple statements on the same connection concurrently should not be allowed
     return navigator.locks.request('DBExecute', async () => {
       const results = [];
       for await (const stmt of this.sqlite3.statements(this.db!, sql as string)) {
@@ -216,7 +224,8 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
         }
       };
 
-      console.debug(sql, bindings, JSON.stringify(result));
+      // For verbose debugging. TODO, maybe remove this if not helpful
+      this.logger.debug(sql, bindings, JSON.stringify(result));
       return result;
     });
   };
