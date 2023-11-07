@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
+    "clean": "rm -rf .next",
+    "watch": "next dev",
     "start": "next start",
     "lint": "next lint"
   },
@@ -12,7 +13,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^5.0.8",
-    "@journeyapps/powersync-react": "0.0.0-dev-20231103100139",
+    "@journeyapps/powersync-react": "0.1.2",
     "@journeyapps/powersync-sdk-web": "workspace:*",
     "@mui/icons-material": "^5.14.16",
     "@mui/material": "^5.14.16",

@@ -4,40 +4,24 @@ import { Grid, styled } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { LoginDetailsWidget } from '@/components/LoginDetailsWidget';
 import { useSupabase } from '@/components/ParentProvider';
-
-export type LoginFormParams = {
-  email: string;
-  password: string;
-};
+import { DEFAULT_ENTRY_ROUTE } from '@/components/Routes';
 
 export default function Login() {
   const router = useRouter();
   const supabase = useSupabase();
 
   return (
-    <S.MainGrid container>
-      <Grid item xs={12} md={6} lg={5}>
-        <LoginDetailsWidget
-          title="Login to Supabase"
-          submitTitle="Login"
-          onSubmit={async (values) => {
-            if (!supabase) {
-              throw new Error('Supabase has not been initialized yet');
-            }
-            await supabase.login(values.email, values.password);
-          }}
-          secondaryActions={[{ title: 'Register', onClick: () => router.push('/auth/register') }]}
-        />
-      </Grid>
-    </S.MainGrid>
+    <LoginDetailsWidget
+      title="Login"
+      submitTitle="Login"
+      onSubmit={async (values) => {
+        if (!supabase) {
+          throw new Error('Supabase has not been initialized yet');
+        }
+        await supabase.login(values.email, values.password);
+        router.push(DEFAULT_ENTRY_ROUTE);
+      }}
+      secondaryActions={[{ title: 'Register', onClick: () => router.push('/auth/register') }]}
+    />
   );
-}
-
-namespace S {
-  export const MainGrid = styled(Grid)`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-  `;
 }

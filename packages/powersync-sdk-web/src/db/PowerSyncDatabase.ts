@@ -10,7 +10,7 @@ import { WebRemote } from './sync/WebRemote';
 import { WebStreamingSyncImplementation } from './sync//WebStreamingSyncImplementation';
 
 export class PowerSyncDatabase extends AbstractPowerSyncDatabase {
-  async _init(): Promise<void> {}
+  async _initialize(): Promise<void> {}
 
   protected generateBucketStorageAdapter(): BucketStorageAdapter {
     return new SqliteBucketStorage(this.database, AbstractPowerSyncDatabase.transactionMutex);
@@ -25,7 +25,7 @@ export class PowerSyncDatabase extends AbstractPowerSyncDatabase {
       adapter: this.bucketStorageAdapter,
       remote,
       uploadCrud: async () => {
-        await this.initialized;
+        await this.waitForReady();
         await connector.uploadData(this);
       },
       retryDelayMs: this.options.retryDelay

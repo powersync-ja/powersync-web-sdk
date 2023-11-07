@@ -7,47 +7,40 @@ import { WASQLitePowerSyncDatabaseOpenFactory } from '@journeyapps/powersync-sdk
 import { AppSchema } from '@/library/powersync/AppSchema';
 import { SupabaseConnector } from '@/library/powersync/SupabaseConnector';
 import { useRouter } from 'next/navigation';
+import { DEFAULT_ENTRY_ROUTE } from './Routes';
 
 const SupabaseContext = React.createContext<SupabaseConnector | null>(null);
 export const useSupabase = () => React.useContext(SupabaseContext);
 
-const PowerSync = new WASQLitePowerSyncDatabaseOpenFactory({
-  dbFilename: 'exampledd.db',
+const powerSync = new WASQLitePowerSyncDatabaseOpenFactory({
+  dbFilename: 'exampledd12.db',
   schema: AppSchema
 }).getInstance();
 
-const connector = new SupabaseConnector();
+export const ParentProvider = ({ children }: { children: React.ReactNode }) => {
+  const [connector] = React.useState(new SupabaseConnector());
 
-export default function ParentProvider({ children }: { children: React.ReactNode }) {
-  const initialized = React.useRef(false);
   const router = useRouter();
 
   React.useEffect(() => {
-    /**
-     * React Strict mode will execute these useEffect twice in dev mode. We only want this to execute once
-     */
-    if (initialized.current) {
-      return;
-    }
-    initialized.current = true;
-
     Logger.useDefaults();
     Logger.setLevel(Logger.DEBUG);
 
-    console.log('Initializing PowerSync');
-    PowerSync.init();
+    //@ts-ignore For console testing purposes
+    window._powersync = powerSync;
+    powerSync.init();
 
     connector.registerListener({
       initialized: () => {
         if (connector.currentSession) {
-          PowerSync.connect(connector);
-          router.push('/todo-lists');
+          powerSync.connect(connector);
+          router.push(DEFAULT_ENTRY_ROUTE);
         } else {
           router.push('/auth/login');
         }
       },
       sessionStarted: () => {
-        PowerSync.connect(connector);
+        powerSync.connect(connector);
       }
     });
 
@@ -55,8 +48,10 @@ export default function ParentProvider({ children }: { children: React.ReactNode
   }, []);
 
   return (
-    <PowerSyncContext.Provider value={PowerSync}>
+    <PowerSyncContext.Provider value={powerSync}>
       <SupabaseContext.Provider value={connector}>{children}</SupabaseContext.Provider>
     </PowerSyncContext.Provider>
   );
-}
+};
+
+export default ParentProvider;

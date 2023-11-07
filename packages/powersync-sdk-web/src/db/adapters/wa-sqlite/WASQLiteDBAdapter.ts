@@ -97,10 +97,10 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
 
     // // TODO
     // @ts-ignore
-    // const { IDBBatchAtomicVFS } = await import('wa-sqlite/src/examples/IDBBatchAtomicVFS.js');
-    // const vfs = new IDBBatchAtomicVFS(this.options.dbFilename);
-    // // @ts-ignore
-    // this.sqlite3.vfs_register(vfs, true);
+    const { IDBMinimalVFS } = await import('wa-sqlite/src/examples/IDBMinimalVFS.js');
+    const vfs = new IDBMinimalVFS(this.options.dbFilename);
+    // @ts-ignore
+    this.sqlite3.vfs_register(vfs, true);
 
     this.db = await this.sqlite3.open_v2(this.options.dbFilename);
     this.sqlite3.register_table_onchange_hook(this.db, (opType, tableName, rowId) => {
@@ -128,7 +128,7 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
           return { rowsAffected: 0 };
         }
         finalized = true;
-        return this._execute('COMMIT TRANSACTION');
+        return this._execute('COMMIT');
       };
 
       const rollback = () => {
@@ -216,7 +216,7 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
         }
       };
 
-      console.debug(sql, JSON.stringify(result));
+      console.debug(sql, bindings, JSON.stringify(result));
       return result;
     });
   };
@@ -256,3 +256,47 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
     };
   }
 }
+
+/**
+ * For testing DB state when using IndexDB VFS
+ * This will allow downloading the DB file
+ */
+// @ts-ignore
+window._snapshotDB = (dbName: string) => {
+  const request = window.indexedDB.open(dbName, 3);
+
+  request.onsuccess = (event: any) => {
+    var db = event.target?.result;
+
+    // Now you can query the object store to get all items.
+    var transaction = db.transaction('blocks', 'readonly');
+    var objectStore = transaction.objectStore('blocks');
+    var getAllItemsRequest = objectStore.getAll();
+
+    getAllItemsRequest.onsuccess = function (event: any) {
+      // const blocks: Uint8Array[] = getAllItemsRequest.result.map((d: any) => d.data);
+
+      const length = -1 * Number(getAllItemsRequest.result[0].offset) + 4096;
+      const mergedArray = new Uint8Array(length);
+      getAllItemsRequest.result.forEach((item: any) => {
+        mergedArray.set(item.data, -1 * Number(item.offset));
+      });
+
+      // Save to file
+      var blob = new Blob([mergedArray], { type: 'application/octet-stream' });
+      var url = URL.createObjectURL(blob);
+
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'test.db'; // Set the desired file name and extension
+      a.click();
+
+      URL.revokeObjectURL(url);
+    };
+
+    transaction.oncomplete = function () {
+      // Transaction completed.
+      db.close();
+    };
+  };
+};

@@ -3,7 +3,11 @@
   "version": "0.0.0",
   "description": "Monorepo for Powersync Web SDK",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "build:packages": "pnpm run --filter=!powersync-test -r build",
+    "clean": "pnpm run -r clean",
+    "watch": "pnpm run --parallel  watch"
+  },
   "keywords": [],
   "author": "",
   "license": "UNLICENSED",

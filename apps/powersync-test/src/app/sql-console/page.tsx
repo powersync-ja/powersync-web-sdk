@@ -2,32 +2,26 @@
 import _ from 'lodash';
 import React from 'react';
 import { usePowerSync, usePowerSyncWatchedQuery } from '@journeyapps/powersync-react';
-import { AbstractPowerSyncDatabase, QueryResult } from '@journeyapps/powersync-sdk-web';
-import { Box, Button, Grid, TextField, Typography, styled } from '@mui/material';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { AbstractPowerSyncDatabase } from '@journeyapps/powersync-sdk-web';
+import { Box, Button, TextField, Typography, styled } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
+import { DynamicParentProvider } from '@/components/DynamicParentProvider';
 
 export type LoginFormParams = {
   email: string;
   password: string;
 };
 
-type SQLQueryGridResult = {
-  columns?: GridColDef[];
-  insertId?: number;
-  rows?: any[];
-  rowsAffected?: number;
-};
-
 const DEFAULT_QUERY = 'SELECT * FROM lists';
 
-export default function TodoLists() {
+export default () => {
   const powerSync: AbstractPowerSyncDatabase = usePowerSync();
   const [query, setQuery] = React.useState(DEFAULT_QUERY);
   const [error, setError] = React.useState<string>('');
 
-  const querySQLResult = usePowerSyncWatchedQuery(query);
+  const querySQLResult = usePowerSyncWatchedQuery(query, [], { tables: ['lists'] });
 
-  const queryResult = React.useMemo(() => {
+  const queryDataGridResult = React.useMemo(() => {
     const firstItem = querySQLResult?.[0];
 
     return {
@@ -58,13 +52,13 @@ export default function TodoLists() {
       />
 
       <Typography color="red">{error}</Typography>
-      {queryResult ? (
+      {queryDataGridResult ? (
         <S.QueryResultContainer>
-          {queryResult.columns ? (
+          {queryDataGridResult.columns ? (
             <DataGrid
               autoHeight={true}
-              rows={queryResult.rows ?? []}
-              columns={queryResult.columns}
+              rows={queryDataGridResult.rows ?? []}
+              columns={queryDataGridResult.columns}
               initialState={{
                 pagination: {
                   paginationModel: {
@@ -86,17 +80,22 @@ export default function TodoLists() {
         Delete some things
       </Button>
       <Button
-        onClick={async (params) => {
-          await powerSync.execute(
-            'INSERT INTO lists (id, created_at, name, owner_id) VALUES(uuid(), datetime(), ?, ?)',
-            ['new one', '9a183452-9c55-4855-afa4-50e22142240d']
-          );
+        onClick={async () => {
+          try {
+            await powerSync.execute(
+              'INSERT INTO lists (id, created_at, name, owner_id) VALUES(uuid(), datetime(), ?, ?)',
+              ['new one', '9a183452-9c55-4855-afa4-50e22142240d']
+            );
+          } catch (ex: any) {
+            console.error(ex);
+            setError(ex.message);
+          }
         }}>
         Create a list
       </Button>
     </S.MainContainer>
   );
-}
+};
 
 namespace S {
   export const MainContainer = styled(Box)`

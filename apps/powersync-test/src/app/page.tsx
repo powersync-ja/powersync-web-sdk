@@ -1,31 +1,35 @@
 'use client';
 import React from 'react';
-import { usePowerSync } from '@journeyapps/powersync-react';
-import { AbstractPowerSyncDatabase } from '@journeyapps/powersync-sdk-web';
-import { useRouter } from 'next/navigation';
-import { useSupabase } from '@/components/ParentProvider';
-import { Grid, styled } from '@mui/material';
+import { CircularProgress, Grid, styled } from '@mui/material';
 
 export type LoginFormParams = {
   email: string;
   password: string;
 };
 
-export default function Login() {
+/**
+ * This page shows a loading spinner until the _layout.tsx
+ * file detects a session and redirects either to the app or
+ * auth flow.
+ */
+export default function Entry() {
   return (
     <S.MainGrid container>
-      <Grid item xs={12} md={6} lg={5}>
-        <div>loading</div>
-      </Grid>
+      <S.CenteredGrid item xs={12} md={6} lg={5}>
+        <CircularProgress />
+      </S.CenteredGrid>
     </S.MainGrid>
   );
 }
 
 namespace S {
-  export const MainGrid = styled(Grid)`
+  export const CenteredGrid = styled(Grid)`
     display: flex;
     justify-content: center;
     align-items: center;
+  `;
+
+  export const MainGrid = styled(CenteredGrid)`
     min-height: 100vh;
   `;
 }

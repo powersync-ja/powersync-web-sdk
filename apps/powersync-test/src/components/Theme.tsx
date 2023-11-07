@@ -21,7 +21,13 @@ export const ThemeProviderWidget: React.FC<React.PropsWithChildren> = ({ childre
   const theme = React.useMemo(() => {
     return createTheme({
       palette: {
-        mode: 'dark'
+        mode: 'dark',
+        primary: {
+          main: '#c44eff'
+        }
+      },
+      typography: {
+        fontFamily: 'Rubik, sans-serif'
       }
     });
   }, []);
