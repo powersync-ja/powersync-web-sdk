@@ -12,7 +12,7 @@ export type LoginFormParams = {
  * file detects a session and redirects either to the app or
  * auth flow.
  */
-export default function Entry() {
+export default function EntryPage() {
   return (
     <S.MainGrid container>
       <S.CenteredGrid item xs={12} md={6} lg={5}>

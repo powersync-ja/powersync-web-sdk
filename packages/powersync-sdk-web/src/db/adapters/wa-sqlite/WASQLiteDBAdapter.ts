@@ -34,6 +34,7 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
     this.dbGetHelpers = null;
     this._workerExecute = null;
     this.initialized = this.init();
+    this.dbGetHelpers = this.generateDBHelpers({ execute: this._execute.bind(this) });
   }
 
   protected async init() {
@@ -73,7 +74,7 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
 
   async getAll<T>(sql: string, parameters?: any[] | undefined): Promise<T[]> {
     await this.initialized;
-    return this.dbGetHelpers!.get(sql, parameters);
+    return this.dbGetHelpers!.getAll(sql, parameters);
   }
 
   async getOptional<T>(sql: string, parameters?: any[] | undefined): Promise<T | null> {

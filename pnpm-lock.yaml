@@ -12,6 +12,85 @@ importers:
         specifier: ^3.0.3
         version: 3.0.3
 
+  apps/powersync-supabase-web-todolist-demo:
+    dependencies:
+      '@emotion/react':
+        specifier: ^11.11.1
+        version: 11.11.1(@types/react@18.2.33)(react@18.2.0)
+      '@emotion/styled':
+        specifier: ^11.11.0
+        version: 11.11.0(@emotion/react@11.11.1)(@types/react@18.2.33)(react@18.2.0)
+      '@fontsource/roboto':
+        specifier: ^5.0.8
+        version: 5.0.8
+      '@journeyapps/powersync-react':
+        specifier: 0.1.2
+        version: 0.1.2(react@18.2.0)
+      '@journeyapps/powersync-sdk-web':
+        specifier: workspace:*
+        version: link:../../packages/powersync-sdk-web
+      '@mui/icons-material':
+        specifier: ^5.14.16
+        version: 5.14.16(@mui/material@5.14.16)(@types/react@18.2.33)(react@18.2.0)
+      '@mui/material':
+        specifier: ^5.14.16
+        version: 5.14.16(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@types/react@18.2.33)(react-dom@18.2.0)(react@18.2.0)
+      '@mui/x-data-grid':
+        specifier: ^6.17.0
+        version: 6.17.0(@mui/material@5.14.16)(@mui/system@5.14.16)(@types/react@18.2.33)(react-dom@18.2.0)(react@18.2.0)
+      '@supabase/supabase-js':
+        specifier: ^2.38.4
+        version: 2.38.4
+      formik:
+        specifier: ^2.4.5
+        version: 2.4.5(react@18.2.0)
+      js-logger:
+        specifier: ^1.6.1
+        version: 1.6.1
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+      next:
+        specifier: 14.0.0
+        version: 14.0.0(react-dom@18.2.0)(react@18.2.0)
+      react:
+        specifier: ^18
+        version: 18.2.0
+      react-dom:
+        specifier: ^18
+        version: 18.2.0(react@18.2.0)
+      wa-sqlite:
+        specifier: link:../../../ja-wa-sqlite
+        version: link:../../../ja-wa-sqlite
+    devDependencies:
+      '@types/lodash':
+        specifier: ^4.14.200
+        version: 4.14.200
+      '@types/node':
+        specifier: ^20
+        version: 20.0.0
+      '@types/react':
+        specifier: ^18
+        version: 18.2.33
+      '@types/react-dom':
+        specifier: ^18
+        version: 18.2.14
+      autoprefixer:
+        specifier: ^10
+        version: 10.4.16(postcss@8.4.31)
+      eslint:
+        specifier: ^8
+        version: 8.52.0
+      eslint-config-next:
+        specifier: 14.0.0
+        version: 14.0.0(eslint@8.52.0)(typescript@5.2.2)
+      postcss:
+        specifier: ^8
+        version: 8.4.31
+      typescript:
+        specifier: ^5
+        version: 5.2.2
+
   apps/powersync-test:
     dependencies:
       '@emotion/react':

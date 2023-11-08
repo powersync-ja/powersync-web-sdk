@@ -1,8 +1,32 @@
 import { Column, ColumnType, Index, IndexedColumn, Schema, Table } from '@journeyapps/powersync-sdk-web';
 
+// TODO move this to a shared NPM package
+
+export interface ListRecord {
+  id: string;
+  name: string;
+  created_at: string;
+  owner_id?: string;
+}
+
+export interface TodoRecord {
+  id: string;
+  created_at: string;
+  completed: boolean;
+  description: string;
+  completed_at?: string;
+
+  created_by: string;
+  completed_by?: string;
+  list_id: string;
+}
+
+export const LISTS_TABLE = 'lists';
+export const TODOS_TABLE = 'todos';
+
 export const AppSchema = new Schema([
   new Table({
-    name: 'todos',
+    name: TODOS_TABLE,
     columns: [
       new Column({ name: 'list_id', type: ColumnType.TEXT }),
       new Column({ name: 'created_at', type: ColumnType.TEXT }),
@@ -15,7 +39,7 @@ export const AppSchema = new Schema([
     indexes: [new Index({ name: 'list', columns: [new IndexedColumn({ name: 'list_id' })] })]
   }),
   new Table({
-    name: 'lists',
+    name: LISTS_TABLE,
     columns: [
       new Column({ name: 'created_at', type: ColumnType.TEXT }),
       new Column({ name: 'name', type: ColumnType.TEXT }),

@@ -35,6 +35,8 @@ export class SupabaseConnector extends BaseObserver<SupabaseConnectorListener> i
   private _client: SupabaseClient | null;
   private _config: SupabaseConfig | null;
 
+  ready: boolean;
+
   currentSession: Session | null;
 
   constructor() {
@@ -42,6 +44,7 @@ export class SupabaseConnector extends BaseObserver<SupabaseConnectorListener> i
     this._client = null;
     this._config = null;
     this.currentSession = null;
+    this.ready = false;
   }
 
   get client(): SupabaseClient {
@@ -59,6 +62,10 @@ export class SupabaseConnector extends BaseObserver<SupabaseConnectorListener> i
   }
 
   async init() {
+    if (this.ready) {
+      return;
+    }
+
     const credentialsResponse = await fetch('/api/supabase');
     // TODO Handle errors here if necessary
     this._config = await credentialsResponse.json();
@@ -68,8 +75,9 @@ export class SupabaseConnector extends BaseObserver<SupabaseConnectorListener> i
       }
     });
     const sessionResponse = await this.client.auth.getSession();
-    this.currentSession = sessionResponse.data.session;
+    this.updateSession(sessionResponse.data.session);
 
+    this.ready = true;
     this.iterateListeners((cb) => cb.initialized?.());
   }
 
@@ -86,9 +94,7 @@ export class SupabaseConnector extends BaseObserver<SupabaseConnectorListener> i
       throw error;
     }
 
-    if (session) {
-      this.iterateListeners((cb) => cb.sessionStarted?.(session));
-    }
+    this.updateSession(session);
   }
 
   async fetchCredentials() {
@@ -165,5 +171,13 @@ export class SupabaseConnector extends BaseObserver<SupabaseConnectorListener> i
         throw ex;
       }
     }
+  }
+
+  updateSession(session: Session | null) {
+    this.currentSession = session;
+    if (!session) {
+      return;
+    }
+    this.iterateListeners((cb) => cb.sessionStarted?.(session));
   }
 }

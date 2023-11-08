@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-import { Grid, styled } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { useSupabase } from '@/components/ParentProvider';
 import { LoginDetailsWidget } from '@/components/LoginDetailsWidget';
@@ -27,7 +26,7 @@ export default function Register() {
         }
 
         if (session) {
-          supabase.iterateListeners((cb) => cb.sessionStarted?.(session));
+          supabase.updateSession(session);
           router.push(DEFAULT_ENTRY_ROUTE);
           return;
         }

@@ -12,8 +12,10 @@ import {
   ListItemIcon,
   ListItemText,
   Toolbar,
+  Typography,
   styled
 } from '@mui/material';
+import Image from 'next/image';
 import MenuIcon from '@mui/icons-material/Menu';
 import WifiIcon from '@mui/icons-material/Wifi';
 import SignalWifiOffIcon from '@mui/icons-material/SignalWifiOff';
@@ -22,9 +24,9 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import TerminalIcon from '@mui/icons-material/Terminal';
 
 import { usePowerSync } from '@journeyapps/powersync-react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useSupabase } from '@/components/ParentProvider';
+import { NavigationPanelContext } from '@/components/navigation/NavigationPanelContext';
 
 export default function ViewsLayout({ children }: { children: React.ReactNode }) {
   const powerSync = usePowerSync();
@@ -33,6 +35,7 @@ export default function ViewsLayout({ children }: { children: React.ReactNode })
 
   const [connected, setConnected] = React.useState(powerSync.connected);
   const [openDrawer, setOpenDrawer] = React.useState(false);
+  const [title, setTitle] = React.useState('');
 
   const NAVIGATION_ITEMS = React.useMemo(
     () => [
@@ -77,7 +80,9 @@ export default function ViewsLayout({ children }: { children: React.ReactNode })
             onClick={() => setOpenDrawer(!openDrawer)}>
             <MenuIcon />
           </IconButton>
-          <Box sx={{ flexGrow: 1 }} />
+          <Box sx={{ flexGrow: 1 }}>
+            <Typography>{title}</Typography>
+          </Box>
           {connected ? <WifiIcon /> : <SignalWifiOffIcon />}
         </Toolbar>
       </S.TopBar>
@@ -91,6 +96,7 @@ export default function ViewsLayout({ children }: { children: React.ReactNode })
                 onClick={async () => {
                   await item.beforeNavigate?.();
                   router.push(item.path);
+                  setOpenDrawer(false);
                 }}>
                 <ListItemIcon>{item.icon()}</ListItemIcon>
                 <ListItemText primary={item.title} />
@@ -99,7 +105,9 @@ export default function ViewsLayout({ children }: { children: React.ReactNode })
           ))}
         </List>
       </Drawer>
-      <S.MainBox>{children}</S.MainBox>
+      <S.MainBox>
+        <NavigationPanelContext.Provider value={{ setTitle }}>{children}</NavigationPanelContext.Provider>
+      </S.MainBox>
     </S.MainBox>
   );
 }
