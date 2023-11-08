@@ -12,13 +12,14 @@ import { DEFAULT_ENTRY_ROUTE } from './Routes';
 const SupabaseContext = React.createContext<SupabaseConnector | null>(null);
 export const useSupabase = () => React.useContext(SupabaseContext);
 
-const powerSync = new WASQLitePowerSyncDatabaseOpenFactory({
-  dbFilename: 'example.db',
-  schema: AppSchema
-}).getInstance();
-
 export const ParentProvider = ({ children }: { children: React.ReactNode }) => {
   const [connector] = React.useState(new SupabaseConnector());
+  const [powerSync] = React.useState(
+    new WASQLitePowerSyncDatabaseOpenFactory({
+      dbFilename: 'example.db',
+      schema: AppSchema
+    }).getInstance()
+  );
 
   const router = useRouter();
 
@@ -40,6 +41,8 @@ export const ParentProvider = ({ children }: { children: React.ReactNode }) => {
         }
       },
       sessionStarted: () => {
+        //@ts-ignore
+        window.counttest++;
         powerSync.connect(connector);
       }
     });
