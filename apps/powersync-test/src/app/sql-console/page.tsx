@@ -2,10 +2,9 @@
 import _ from 'lodash';
 import React from 'react';
 import { usePowerSync, usePowerSyncWatchedQuery } from '@journeyapps/powersync-react';
-import { AbstractPowerSyncDatabase } from '@journeyapps/powersync-sdk-web';
-import { Box, Button, TextField, Typography, styled } from '@mui/material';
+import { Box, Button, TextField, styled } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import { DynamicParentProvider } from '@/components/DynamicParentProvider';
+import { AbstractPowerSyncDatabase } from '@journeyapps/powersync-sdk-web';
 
 export type LoginFormParams = {
   email: string;
@@ -17,8 +16,6 @@ const DEFAULT_QUERY = 'SELECT * FROM lists';
 export default () => {
   const powerSync: AbstractPowerSyncDatabase = usePowerSync();
   const [query, setQuery] = React.useState(DEFAULT_QUERY);
-  const [error, setError] = React.useState<string>('');
-
   const querySQLResult = usePowerSyncWatchedQuery(query, [], { tables: ['lists'] });
 
   const queryDataGridResult = React.useMemo(() => {
@@ -51,7 +48,6 @@ export default () => {
         onChange={(event) => debouncedSetQuery(event.target.value)}
       />
 
-      <Typography color="red">{error}</Typography>
       {queryDataGridResult ? (
         <S.QueryResultContainer>
           {queryDataGridResult.columns ? (
@@ -88,7 +84,6 @@ export default () => {
             );
           } catch (ex: any) {
             console.error(ex);
-            setError(ex.message);
           }
         }}>
         Create a list
