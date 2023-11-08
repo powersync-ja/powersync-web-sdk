@@ -63,6 +63,13 @@ async function _openDB(dbFileName: string): Promise<DBWorkerInterface> {
         let columns;
         const wrappedBindings = bindings ? [bindings] : [[]];
         for (const binding of wrappedBindings) {
+          // TODO not sure why this is needed currently, but booleans break
+          binding.forEach((b, index, arr) => {
+            if (typeof b == 'boolean') {
+              arr[index] = b ? 1 : 0;
+            }
+          });
+
           sqlite3.reset(stmt);
           if (bindings) {
             sqlite3.bind_collection(stmt, binding);
