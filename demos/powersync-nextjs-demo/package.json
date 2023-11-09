@@ -15,6 +15,7 @@
     "@fontsource/roboto": "^5.0.8",
     "@journeyapps/powersync-react": "0.1.2",
     "@journeyapps/powersync-sdk-web": "workspace:*",
+    "@journeyapps/wa-sqlite": "link:../../../ja-wa-sqlite",
     "@mui/icons-material": "^5.14.16",
     "@mui/material": "^5.14.16",
     "@mui/x-data-grid": "^6.17.0",
@@ -24,18 +25,18 @@
     "lodash": "^4.17.21",
     "next": "14.0.0",
     "react": "^18",
-    "react-dom": "^18",
-    "wa-sqlite": "link:../../../ja-wa-sqlite"
+    "react-dom": "^18"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.200",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "autoprefixer": "^10",
+    "autoprefixer": "^10.0.0",
     "eslint": "^8",
     "eslint-config-next": "14.0.0",
-    "postcss": "^8",
+    "postcss": "^8.0.0",
+    "tailwindcss": "^3.3.5",
     "typescript": "^5"
   }
 }

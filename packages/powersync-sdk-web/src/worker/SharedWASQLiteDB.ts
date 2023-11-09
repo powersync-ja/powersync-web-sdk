@@ -1,11 +1,11 @@
 //@ts-ignore TODO add types to package
-import * as SQLite from 'wa-sqlite/src/sqlite-api.js';
+import * as SQLite from '@journeyapps/wa-sqlite/src/sqlite-api.js';
+import '@journeyapps/wa-sqlite';
+
 import _ from 'lodash';
 import * as Comlink from 'comlink';
 import { QueryResult } from '@journeyapps/powersync-sdk-common';
 import { v4 as uuid } from 'uuid';
-
-import 'wa-sqlite';
 
 // The item function cannot be returned over Comlink bridge
 export type WASQLExecuteResult = Omit<QueryResult, 'rows'> & {
@@ -27,12 +27,13 @@ export type DBWorkerInterface = {
 const _self: SharedWorkerGlobalScope = self as any;
 
 async function _openDB(dbFileName: string): Promise<DBWorkerInterface> {
-  const { default: moduleFactory } = await import('wa-sqlite/dist/wa-sqlite-async.mjs');
+  // @ts-ignore TODO better typings
+  const { default: moduleFactory } = await import('@journeyapps/wa-sqlite/dist/wa-sqlite-async.mjs');
   const module = await moduleFactory();
   const sqlite3 = SQLite.Factory(module);
 
   // @ts-ignore
-  const { IDBMinimalVFS } = await import('wa-sqlite/src/examples/IDBMinimalVFS.js');
+  const { IDBMinimalVFS } = await import('@journeyapps/wa-sqlite/src/examples/IDBMinimalVFS.js');
   const vfs = new IDBMinimalVFS(dbFileName);
   sqlite3.vfs_register(vfs, true);
 
