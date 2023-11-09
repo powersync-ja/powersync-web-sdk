@@ -12,7 +12,7 @@ import { DEFAULT_ENTRY_ROUTE } from '../Routes';
 const SupabaseContext = React.createContext<SupabaseConnector | null>(null);
 export const useSupabase = () => React.useContext(SupabaseContext);
 
-export const ParentProvider = ({ children }: { children: React.ReactNode }) => {
+export const SystemProvider = ({ children }: { children: React.ReactNode }) => {
   const [connector] = React.useState(new SupabaseConnector());
   const [powerSync] = React.useState(
     new WASQLitePowerSyncDatabaseOpenFactory({
@@ -56,4 +56,4 @@ export const ParentProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default ParentProvider;
+export default SystemProvider;
