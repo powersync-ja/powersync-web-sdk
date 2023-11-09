@@ -36,6 +36,12 @@ Logger.useDefaults();
 
 Enable verbose output in the developer tools for detailed logs.
 
+The WASQLite DB Adapter opens SQLite connections inside a shared webworker. This worker can be inspected in Chrome by accessing
+
+```
+chrome://inspect/#workers
+```
+
 
 # Getting Started
 
