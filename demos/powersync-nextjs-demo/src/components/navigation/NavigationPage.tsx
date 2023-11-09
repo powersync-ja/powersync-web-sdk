@@ -12,7 +12,7 @@ export const NavigationPage: React.FC<React.PropsWithChildren<{ title: string }>
     navigationPanel.setTitle(title);
 
     return () => navigationPanel.setTitle('');
-  }, [title]);
+  }, [title, navigationPanel]);
 
   return <S.Container>{children}</S.Container>;
 };

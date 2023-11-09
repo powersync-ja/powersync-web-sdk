@@ -24,7 +24,8 @@ export const ParentProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
 
   React.useEffect(() => {
-    Logger.useDefaults();
+    // Linting thinks this is a hook due to it's name
+    Logger.useDefaults(); // eslint-disable-line
     Logger.setLevel(Logger.DEBUG);
 
     //@ts-ignore For console testing purposes
@@ -46,7 +47,7 @@ export const ParentProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     connector.init();
-  }, []);
+  }, [powerSync, connector, router]);
 
   return (
     <PowerSyncContext.Provider value={powerSync}>

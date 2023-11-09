@@ -26,7 +26,7 @@ const description = (total: number, completed: number = 0) => {
   return `${total - completed} pending, ${completed} completed`;
 };
 
-export default () => {
+export default function TodoListsPage() {
   const powerSync = usePowerSync();
   const supabase = useSupabase();
   const router = useRouter();
@@ -102,7 +102,7 @@ export default () => {
           <DialogTitle id="alert-dialog-title">{'Create Todo List'}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">Enter a name for a new todo list</DialogContentText>
-            <TextField fullWidth inputRef={nameInputRef} label="Name" />
+            <TextField sx={{ marginTop: '10px' }} fullWidth inputRef={nameInputRef} label="Name" />
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setShowPrompt(false)}>Cancel</Button>
@@ -118,7 +118,7 @@ export default () => {
       </Box>
     </NavigationPage>
   );
-};
+}
 
 namespace S {
   export const FloatingActionButton = styled(Fab)`

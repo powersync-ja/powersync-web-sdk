@@ -13,7 +13,7 @@ export type LoginFormParams = {
 
 const DEFAULT_QUERY = 'SELECT * FROM lists';
 
-export default () => {
+export default function SQLConsolePage() {
   const [query, setQuery] = React.useState(DEFAULT_QUERY);
   const querySQLResult = usePowerSyncWatchedQuery(query);
 
@@ -71,7 +71,7 @@ export default () => {
       </S.MainContainer>
     </NavigationPage>
   );
-};
+}
 
 namespace S {
   export const MainContainer = styled(Box)`

@@ -17,7 +17,7 @@ declare module '@mui/material/styles' {
   }
 }
 
-export const ThemeProviderWidget: React.FC<React.PropsWithChildren> = ({ children }) => {
+export const ThemeProviderWidget: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
   const theme = React.useMemo(() => {
     return createTheme({
       palette: {

@@ -23,7 +23,7 @@ import { useParams } from 'next/navigation';
 import { NavigationPage } from '@/components/navigation/NavigationPage';
 import { TodoItemWidget } from '@/components/widgets/TodoItemWidget';
 
-export default () => {
+export default function TodoEditPage() {
   const powerSync = usePowerSync();
   const supabase = useSupabase();
   const params = useParams();
@@ -119,7 +119,7 @@ export default () => {
           <DialogTitle id="alert-dialog-title">{'Create Todo Item'}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">Enter a description for a new todo item</DialogContentText>
-            <TextField fullWidth inputRef={nameInputRef} label="Name" />
+            <TextField sx={{ marginTop: '10px' }} fullWidth inputRef={nameInputRef} label="Name" />
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setShowPrompt(false)}>Cancel</Button>
@@ -135,7 +135,7 @@ export default () => {
       </Box>
     </NavigationPage>
   );
-};
+}
 
 namespace S {
   export const FloatingActionButton = styled(Fab)`

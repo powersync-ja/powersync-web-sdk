@@ -59,13 +59,13 @@ export default function ViewsLayout({ children }: { children: React.ReactNode })
         icon: () => <ExitToAppIcon />
       }
     ],
-    []
+    [powerSync, supabase]
   );
 
   React.useEffect(() => {
     const l = powerSync.registerListener({ statusChanged: (status) => setConnected(status.connected) });
     return () => l?.();
-  }, []);
+  }, [powerSync]);
 
   return (
     <S.MainBox>
