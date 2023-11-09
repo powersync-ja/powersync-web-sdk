@@ -89,19 +89,8 @@ export const connectPowerSync = async () => {
   await PowerSync.connect(connector);
 };
 
-// Use queries in React Components
-export const CustomerListDisplay = () => {
-  const customers = usePowerSyncWatchedQuery('SELECT * from customers');
-
-  return (
-    <View>
-      {customers.map((l) => (
-        <Text key={l.id}>{JSON.stringify(l)}</Text>
-      ))}
-    </View>
-  );
-};
-
 ```
+
+React hooks are available in the [@journeyapps/powersync-react](https://www.npmjs.com/package/@journeyapps/powersync-react) package
 
 Refer to our [full documentation](https://docs.powersync.co/client-sdk-references/react-native-and-expo) to learn more.

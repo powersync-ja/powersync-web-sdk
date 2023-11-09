@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
-import { ListItemWidget } from '@/components/ListItemWidget';
+import { ListItemWidget } from '@/components/widgets/ListItemWidget';
 import { useRouter } from 'next/navigation';
 import { NavigationPage } from '@/components/navigation/NavigationPage';
 

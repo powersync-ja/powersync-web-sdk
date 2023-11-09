@@ -2,7 +2,7 @@
 import React from 'react';
 import { Grid, styled } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { LoginDetailsWidget } from '@/components/LoginDetailsWidget';
+import { LoginDetailsWidget } from '@/components/widgets/LoginDetailsWidget';
 import { useSupabase } from '@/components/ParentProvider';
 import { DEFAULT_ENTRY_ROUTE } from '@/components/Routes';
 

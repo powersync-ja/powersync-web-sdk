@@ -2,7 +2,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useSupabase } from '@/components/ParentProvider';
-import { LoginDetailsWidget } from '@/components/LoginDetailsWidget';
+import { LoginDetailsWidget } from '@/components/widgets/LoginDetailsWidget';
 import { DEFAULT_ENTRY_ROUTE } from '@/components/Routes';
 
 export default function Register() {
