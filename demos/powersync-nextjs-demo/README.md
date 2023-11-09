@@ -33,13 +33,7 @@ Then insert credentials for Supabase.
 Run the development server:
 
 ```bash
-npm run watch
-# or
-yarn watch
-# or
 pnpm watch
-# or
-bun watch
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

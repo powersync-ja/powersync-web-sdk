@@ -5,9 +5,9 @@
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "repository": "https://github.com/journeyapps/powersync-web-sdk",
+  "repository": "https://github.com/powersync-js/powersync-web-sdk",
   "bugs": {
-    "url": "https://github.com/journeyapps/powersync-web-sdk/issues"
+    "url": "https://github.com/powersync-ja/powersync-web-sdk/issues"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
@@ -33,10 +33,10 @@
     "@types/lodash": "^4.14.200",
     "@types/uuid": "^9.0.6",
     "typescript": "^5.2.2",
-    "@journeyapps/wa-sqlite": "link:../../../ja-wa-sqlite"
+    "@journeyapps/wa-sqlite": "0.0.0-dev-20231109054802"
   },
   "peerDependencies": {
-    "@journeyapps/wa-sqlite": "link:../../../ja-wa-sqlite"
+    "@journeyapps/wa-sqlite": "0.0.0-dev-20231109054802"
   },
   "dependencies": {
     "@journeyapps/powersync-sdk-common": "0.1.3",

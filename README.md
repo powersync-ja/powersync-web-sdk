@@ -1,6 +1,6 @@
 # PowerSync Web SDK
 
-This mono repo contains the packages for PowerSync's Web SDK.
+This monorepo contains the packages for PowerSync's Web SDK.
 
 ## Structure
 
@@ -17,3 +17,16 @@ SDK packages are located in the `/packages/` directory.
 
  - [packages/powersync-sdk-web](./packages/powersync-sdk-web/README.md) contains the core PowerSync Web SDK code.
 
+## Getting started
+
+This monorepo uses PNPM.
+
+```bash
+pnpm install
+```
+
+To run a demo app use
+
+```bash
+pnpm watch
+```
