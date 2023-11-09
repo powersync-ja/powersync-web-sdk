@@ -1,9 +1,8 @@
 'use client';
 import React from 'react';
-import { Grid, styled } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { LoginDetailsWidget } from '@/components/widgets/LoginDetailsWidget';
-import { useSupabase } from '@/components/ParentProvider';
+import { useSupabase } from '@/components/providers/ParentProvider';
 import { DEFAULT_ENTRY_ROUTE } from '@/components/Routes';
 
 export default function Login() {

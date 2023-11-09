@@ -25,7 +25,7 @@ import TerminalIcon from '@mui/icons-material/Terminal';
 
 import { usePowerSync } from '@journeyapps/powersync-react';
 import { useRouter } from 'next/navigation';
-import { useSupabase } from '@/components/ParentProvider';
+import { useSupabase } from '@/components/providers/ParentProvider';
 import { NavigationPanelContext } from '@/components/navigation/NavigationPanelContext';
 
 export default function ViewsLayout({ children }: { children: React.ReactNode }) {

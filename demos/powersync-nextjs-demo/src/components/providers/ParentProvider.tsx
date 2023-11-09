@@ -7,7 +7,7 @@ import { WASQLitePowerSyncDatabaseOpenFactory } from '@journeyapps/powersync-sdk
 import { AppSchema } from '@/library/powersync/AppSchema';
 import { SupabaseConnector } from '@/library/powersync/SupabaseConnector';
 import { useRouter } from 'next/navigation';
-import { DEFAULT_ENTRY_ROUTE } from './Routes';
+import { DEFAULT_ENTRY_ROUTE } from '../Routes';
 
 const SupabaseContext = React.createContext<SupabaseConnector | null>(null);
 export const useSupabase = () => React.useContext(SupabaseContext);

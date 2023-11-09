@@ -1,7 +1,7 @@
 'use client';
 import _ from 'lodash';
 import React from 'react';
-import { useSupabase } from '@/components/ParentProvider';
+import { useSupabase } from '@/components/providers/ParentProvider';
 import { LISTS_TABLE, TODOS_TABLE, TodoRecord } from '@/library/powersync/AppSchema';
 import { usePowerSync, usePowerSyncWatchedQuery } from '@journeyapps/powersync-react';
 import {
