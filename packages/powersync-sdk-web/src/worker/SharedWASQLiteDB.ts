@@ -24,9 +24,13 @@ export type DBWorkerInterface = {
   registerOnTableChange: (callback: OnTableChangeCallback) => void;
 };
 
+export type InternalDBWorkerInterface = DBWorkerInterface & {
+  close: () => void;
+}
+
 const _self: SharedWorkerGlobalScope = self as any;
 
-async function _openDB(dbFileName: string): Promise<DBWorkerInterface> {
+async function _openDB(dbFileName: string): Promise<InternalDBWorkerInterface> {
   // @ts-ignore TODO better typings
   const { default: moduleFactory } = await import('@journeyapps/wa-sqlite/dist/wa-sqlite-async.mjs');
   const module = await moduleFactory();
@@ -127,11 +131,14 @@ async function _openDB(dbFileName: string): Promise<DBWorkerInterface> {
 
   return {
     execute: Comlink.proxy(execute),
-    registerOnTableChange: Comlink.proxy(registerOnTableChange)
+    registerOnTableChange: Comlink.proxy(registerOnTableChange),
+    close: () => {
+      sqlite3.close(db);
+    }
   };
 }
 
-const DBMap = new Map<string, DBWorkerInterface>();
+const DBMap = new Map<string, InternalDBWorkerInterface>();
 
 const openDB = async (dbFileName: string): Promise<DBWorkerInterface> => {
   if (!DBMap.has(dbFileName)) {
@@ -146,3 +153,9 @@ _self.onconnect = function (event: MessageEvent<string>) {
   console.debug('Exposing db on port', port);
   Comlink.expose(openDB, port);
 };
+
+addEventListener("beforeunload", (event) => {
+  Array.from(DBMap.values()).forEach(db => {
+    db.close();
+  })
+});

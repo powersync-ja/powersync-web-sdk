@@ -65,7 +65,14 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
     };
   };
 
-  close() {}
+  close() {
+    /**
+    * TODO improve DB closing logic in shared worker.
+    * Cannot close a DB from a single browser tab, as multiple may be using
+    * the same connection.
+    * The shared worker will close connections once it closes
+    * */
+  }
 
   async getAll<T>(sql: string, parameters?: any[] | undefined): Promise<T[]> {
     await this.initialized;

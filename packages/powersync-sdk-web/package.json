@@ -1,7 +1,7 @@
 {
   "name": "@journeyapps/powersync-sdk-web",
   "version": "0.0.0",
-  "description": "",
+  "description": "A Web SDK for JourneyApps PowerSync",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
