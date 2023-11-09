@@ -62,7 +62,6 @@ export const LoginDetailsWidget: React.FC<LoginDetailsWidgetProps> = (props) => 
                 <S.TextInput
                   id="email-input"
                   label="Email Address"
-                  aria-describedby="email-helper-text"
                   name="email"
                   type="email"
                   autoComplete="email"
@@ -75,7 +74,6 @@ export const LoginDetailsWidget: React.FC<LoginDetailsWidgetProps> = (props) => 
                 <S.TextInput
                   id="password-input"
                   label="Password"
-                  aria-describedby="password-helper-text"
                   name="password"
                   type="password"
                   autoComplete="current-password"

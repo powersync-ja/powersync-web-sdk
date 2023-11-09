@@ -15,7 +15,7 @@ const DEFAULT_QUERY = 'SELECT * FROM lists';
 
 export default () => {
   const [query, setQuery] = React.useState(DEFAULT_QUERY);
-  const querySQLResult = usePowerSyncWatchedQuery(query, [], { tables: ['lists'] });
+  const querySQLResult = usePowerSyncWatchedQuery(query);
 
   const queryDataGridResult = React.useMemo(() => {
     const firstItem = querySQLResult?.[0];

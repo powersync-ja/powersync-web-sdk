@@ -1,17 +1,20 @@
 {
-  "name": "powersync-web-sdk",
+  "name": "@journeyapps/powersync-web-sdk",
   "version": "0.0.0",
-  "description": "Monorepo for Powersync Web SDK",
+  "description": "Monorepo for PowerSync Web SDK",
   "private": true,
   "scripts": {
-    "build:packages": "pnpm run --filter=!powersync-test -r build",
+    "build:all": "pnpm run -r build",
+    "build:packages": "pnpm run --filter=!@journeyapps/powersync-nextjs-demo -r build",
     "clean": "pnpm run -r clean",
+    "release": "pnpm build:packages && pnpm changeset publish",
     "watch": "pnpm run --parallel  watch"
   },
   "keywords": [],
   "author": "",
   "license": "UNLICENSED",
   "devDependencies": {
+    "@changesets/cli": "^2.26.2",
     "prettier": "^3.0.3"
   }
 }

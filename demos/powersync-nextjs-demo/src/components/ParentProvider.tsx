@@ -41,8 +41,6 @@ export const ParentProvider = ({ children }: { children: React.ReactNode }) => {
         }
       },
       sessionStarted: () => {
-        //@ts-ignore
-        window.counttest++;
         powerSync.connect(connector);
       }
     });

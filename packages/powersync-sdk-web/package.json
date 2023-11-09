@@ -1,11 +1,10 @@
 {
   "name": "@journeyapps/powersync-sdk-web",
-  "private": "true",
   "version": "0.0.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "repository": "https://github.com/powersync-js/powersync-web-sdk",
+  "repository": "https://github.com/powersync-ja/powersync-web-sdk",
   "bugs": {
     "url": "https://github.com/powersync-ja/powersync-web-sdk/issues"
   },
