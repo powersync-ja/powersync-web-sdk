@@ -4,6 +4,9 @@
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "repository": "https://github.com/powersync-ja/powersync-web-sdk",
   "bugs": {
     "url": "https://github.com/powersync-ja/powersync-web-sdk/issues"
