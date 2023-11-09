@@ -2,7 +2,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { usePowerSyncWatchedQuery } from '@journeyapps/powersync-react';
-import { Box, TextField, styled } from '@mui/material';
+import { Box, Button, Grid, TextField, styled } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { NavigationPage } from '@/components/navigation/NavigationPage';
 
@@ -14,6 +14,7 @@ export type LoginFormParams = {
 const DEFAULT_QUERY = 'SELECT * FROM lists';
 
 export default function SQLConsolePage() {
+  const inputRef = React.useRef<HTMLInputElement>();
   const [query, setQuery] = React.useState(DEFAULT_QUERY);
   const querySQLResult = usePowerSyncWatchedQuery(query);
 
@@ -31,22 +32,34 @@ export default function SQLConsolePage() {
     };
   }, [querySQLResult]);
 
-  const debouncedSetQuery = React.useCallback(
-    _.debounce((query: string) => {
-      setQuery(query);
-    }, 500),
-    []
-  );
-
   return (
     <NavigationPage title="SQL Console">
       <S.MainContainer>
-        <TextField
+        <S.CenteredGrid container >
+          <S.CenteredGrid item xs={12} md={10}>
+          <TextField
+          inputRef={inputRef}
           fullWidth
           label="Query"
           defaultValue={DEFAULT_QUERY}
-          onChange={(event) => debouncedSetQuery(event.target.value)}
+          onKeyDown={(e) => {
+            const inputValue = inputRef.current?.value;
+            if (e.key == 'Enter' && inputValue ) {
+              setQuery(inputValue)
+            }
+          }}
         />
+          </S.CenteredGrid>
+          <S.CenteredGrid item xs={12} md={2}>
+            <Button sx={{margin: '10px'}} variant='contained' onClick={()=> {
+              const queryInput = inputRef?.current?.value;
+              if (queryInput) {
+                setQuery(queryInput)
+              }
+            }}>Execute Query</Button>
+          </S.CenteredGrid>
+        </S.CenteredGrid>
+     
 
         {queryDataGridResult ? (
           <S.QueryResultContainer>
@@ -81,4 +94,10 @@ namespace S {
   export const QueryResultContainer = styled(Box)`
     margin-top: 40px;
   `;
+
+  export const CenteredGrid = styled(Grid)`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  `
 }
