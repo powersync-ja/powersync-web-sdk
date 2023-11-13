@@ -33,8 +33,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/powersync-sdk-web
       '@journeyapps/wa-sqlite':
-        specifier: 0.0.0-dev-20231113070817
-        version: 0.0.0-dev-20231113070817
+        specifier: 0.0.1
+        version: 0.0.1
       '@mui/icons-material':
         specifier: ^5.14.16
         version: 5.14.16(@mui/material@5.14.16)(@types/react@18.0.0)(react@18.0.0)
@@ -100,8 +100,8 @@ importers:
   packages/powersync-sdk-web:
     dependencies:
       '@journeyapps/powersync-sdk-common':
-        specifier: 0.1.3
-        version: 0.1.3
+        specifier: 0.1.4
+        version: 0.1.4
       comlink:
         specifier: ^4.4.1
         version: 4.4.1
@@ -116,8 +116,8 @@ importers:
         version: 9.0.1
     devDependencies:
       '@journeyapps/wa-sqlite':
-        specifier: 0.0.0-dev-20231113070817
-        version: 0.0.0-dev-20231113070817
+        specifier: 0.0.1
+        version: 0.0.1
       '@types/lodash':
         specifier: ^4.14.200
         version: 4.14.200
@@ -571,8 +571,20 @@ packages:
       uuid: 3.4.0
     dev: false
 
-  /@journeyapps/wa-sqlite@0.0.0-dev-20231113070817:
-    resolution: {integrity: sha512-ERhYtApJiIsvaKNMk+5wWMWxXpaJNbbUY3A0u5dQcF0GY/x4CvhLvxUgWFzG7LI12XAORnDzLUcgcc355MjFXQ==}
+  /@journeyapps/powersync-sdk-common@0.1.4:
+    resolution: {integrity: sha512-VFf/ej7sy1NxL0yFkMwPIIjCI9TJ6EWj0thx5WPEanhLeCqgA5OdTmSmp39Tc6EYxF1VZdLWqUMvhT+r0WMFuQ==}
+    dependencies:
+      async-mutex: 0.4.0
+      can-ndjson-stream: 1.0.2
+      event-iterator: 2.0.0
+      js-logger: 1.6.1
+      lodash: 4.17.21
+      object-hash: 3.0.0
+      uuid: 3.4.0
+    dev: false
+
+  /@journeyapps/wa-sqlite@0.0.1:
+    resolution: {integrity: sha512-lsaPhjCZbHhAZ5JpftJTWL0JkVipja/PrF6Xno/lzFOWledfszvnMtvCZfGNxCaiGljk3ds3Hg5erPzGD+z1uw==}
 
   /@jridgewell/gen-mapping@0.3.3:
     resolution: {integrity: sha512-HLhSWOLRi875zjjMG/r+Nv0oCW8umGb0BgEhyX3dDX3egwZtB8PqLnjz3yedt8R5StBrzcg4aBpnh8UA9D1BoQ==}
