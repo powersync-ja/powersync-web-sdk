@@ -1,0 +1,31 @@
+# Ensures packages build correctly
+name: Build
+
+on:
+  push:
+
+jobs:
+  build:
+    name: Build All
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v2
+        with:
+          node-version: 20
+
+      - name: Setup PNPM
+        run: |
+          npm install -g pnpm
+          echo "PNPM version: $(pnpm -v)"
+          echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_TOKEN}}" >> ~/.npmrc
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build:all
