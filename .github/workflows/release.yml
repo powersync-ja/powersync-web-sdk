@@ -19,6 +19,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20
+      
+      - name: Setup PNPM
+        run: |
+          npm install -g pnpm
 
       - name: Install Dependencies
         run: pnpm
