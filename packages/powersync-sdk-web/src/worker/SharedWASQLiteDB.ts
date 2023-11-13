@@ -58,7 +58,6 @@ async function _openDB(dbFileName: string): Promise<InternalDBWorkerInterface> {
 
   /**
    * This executes SQL statements.
-   * Note that this should be guarded with a lock to ensure only 1 query is executed concurrently.
    */
   const execute = async (sql: string | TemplateStringsArray, bindings?: any[]): Promise<WASQLExecuteResult> => {
     // Running multiple statements on the same connection concurrently should not be allowed
@@ -123,8 +122,6 @@ async function _openDB(dbFileName: string): Promise<InternalDBWorkerInterface> {
         }
       };
 
-      // For verbose debugging. TODO, maybe remove this if not helpful
-      console.debug(sql, bindings, JSON.stringify(result));
       return result;
     });
   };
