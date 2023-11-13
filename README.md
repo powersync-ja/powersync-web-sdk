@@ -8,7 +8,7 @@ This monorepo contains the packages for PowerSync's Web SDK.
 
 Demo applications are located in the `/demos/` directory.
 
- - [apps/powersync-nextjs-demo](./demos/powersync-nextjs-demo/README.md): A NextJS 14 Todo list application.
+ - [demos/powersync-nextjs-demo](./demos/powersync-nextjs-demo/README.md): A NextJS 14 Todo list application.
 
 
 ### Packages
