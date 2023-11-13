@@ -6,8 +6,9 @@
   "scripts": {
     "build:all": "pnpm run -r build",
     "build:packages": "pnpm run --filter './packages/**' -r build",
+    "ci:version": "changeset version && pnpm install --no-frozen-lockfile",
+    "ci:publish": "changeset publish && git push --follow-tags",
     "clean": "pnpm run -r clean",
-    "release": "pnpm build:packages && pnpm changeset publish",
     "watch": "pnpm run --parallel  watch"
   },
   "keywords": [],
