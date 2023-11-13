@@ -1,5 +1,4 @@
-//@ts-ignore TODO add types to package
-import * as SQLite from '@journeyapps/wa-sqlite/src/sqlite-api.js';
+import * as SQLite from '@journeyapps/wa-sqlite';
 import '@journeyapps/wa-sqlite';
 
 import _ from 'lodash';
@@ -31,12 +30,10 @@ export type InternalDBWorkerInterface = DBWorkerInterface & {
 const _self: SharedWorkerGlobalScope = self as any;
 
 async function _openDB(dbFileName: string): Promise<InternalDBWorkerInterface> {
-  // @ts-ignore TODO better typings
   const { default: moduleFactory } = await import('@journeyapps/wa-sqlite/dist/wa-sqlite-async.mjs');
   const module = await moduleFactory();
   const sqlite3 = SQLite.Factory(module);
 
-  // @ts-ignore
   const { IDBBatchAtomicVFS } = await import('@journeyapps/wa-sqlite/src/examples/IDBBatchAtomicVFS.js');
   const vfs = new IDBBatchAtomicVFS(dbFileName);
   sqlite3.vfs_register(vfs, true);
