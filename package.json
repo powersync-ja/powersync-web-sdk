@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "build:all": "pnpm run -r build",
-    "build:packages": "pnpm run --filter=!@journeyapps/powersync-nextjs-demo -r build",
+    "build:packages": "pnpm run --filter './packages/**' -r build",
     "clean": "pnpm run -r clean",
     "release": "pnpm build:packages && pnpm changeset publish",
     "watch": "pnpm run --parallel  watch"

@@ -15,7 +15,7 @@
     "@fontsource/roboto": "^5.0.8",
     "@journeyapps/powersync-react": "0.1.2",
     "@journeyapps/powersync-sdk-web": "workspace:*",
-    "@journeyapps/wa-sqlite": "0.0.0-dev-20231109054802",
+    "@journeyapps/wa-sqlite": "0.0.0-dev-20231113070817",
     "@mui/icons-material": "^5.14.16",
     "@mui/material": "^5.14.16",
     "@mui/x-data-grid": "^6.17.0",

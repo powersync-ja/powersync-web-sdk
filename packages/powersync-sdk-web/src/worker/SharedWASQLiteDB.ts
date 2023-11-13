@@ -26,7 +26,7 @@ export type DBWorkerInterface = {
 
 export type InternalDBWorkerInterface = DBWorkerInterface & {
   close: () => void;
-}
+};
 
 const _self: SharedWorkerGlobalScope = self as any;
 
@@ -37,8 +37,8 @@ async function _openDB(dbFileName: string): Promise<InternalDBWorkerInterface> {
   const sqlite3 = SQLite.Factory(module);
 
   // @ts-ignore
-  const { IDBMinimalVFS } = await import('@journeyapps/wa-sqlite/src/examples/IDBMinimalVFS.js');
-  const vfs = new IDBMinimalVFS(dbFileName);
+  const { IDBBatchAtomicVFS } = await import('@journeyapps/wa-sqlite/src/examples/IDBBatchAtomicVFS.js');
+  const vfs = new IDBBatchAtomicVFS(dbFileName);
   sqlite3.vfs_register(vfs, true);
 
   const db = await sqlite3.open_v2(dbFileName);
@@ -154,8 +154,8 @@ _self.onconnect = function (event: MessageEvent<string>) {
   Comlink.expose(openDB, port);
 };
 
-addEventListener("beforeunload", (event) => {
-  Array.from(DBMap.values()).forEach(db => {
+addEventListener('beforeunload', (event) => {
+  Array.from(DBMap.values()).forEach((db) => {
     db.close();
-  })
+  });
 });

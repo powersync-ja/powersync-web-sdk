@@ -18,7 +18,7 @@
   "homepage": "https://docs.powersync.co",
   "scripts": {
     "build": "tsc --build",
-    "clean": "rm -rf dist",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo",
     "watch": "tsc --build -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -35,10 +35,10 @@
     "@types/lodash": "^4.14.200",
     "@types/uuid": "^9.0.6",
     "typescript": "^5.2.2",
-    "@journeyapps/wa-sqlite": "0.0.0-dev-20231109054802"
+    "@journeyapps/wa-sqlite": "0.0.0-dev-20231113070817"
   },
   "peerDependencies": {
-    "@journeyapps/wa-sqlite": "0.0.0-dev-20231109054802"
+    "@journeyapps/wa-sqlite": "0.0.0-dev-20231113070817"
   },
   "dependencies": {
     "@journeyapps/powersync-sdk-common": "0.1.3",

@@ -25,4 +25,8 @@ This monorepo uses PNPM.
 pnpm install
 ```
 
+```bash 
+pnpm build:packages
+```
+
 To run a demo app see [README](./demos/powersync-nextjs-demo/README.md)

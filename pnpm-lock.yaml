@@ -33,8 +33,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/powersync-sdk-web
       '@journeyapps/wa-sqlite':
-        specifier: 0.0.0-dev-20231109054802
-        version: 0.0.0-dev-20231109054802
+        specifier: 0.0.0-dev-20231113070817
+        version: 0.0.0-dev-20231113070817
       '@mui/icons-material':
         specifier: ^5.14.16
         version: 5.14.16(@mui/material@5.14.16)(@types/react@18.0.0)(react@18.0.0)
@@ -116,8 +116,8 @@ importers:
         version: 9.0.1
     devDependencies:
       '@journeyapps/wa-sqlite':
-        specifier: 0.0.0-dev-20231109054802
-        version: 0.0.0-dev-20231109054802
+        specifier: 0.0.0-dev-20231113070817
+        version: 0.0.0-dev-20231113070817
       '@types/lodash':
         specifier: ^4.14.200
         version: 4.14.200
@@ -571,8 +571,8 @@ packages:
       uuid: 3.4.0
     dev: false
 
-  /@journeyapps/wa-sqlite@0.0.0-dev-20231109054802:
-    resolution: {integrity: sha512-5vL5RA8JEcs2QjhYMNE4Si2JGHqk/VsGGNG63acnCxM8ftgtiDP6lwpzTTX2gIF2lb6ynNC4wEUCVQc6X/588Q==}
+  /@journeyapps/wa-sqlite@0.0.0-dev-20231113070817:
+    resolution: {integrity: sha512-ERhYtApJiIsvaKNMk+5wWMWxXpaJNbbUY3A0u5dQcF0GY/x4CvhLvxUgWFzG7LI12XAORnDzLUcgcc355MjFXQ==}
 
   /@jridgewell/gen-mapping@0.3.3:
     resolution: {integrity: sha512-HLhSWOLRi875zjjMG/r+Nv0oCW8umGb0BgEhyX3dDX3egwZtB8PqLnjz3yedt8R5StBrzcg4aBpnh8UA9D1BoQ==}
