@@ -11,8 +11,8 @@
     "watch": "pnpm run --parallel  watch"
   },
   "keywords": [],
-  "author": "",
-  "license": "UNLICENSED",
+  "author": "JOURNEYAPPS",
+  "license": "Apache-2.0",
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
     "prettier": "^3.0.3"

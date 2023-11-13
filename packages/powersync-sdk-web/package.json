@@ -13,7 +13,7 @@
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
-    "access": "restricted"
+    "access": "public"
   },
   "homepage": "https://docs.powersync.co",
   "scripts": {
