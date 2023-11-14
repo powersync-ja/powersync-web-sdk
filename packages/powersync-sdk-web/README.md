@@ -3,7 +3,7 @@
 [PowerSync](https://powersync.co) is a service and set of SDKs that keeps Postgres databases in sync with on-device SQLite databases. See a summary of features [here](https://docs.powersync.co/client-sdk-references/react-native-and-expo).
 
 ## Alpha Release
-This React Native SDK package is currently in an alpha release.
+This SDK package is currently in an alpha release.
 
 # Installation
 
