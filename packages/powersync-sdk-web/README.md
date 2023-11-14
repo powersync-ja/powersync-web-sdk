@@ -1,6 +1,6 @@
 # PowerSync SDK for Web
 
-[PowerSync](https://powersync.co) is a service and set of SDKs that keeps Postgres databases in sync with on-device SQLite databases. See a summary of features [here](https://docs.powersync.co/client-sdk-references/react-native-and-expo).
+[PowerSync](https://powersync.co) is a service and set of SDKs that keeps Postgres databases in sync with on-device SQLite databases.
 
 ## Alpha Release
 This SDK package is currently in an alpha release.
@@ -98,4 +98,10 @@ export const connectPowerSync = async () => {
 
 React hooks are available in the [@journeyapps/powersync-react](https://www.npmjs.com/package/@journeyapps/powersync-react) package
 
-Refer to our [full documentation](https://docs.powersync.co/client-sdk-references/react-native-and-expo) to learn more.
+
+## Demo Apps
+
+See our [NextJS Demo App](https://github.com/powersync-ja/powersync-web-sdk/tree/main/demos/powersync-nextjs-demo) for how to use this SDK with NextJS. 
+
+# Known Issues
+This initial SDK uses a `SharedWorker` for DB operations. This is not supported on Chrome for Android. Future SDK versions will feature selectable DB Adapters which will increase compatibility. 
