@@ -104,4 +104,4 @@ React hooks are available in the [@journeyapps/powersync-react](https://www.npmj
 See our [NextJS Demo App](https://github.com/powersync-ja/powersync-web-sdk/tree/main/demos/powersync-nextjs-demo) for how to use this SDK with NextJS. 
 
 # Known Issues
-This initial SDK uses a `SharedWorker` for DB operations. This is not supported on Chrome for Android. Future SDK versions will feature selectable DB Adapters which will increase compatibility. 
+This initial SDK version uses a `SharedWorker` for DB operations which is not supported on Chrome for Android. Future SDK versions will feature selectable DB Adapters which will increase compatibility. 
