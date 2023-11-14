@@ -29,4 +29,4 @@ pnpm install
 pnpm build:packages
 ```
 
-To run a demo app see [README](./demos/powersync-nextjs-demo/README.md)
+To run a demo app see [README](./demos/powersync-nextjs-demo/README.md#getting-started)
