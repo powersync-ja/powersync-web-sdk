@@ -28,7 +28,7 @@ This package uses [js-logger](https://www.npmjs.com/package/js-logger) for loggi
 
 Enable JS Logger with your logging interface of choice or use the default `console`
 ```JavaScript
-import { Logger } from 'js-logger';
+import Logger from 'js-logger';
 
 // Log messages will be written to the window's console.
 Logger.useDefaults();
@@ -51,7 +51,7 @@ See our [Docs](https://docs.powersync.co/usage/installation/client-side-setup) f
 import {
   Column,
   ColumnType,
-  RNQSPowerSyncDatabaseOpenFactory,
+  WASQLitePowerSyncDatabaseOpenFactory,
   Schema,
   Table
 } from '@journeyapps/powersync-sdk-web';
@@ -63,7 +63,7 @@ export const AppSchema = new Schema([
 let PowerSync;
 
 export const openDatabase = async () => {
-  const PowerSync = new WASQLitePowerSyncDatabaseOpenFactory({
+  PowerSync = new WASQLitePowerSyncDatabaseOpenFactory({
     schema: AppSchema,
     dbFilename: 'test.sqlite'
   }).getInstance();
@@ -81,7 +81,6 @@ class Connector {
       endpoint: '[The PowerSync instance URL]',
       token: 'An authentication token',
       expiresAt: 'When the token expires',
-      userID: 'User ID to associate the session with'
     };
   }
 
