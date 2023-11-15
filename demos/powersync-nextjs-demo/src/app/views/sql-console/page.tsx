@@ -35,31 +35,35 @@ export default function SQLConsolePage() {
   return (
     <NavigationPage title="SQL Console">
       <S.MainContainer>
-        <S.CenteredGrid container >
+        <S.CenteredGrid container>
           <S.CenteredGrid item xs={12} md={10}>
-          <TextField
-          inputRef={inputRef}
-          fullWidth
-          label="Query"
-          defaultValue={DEFAULT_QUERY}
-          onKeyDown={(e) => {
-            const inputValue = inputRef.current?.value;
-            if (e.key == 'Enter' && inputValue ) {
-              setQuery(inputValue)
-            }
-          }}
-        />
+            <TextField
+              inputRef={inputRef}
+              fullWidth
+              label="Query"
+              defaultValue={DEFAULT_QUERY}
+              onKeyDown={(e) => {
+                const inputValue = inputRef.current?.value;
+                if (e.key == 'Enter' && inputValue) {
+                  setQuery(inputValue);
+                }
+              }}
+            />
           </S.CenteredGrid>
           <S.CenteredGrid item xs={12} md={2}>
-            <Button sx={{margin: '10px'}} variant='contained' onClick={()=> {
-              const queryInput = inputRef?.current?.value;
-              if (queryInput) {
-                setQuery(queryInput)
-              }
-            }}>Execute Query</Button>
+            <Button
+              sx={{ margin: '10px' }}
+              variant="contained"
+              onClick={() => {
+                const queryInput = inputRef?.current?.value;
+                if (queryInput) {
+                  setQuery(queryInput);
+                }
+              }}>
+              Execute Query
+            </Button>
           </S.CenteredGrid>
         </S.CenteredGrid>
-     
 
         {queryDataGridResult ? (
           <S.QueryResultContainer>
@@ -99,5 +103,5 @@ namespace S {
     display: flex;
     justify-content: center;
     align-items: center;
-  `
+  `;
 }

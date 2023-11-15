@@ -42,4 +42,5 @@ next-env.d.ts
 # PWA
 **/public/workbox-*.js
 **/public/sw.js
+**/public/swe-worker-*
 **/public/fallback-*.js
