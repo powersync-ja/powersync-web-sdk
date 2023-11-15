@@ -17,7 +17,9 @@ export const SystemProvider = ({ children }: { children: React.ReactNode }) => {
   const [powerSync] = React.useState(
     new WASQLitePowerSyncDatabaseOpenFactory({
       dbFilename: 'example.db',
-      schema: AppSchema
+      schema: AppSchema,
+      // This is disabled once CSR+SSR functionality is verified to be working correctly
+      disableSSRWarning: true
     }).getInstance()
   );
 

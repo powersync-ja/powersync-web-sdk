@@ -14,10 +14,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<SupabaseCo
       powersyncUrl: process.env.POWERSYNC_URL!
     },
     {
-      status: 200,
-      headers: {
-        'Cache-Control': 'max-age=31536000' // 1 year in seconds
-      }
+      status: 200
     }
   );
 }
