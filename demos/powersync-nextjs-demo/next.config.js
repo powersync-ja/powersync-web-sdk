@@ -2,7 +2,7 @@ const { default: _withPWA } = require('@ducanh2912/next-pwa');
 const withPWA = _withPWA({
   dest: 'public',
   cacheStartUrl: true,
-  dynamicStartUrl: '/views/todo-lists',
+  dynamicStartUrl: true,
   cacheOnFrontEndNav: true,
   aggressiveFrontEndNavCaching: true,
   swcMinify: true,
@@ -15,19 +15,11 @@ const withPWA = _withPWA({
       {
         urlPattern: ({ request, url: { pathname }, sameOrigin }) =>
           '1' === request.headers.get('RSC') && sameOrigin && !pathname.startsWith('/api/'),
-        handler: 'NetworkFirst',
+        // Caching server-side rendering caused a lot of bugs
+        handler: 'NetworkOnly',
         options: {
           cacheName: 'pages-rsc',
-          plugins: [
-            {
-              cacheKeyWillBeUsed: ({ request, mode }) => {
-                const url = new URL(request.url || request);
-                url.searchParams.delete('_rsc');
-                url.searchParams.delete('id');
-                return url.href;
-              }
-            }
-          ]
+          plugins: []
         }
       },
       {

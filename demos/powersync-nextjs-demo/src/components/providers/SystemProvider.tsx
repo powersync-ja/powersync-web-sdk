@@ -6,12 +6,20 @@ import { PowerSyncContext } from '@journeyapps/powersync-react';
 import { WASQLitePowerSyncDatabaseOpenFactory } from '@journeyapps/powersync-sdk-web';
 import { AppSchema } from '@/library/powersync/AppSchema';
 import { SupabaseConnector } from '@/library/powersync/SupabaseConnector';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { DEFAULT_ENTRY_ROUTE } from '../Routes';
 import { CircularProgress } from '@mui/material';
 
 const SupabaseContext = React.createContext<SupabaseConnector | null>(null);
 export const useSupabase = () => React.useContext(SupabaseContext);
+
+/**
+ * This provider acts as an authenticator guard. If there is no active
+ * session it will navigate to the login screen. If there is an
+ * active session and the current path is the index, it will navigate
+ * to the default entry point page.
+ */
+const REDIRECT_ON_AUTHENTICATED_ROUTES = ['/'];
 
 export const SystemProvider = ({ children }: { children: React.ReactNode }) => {
   const [connector] = React.useState(new SupabaseConnector());
@@ -35,13 +43,11 @@ export const SystemProvider = ({ children }: { children: React.ReactNode }) => {
     window._powersync = powerSync;
     powerSync.init();
 
-    connector.registerListener({
+    const l = connector.registerListener({
       initialized: () => {
-        if (connector.currentSession) {
-          powerSync.connect(connector);
-          router.push(DEFAULT_ENTRY_ROUTE);
-        } else {
+        if (!connector.currentSession) {
           router.push('/auth/login');
+          return;
         }
       },
       sessionStarted: () => {
@@ -50,6 +56,8 @@ export const SystemProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     connector.init();
+
+    return () => l?.();
   }, [powerSync, connector, router]);
 
   return (
