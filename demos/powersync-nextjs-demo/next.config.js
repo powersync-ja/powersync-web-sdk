@@ -1,5 +1,4 @@
-const { default: _withPWA, runtimeCaching } = require('@ducanh2912/next-pwa');
-
+const { default: _withPWA } = require('@ducanh2912/next-pwa');
 const withPWA = _withPWA({
   dest: 'public',
   cacheStartUrl: true,
@@ -11,7 +10,46 @@ const withPWA = _withPWA({
   customWorkerSrc: 'service-worker',
   extendDefaultRuntimeCaching: true,
   workboxOptions: {
-    runtimeCaching: []
+    // This adds some caching logic which uses the same cache for different query parameters
+    runtimeCaching: [
+      {
+        urlPattern: ({ request, url: { pathname }, sameOrigin }) =>
+          '1' === request.headers.get('RSC') && sameOrigin && !pathname.startsWith('/api/'),
+        handler: 'NetworkFirst',
+        options: {
+          cacheName: 'pages-rsc',
+          plugins: [
+            {
+              cacheKeyWillBeUsed: ({ request, mode }) => {
+                const url = new URL(request.url || request);
+                url.searchParams.delete('_rsc');
+                url.searchParams.delete('id');
+                return url.href;
+              }
+            }
+          ]
+        }
+      },
+      {
+        urlPattern: ({ url: { pathname }, sameOrigin }) => sameOrigin && pathname.startsWith('/views/'),
+        handler: 'NetworkFirst',
+        options: {
+          cacheName: 'views',
+          plugins: [
+            {
+              cacheKeyWillBeUsed: ({ request, mode }) => {
+                const url = new URL(request.url || request);
+                if (url.pathname.includes('/todo-lists/edit')) {
+                  // The page content is the same for any todo list. The todo is fetched dynamically
+                  url.searchParams.delete('id');
+                }
+                return url.href;
+              }
+            }
+          ]
+        }
+      }
+    ]
   }
 });
 

@@ -1,6 +1,6 @@
 'use client';
 import _ from 'lodash';
-import React from 'react';
+import React, { Suspense } from 'react';
 import Logger from 'js-logger';
 import { PowerSyncContext } from '@journeyapps/powersync-react';
 import { WASQLitePowerSyncDatabaseOpenFactory } from '@journeyapps/powersync-sdk-web';
@@ -8,6 +8,7 @@ import { AppSchema } from '@/library/powersync/AppSchema';
 import { SupabaseConnector } from '@/library/powersync/SupabaseConnector';
 import { useRouter } from 'next/navigation';
 import { DEFAULT_ENTRY_ROUTE } from '../Routes';
+import { CircularProgress } from '@mui/material';
 
 const SupabaseContext = React.createContext<SupabaseConnector | null>(null);
 export const useSupabase = () => React.useContext(SupabaseContext);
@@ -52,9 +53,11 @@ export const SystemProvider = ({ children }: { children: React.ReactNode }) => {
   }, [powerSync, connector, router]);
 
   return (
-    <PowerSyncContext.Provider value={powerSync}>
-      <SupabaseContext.Provider value={connector}>{children}</SupabaseContext.Provider>
-    </PowerSyncContext.Provider>
+    <Suspense fallback={<CircularProgress />}>
+      <PowerSyncContext.Provider value={powerSync}>
+        <SupabaseContext.Provider value={connector}>{children}</SupabaseContext.Provider>
+      </PowerSyncContext.Provider>
+    </Suspense>
   );
 };
 

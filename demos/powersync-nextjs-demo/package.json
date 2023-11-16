@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ducanh2912/next-pwa": "9.7.2",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^5.0.8",
@@ -24,9 +25,10 @@
     "js-logger": "^1.6.1",
     "lodash": "^4.17.21",
     "next": "14.0.0",
-    "@ducanh2912/next-pwa": "9.7.2",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "workbox-strategies": "^7.0.0",
+    "workbox-sw": "^7.0.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.200",

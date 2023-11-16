@@ -65,7 +65,13 @@ let PowerSync;
 export const openDatabase = async () => {
   const PowerSync = new WASQLitePowerSyncDatabaseOpenFactory({
     schema: AppSchema,
-    dbFilename: 'test.sqlite'
+    dbFilename: 'test.sqlite',
+    /**
+     * The SDK will return empty query results in SSR mode.
+     * By default the SDK will warn that it's running in SSR
+     * mode to assist with debugging.
+     */
+    disableSSRWarning: true
   }).getInstance();
 
   await PowerSync.init();

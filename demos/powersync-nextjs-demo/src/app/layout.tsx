@@ -4,6 +4,7 @@ import { Rubik } from 'next/font/google';
 import './globals.css';
 import { ThemeProviderContainer } from '@/components/providers/ThemeProviderContainer';
 import SystemProvider from '@/components/providers/SystemProvider';
+import { DynamicSystemProvider } from '@/components/providers/DynamicSystemProvider';
 
 const rubik = Rubik({ subsets: ['latin'], display: 'swap' });
 
@@ -22,7 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className={rubik.className}>
         <ThemeProviderContainer>
-          <SystemProvider>{children}</SystemProvider>
+          <DynamicSystemProvider>{children}</DynamicSystemProvider>
         </ThemeProviderContainer>
       </body>
     </html>
