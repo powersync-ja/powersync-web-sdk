@@ -38,6 +38,23 @@ pnpm watch
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Progressive Web App (PWA)
+This demo is PWA compatible. PWA is not available in development (watch) mode.
+
+Build the production codebase
+
+```bash
+pnpm build
+```
+
+Run the production server
+
+```bash
+pnpm start
+```
+
+Open a browser on the served URL and install the PWA.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
