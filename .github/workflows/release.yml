@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -15,20 +16,48 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v3
 
-      - name: Setup Node.js 18
+      - name: Setup Node.js 20
         uses: actions/setup-node@v3
         with:
           node-version: 20
 
+      - name: Setup PNPM
+        run: |
+          npm install -g pnpm@8
+          echo "PNPM version: $(pnpm -v)"
+
+      - name: Setup NPMRC
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_TOKEN}}" >> ~/.npmrc
+
       - name: Install Dependencies
-        run: pnpm
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages
+        run: pnpm build:packages
+
+      - id: is_dev
+        run: |
+          IS_DEV=${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/changeset-release/main' }}
+          echo "value=$IS_DEV" >> $GITHUB_OUTPUT
+
+      - name: Publish dev packages
+        if: ${{ steps.is_dev.outputs.value == 'true' }}
+        run: |
+          pnpm changeset version --no-git-tag --snapshot dev
+          pnpm changeset publish --tag next
 
       - name: Create Release Pull Request or Publish to npm
+        if: ${{ steps.is_dev.outputs.value == 'false' }}
         id: changesets
         uses: changesets/action@v1
         with:
-          # This expects you to have a script called release which does a build for your packages and calls changeset publish
-          publish: pnpm release
+          version: pnpm ci:version
+          commit: 'chore: update versions'
+          title: '[Chore] update versions'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish production components.
+        if: ${{ github.ref == 'refs/heads/main' && steps.changesets.outputs.hasChangesets == 'false' }}
+        run: pnpm ci:publish

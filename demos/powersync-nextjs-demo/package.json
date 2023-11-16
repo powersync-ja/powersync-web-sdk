@@ -1,6 +1,6 @@
 {
   "name": "@journeyapps/powersync-nextjs-demo",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "private": true,
   "scripts": {
     "build": "next build",
@@ -26,9 +26,7 @@
     "lodash": "^4.17.21",
     "next": "14.0.0",
     "react": "^18",
-    "react-dom": "^18",
-    "workbox-strategies": "^7.0.0",
-    "workbox-sw": "^7.0.0"
+    "react-dom": "^18"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.200",

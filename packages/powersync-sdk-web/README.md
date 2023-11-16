@@ -1,9 +1,9 @@
 # PowerSync SDK for Web
 
-[PowerSync](https://powersync.co) is a service and set of SDKs that keeps Postgres databases in sync with on-device SQLite databases. See a summary of features [here](https://docs.powersync.co/client-sdk-references/react-native-and-expo).
+[PowerSync](https://powersync.co) is a service and set of SDKs that keeps Postgres databases in sync with on-device SQLite databases.
 
 ## Alpha Release
-This React Native SDK package is currently in an alpha release.
+This SDK package is currently in an alpha release.
 
 # Installation
 
@@ -28,7 +28,7 @@ This package uses [js-logger](https://www.npmjs.com/package/js-logger) for loggi
 
 Enable JS Logger with your logging interface of choice or use the default `console`
 ```JavaScript
-import { Logger } from 'js-logger';
+import Logger from 'js-logger';
 
 // Log messages will be written to the window's console.
 Logger.useDefaults();
@@ -51,7 +51,7 @@ See our [Docs](https://docs.powersync.co/usage/installation/client-side-setup) f
 import {
   Column,
   ColumnType,
-  RNQSPowerSyncDatabaseOpenFactory,
+  WASQLitePowerSyncDatabaseOpenFactory,
   Schema,
   Table
 } from '@journeyapps/powersync-sdk-web';
@@ -87,7 +87,6 @@ class Connector {
       endpoint: '[The PowerSync instance URL]',
       token: 'An authentication token',
       expiresAt: 'When the token expires',
-      userID: 'User ID to associate the session with'
     };
   }
 
@@ -105,4 +104,9 @@ export const connectPowerSync = async () => {
 
 React hooks are available in the [@journeyapps/powersync-react](https://www.npmjs.com/package/@journeyapps/powersync-react) package
 
-Refer to our [full documentation](https://docs.powersync.co/client-sdk-references/react-native-and-expo) to learn more.
+## Demo Apps
+
+See our [NextJS Demo App](https://github.com/powersync-ja/powersync-web-sdk/tree/main/demos/powersync-nextjs-demo) for how to use this SDK with NextJS and Supabase. 
+
+# Known Issues
+This initial SDK version uses a `SharedWorker` for DB operations which is not supported on Chrome for Android. Future SDK versions will feature selectable DB Adapters which will increase compatibility. 
