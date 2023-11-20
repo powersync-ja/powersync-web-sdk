@@ -63,7 +63,7 @@ export const AppSchema = new Schema([
 let PowerSync;
 
 export const openDatabase = async () => {
-  const PowerSync = new WASQLitePowerSyncDatabaseOpenFactory({
+  PowerSync = new WASQLitePowerSyncDatabaseOpenFactory({
     schema: AppSchema,
     dbFilename: 'test.sqlite',
     /**
