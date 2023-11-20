@@ -12,7 +12,11 @@ import {
 import _ from 'lodash';
 import * as Comlink from 'comlink';
 import Logger, { ILogger } from 'js-logger';
-import type { OpenDB, WASQLiteExecuteMethod } from '../../../worker/SharedWASQLiteDB.worker';
+import type { OpenDB, WASQLiteExecuteMethod } from '../../../worker/open-db';
+
+export type WASQLiteCapabilities = {
+  isMultiTab: boolean;
+};
 
 /**
  * Adapter for WA-SQLite
@@ -23,8 +27,13 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
   private dbGetHelpers: DBGetUtils | null;
   private _workerExecute: WASQLiteExecuteMethod | null;
 
+  capabilities: WASQLiteCapabilities;
+
   constructor(protected options: Omit<PowerSyncOpenFactoryOptions, 'schema'>) {
     super();
+    this.capabilities = {
+      isMultiTab: typeof SharedWorker !== 'undefined'
+    };
     this.logger = Logger.get('WASQLite');
     this.dbGetHelpers = null;
     this._workerExecute = null;
@@ -33,8 +42,21 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
   }
 
   protected async init() {
-    const worker = new SharedWorker(new URL('../../../worker/SharedWASQLiteDB.worker.js', import.meta.url));
-    const openDB = Comlink.wrap<OpenDB>(worker.port);
+    const { isMultiTab } = this.capabilities;
+    if (!isMultiTab) {
+      this.logger.warn('Multiple tabs are not supported in this browser');
+    }
+    /**
+     *  Webpack V5 can bundle the worker automatically if the full Worker constructor syntax is used
+     *  https://webpack.js.org/guides/web-workers/
+     *  This enables multi tab support by default, but falls back if SharedWorker is not available
+     *  (in the case of Android)
+     */
+    const openDB = isMultiTab
+      ? Comlink.wrap<OpenDB>(
+          new SharedWorker(new URL('../../../worker/SharedWASQLiteDB.worker.js', import.meta.url)).port
+        )
+      : Comlink.wrap<OpenDB>(new Worker(new URL('../../../worker/WASQLiteDB.worker.js', import.meta.url)));
 
     const { execute, registerOnTableChange } = await openDB(this.options.dbFilename);
     this._workerExecute = execute;
