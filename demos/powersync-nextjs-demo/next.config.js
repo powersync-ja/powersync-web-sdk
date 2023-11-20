@@ -10,12 +10,12 @@ const withPWA = _withPWA({
   customWorkerSrc: 'service-worker',
   extendDefaultRuntimeCaching: true,
   workboxOptions: {
-    // This adds some caching logic which uses the same cache for different query parameters
+    // These caching rules extend the default rules from `next-pwa`
     runtimeCaching: [
       {
         urlPattern: ({ request, url: { pathname }, sameOrigin }) =>
           '1' === request.headers.get('RSC') && sameOrigin && !pathname.startsWith('/api/'),
-        // Caching server-side rendering caused a lot of bugs
+        // Caching server-side rendering caused a lot of bugs, this app uses only client side rendering and navigation
         handler: 'NetworkOnly',
         options: {
           cacheName: 'pages-rsc',
