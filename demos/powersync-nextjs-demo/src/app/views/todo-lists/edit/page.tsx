@@ -1,12 +1,13 @@
 'use client';
 import _ from 'lodash';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useSupabase } from '@/components/providers/SystemProvider';
 import { LISTS_TABLE, TODOS_TABLE, TodoRecord } from '@/library/powersync/AppSchema';
 import { usePowerSync, usePowerSyncWatchedQuery } from '@journeyapps/powersync-react';
 import {
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -19,15 +20,20 @@ import {
 } from '@mui/material';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
-import { useParams } from 'next/navigation';
 import { NavigationPage } from '@/components/navigation/NavigationPage';
 import { TodoItemWidget } from '@/components/widgets/TodoItemWidget';
+import { useSearchParams } from 'next/navigation';
 
-export default function TodoEditPage() {
+/**
+ * useSearchParams causes the entire element to fall back to client side rendering
+ * This is exposed as a separate React component in order to suspend its render
+ * and allow the root page to render on the server.
+ */
+const TodoEditSection = () => {
   const powerSync = usePowerSync();
   const supabase = useSupabase();
-  const params = useParams();
-  const listID = params?.id as string;
+  const params = useSearchParams();
+  const listID = (params.get('id') as string) || '';
 
   const [listRecord] = usePowerSyncWatchedQuery<{ name: string }>(`SELECT name FROM ${LISTS_TABLE} WHERE id = ?`, [
     listID
@@ -134,6 +140,16 @@ export default function TodoEditPage() {
         </Dialog>
       </Box>
     </NavigationPage>
+  );
+};
+
+export default function TodoEditPage() {
+  return (
+    <Box>
+      <Suspense fallback={<CircularProgress />}>
+        <TodoEditSection />
+      </Suspense>
+    </Box>
   );
 }
 

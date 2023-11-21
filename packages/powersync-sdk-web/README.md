@@ -65,7 +65,13 @@ let PowerSync;
 export const openDatabase = async () => {
   PowerSync = new WASQLitePowerSyncDatabaseOpenFactory({
     schema: AppSchema,
-    dbFilename: 'test.sqlite'
+    dbFilename: 'test.sqlite',
+    /**
+     * The SDK will return empty query results in SSR mode.
+     * By default the SDK will warn that it's running in SSR
+     * mode to assist with debugging.
+     */
+    disableSSRWarning: true
   }).getInstance();
 
   await PowerSync.init();
@@ -97,7 +103,6 @@ export const connectPowerSync = async () => {
 ```
 
 React hooks are available in the [@journeyapps/powersync-react](https://www.npmjs.com/package/@journeyapps/powersync-react) package
-
 
 ## Demo Apps
 

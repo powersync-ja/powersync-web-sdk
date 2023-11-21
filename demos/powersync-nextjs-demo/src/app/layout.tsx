@@ -15,6 +15,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#c44eff" />
+        <link rel="apple-touch-icon" href="/icons/icon.png"></link>
+      </head>
       <body className={rubik.className}>
         <ThemeProviderContainer>
           <DynamicSystemProvider>{children}</DynamicSystemProvider>

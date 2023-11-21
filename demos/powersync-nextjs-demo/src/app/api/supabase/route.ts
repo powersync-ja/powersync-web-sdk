@@ -13,6 +13,8 @@ export async function GET(request: NextRequest): Promise<NextResponse<SupabaseCo
       supabaseAnonKey: process.env.SUPABASE_ANON_KEY!,
       powersyncUrl: process.env.POWERSYNC_URL!
     },
-    { status: 200 }
+    {
+      status: 200
+    }
   );
 }

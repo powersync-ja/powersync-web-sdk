@@ -12,7 +12,7 @@ import {
 import _ from 'lodash';
 import * as Comlink from 'comlink';
 import Logger, { ILogger } from 'js-logger';
-import type { OpenDB, WASQLiteExecuteMethod } from '../../../worker/SharedWASQLiteDB';
+import type { OpenDB, WASQLiteExecuteMethod } from '../../../worker/SharedWASQLiteDB.worker';
 
 /**
  * Adapter for WA-SQLite
@@ -33,7 +33,7 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
   }
 
   protected async init() {
-    const worker = new SharedWorker(new URL('../../../worker/SharedWASQLiteDB.js', import.meta.url));
+    const worker = new SharedWorker(new URL('../../../worker/SharedWASQLiteDB.worker.js', import.meta.url));
     const openDB = Comlink.wrap<OpenDB>(worker.port);
 
     const { execute, registerOnTableChange } = await openDB(this.options.dbFilename);
@@ -67,11 +67,11 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
 
   close() {
     /**
-    * TODO improve DB closing logic in shared worker.
-    * Cannot close a DB from a single browser tab, as multiple may be using
-    * the same connection.
-    * The shared worker will close connections once it closes
-    * */
+     * TODO improve DB closing logic in shared worker.
+     * Cannot close a DB from a single browser tab, as multiple may be using
+     * the same connection.
+     * The shared worker will close connections once it closes
+     * */
   }
 
   async getAll<T>(sql: string, parameters?: any[] | undefined): Promise<T[]> {

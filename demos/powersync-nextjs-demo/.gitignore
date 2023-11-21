@@ -38,3 +38,10 @@ next-env.d.ts
 .idea
 .fleet
 .vscode
+
+# PWA
+**/public/workbox-*.js
+**/public/sw.js
+**/public/swe-worker-*
+**/public/worker-*.js
+**/public/fallback-*.js

@@ -87,7 +87,7 @@ export default function TodoListsPage() {
                 description={description(r.total_tasks, r.completed_tasks)}
                 onDelete={() => deleteList(r.id)}
                 onPress={() => {
-                  router.push(`/views/todo-lists/edit/${r.id}`);
+                  router.push(`/views/todo-lists/edit?id=${r.id}`);
                 }}
               />
             ))}
