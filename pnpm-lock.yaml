@@ -33,8 +33,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/powersync-sdk-web
       '@journeyapps/wa-sqlite':
-        specifier: 0.0.1
-        version: 0.0.1
+        specifier: ~0.0.2
+        version: 0.0.2
       '@mui/icons-material':
         specifier: ^5.14.16
         version: 5.14.16(@mui/material@5.14.16)(@types/react@18.0.0)(react@18.0.0)
@@ -116,7 +116,7 @@ importers:
         version: 9.0.1
     devDependencies:
       '@journeyapps/wa-sqlite':
-        specifier: 0.0.2
+        specifier: ~0.0.2
         version: 0.0.2
       '@types/lodash':
         specifier: ^4.14.200
@@ -571,13 +571,8 @@ packages:
       uuid: 3.4.0
     dev: false
 
-  /@journeyapps/wa-sqlite@0.0.1:
-    resolution: {integrity: sha512-lsaPhjCZbHhAZ5JpftJTWL0JkVipja/PrF6Xno/lzFOWledfszvnMtvCZfGNxCaiGljk3ds3Hg5erPzGD+z1uw==}
-    dev: false
-
   /@journeyapps/wa-sqlite@0.0.2:
     resolution: {integrity: sha512-qSuSQyzopPiwQd/ChAWe3Po/OzeVrcpWc8KVFzHfhnqR2O3L2bHjsLRsQrnx9hZAF71WNhxfhxF5gGqcbfXmZw==}
-    dev: true
 
   /@jridgewell/gen-mapping@0.3.3:
     resolution: {integrity: sha512-HLhSWOLRi875zjjMG/r+Nv0oCW8umGb0BgEhyX3dDX3egwZtB8PqLnjz3yedt8R5StBrzcg4aBpnh8UA9D1BoQ==}
