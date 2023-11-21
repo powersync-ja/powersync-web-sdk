@@ -36,7 +36,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/powersync-sdk-web
       '@journeyapps/wa-sqlite':
-        specifier: 0.0.2
+        specifier: ~0.0.2
         version: 0.0.2
       '@mui/icons-material':
         specifier: ^5.14.16
@@ -125,7 +125,7 @@ importers:
         version: 9.0.1
     devDependencies:
       '@journeyapps/wa-sqlite':
-        specifier: 0.0.2
+        specifier: ~0.0.2
         version: 0.0.2
       '@types/lodash':
         specifier: ^4.14.200
