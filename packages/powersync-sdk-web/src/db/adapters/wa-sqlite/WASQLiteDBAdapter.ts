@@ -12,7 +12,7 @@ import {
 import _ from 'lodash';
 import * as Comlink from 'comlink';
 import Logger, { ILogger } from 'js-logger';
-import type { OpenDB, WASQLiteExecuteMethod } from '../../../worker/open-db';
+import type { DBWorkerInterface, OpenDB } from '../../../worker/open-db';
 
 export type WASQLiteCapabilities = {
   isMultiTab: boolean;
@@ -25,7 +25,7 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
   private initialized: Promise<void>;
   private logger: ILogger;
   private dbGetHelpers: DBGetUtils | null;
-  private _workerExecute: WASQLiteExecuteMethod | null;
+  private workerMethods: DBWorkerInterface | null;
 
   capabilities: WASQLiteCapabilities;
 
@@ -36,7 +36,7 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
     };
     this.logger = Logger.get('WASQLite');
     this.dbGetHelpers = null;
-    this._workerExecute = null;
+    this.workerMethods = null;
     this.initialized = this.init();
     this.dbGetHelpers = this.generateDBHelpers({ execute: this._execute.bind(this) });
   }
@@ -58,10 +58,9 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
         )
       : Comlink.wrap<OpenDB>(new Worker(new URL('../../../worker/WASQLiteDB.worker.js', import.meta.url)));
 
-    const { execute, registerOnTableChange } = await openDB(this.options.dbFilename);
-    this._workerExecute = execute;
+    this.workerMethods = await openDB(this.options.dbFilename);
 
-    registerOnTableChange(
+    this.workerMethods.registerOnTableChange(
       Comlink.proxy((opType, tableName, rowId) => {
         this.iterateListeners((cb) => cb.tablesUpdated?.({ opType, table: tableName, rowId }));
       })
@@ -77,7 +76,7 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
    */
   private _execute = async (sql: string, bindings?: any[]): Promise<QueryResult> => {
     await this.initialized;
-    const result = await this._workerExecute!(sql, bindings);
+    const result = await this.workerMethods!.execute!(sql, bindings);
     return {
       ...result,
       rows: {
@@ -88,12 +87,9 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
   };
 
   close() {
-    /**
-     * TODO improve DB closing logic in shared worker.
-     * Cannot close a DB from a single browser tab, as multiple may be using
-     * the same connection.
-     * The shared worker will close connections once it closes
-     * */
+    if (!this.capabilities.isMultiTab) {
+      this.workerMethods?.close?.();
+    }
   }
 
   async getAll<T>(sql: string, parameters?: any[] | undefined): Promise<T[]> {
@@ -114,31 +110,34 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
   async readLock<T>(fn: (tx: LockContext) => Promise<T>, options?: DBLockOptions | undefined): Promise<T> {
     await this.initialized;
     return new Promise((resolve, reject) => {
-      // This implementation currently only uses a single connection. Locking is ensured by navigator locks
-      // TODO add concurrent connections
-      navigator.locks.request('DBLock', async () => {
-        try {
-          const res = await fn(this.generateDBHelpers({ execute: this._execute }));
-          resolve(res);
-        } catch (ex) {
-          reject(ex);
-        }
-      });
+      this.workerMethods!.acquireDBLock(
+        Comlink.proxy(async () => {
+          try {
+            const res = await fn(this.generateDBHelpers({ execute: this._execute }));
+            resolve(res);
+          } catch (ex) {
+            reject(ex);
+          }
+        })
+      );
     });
   }
 
-  writeLock<T>(fn: (tx: LockContext) => Promise<T>, options?: DBLockOptions | undefined): Promise<T> {
+  async writeLock<T>(fn: (tx: LockContext) => Promise<T>, options?: DBLockOptions | undefined): Promise<T> {
+    await this.initialized;
     return new Promise((resolve, reject) => {
       // This implementation currently only uses a single connection. Locking is ensured by navigator locks
       // TODO add concurrent connections
-      navigator.locks.request('DBLock', async () => {
-        try {
-          const res = await fn(this.generateDBHelpers({ execute: this._execute }));
-          resolve(res);
-        } catch (ex) {
-          reject(ex);
-        }
-      });
+      this.workerMethods!.acquireDBLock(
+        Comlink.proxy(async () => {
+          try {
+            const res = await fn(this.generateDBHelpers({ execute: this._execute }));
+            resolve(res);
+          } catch (ex) {
+            reject(ex);
+          }
+        })
+      );
     });
   }
 

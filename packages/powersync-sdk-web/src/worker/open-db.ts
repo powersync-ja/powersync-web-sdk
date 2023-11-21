@@ -11,21 +11,20 @@ export type WASQLExecuteResult = Omit<QueryResult, 'rows'> & {
   };
 };
 
-export type WASQLiteExecuteMethod = (sql: string, params?: any[]) => Promise<WASQLExecuteResult>;
-export type InternalDBWorkerInterface = DBWorkerInterface & {
+export type DBWorkerInterface = {
   //   Close is only exposed when used in a single non shared webworker
   close?: () => void;
+  execute: WASQLiteExecuteMethod;
+  acquireDBLock: (callback: () => Promise<void>) => Promise<void>;
+  registerOnTableChange: (callback: OnTableChangeCallback) => void;
 };
+
+export type WASQLiteExecuteMethod = (sql: string, params?: any[]) => Promise<WASQLExecuteResult>;
 
 export type OnTableChangeCallback = (opType: number, tableName: string, rowId: number) => void;
 export type OpenDB = (dbFileName: string) => DBWorkerInterface;
 
-export type DBWorkerInterface = {
-  execute: WASQLiteExecuteMethod;
-  registerOnTableChange: (callback: OnTableChangeCallback) => void;
-};
-
-export async function _openDB(dbFileName: string): Promise<InternalDBWorkerInterface> {
+export async function _openDB(dbFileName: string): Promise<DBWorkerInterface> {
   const { default: moduleFactory } = await import('@journeyapps/wa-sqlite/dist/wa-sqlite-async.mjs');
   const module = await moduleFactory();
   const sqlite3 = SQLite.Factory(module);
@@ -119,7 +118,14 @@ export async function _openDB(dbFileName: string): Promise<InternalDBWorkerInter
     });
   };
 
+  const acquireDBLock = async (callback: () => Promise<void>) => {
+    return navigator.locks.request(`db-lock-${dbFileName}`, async () => {
+      return callback();
+    });
+  };
+
   return {
+    acquireDBLock: Comlink.proxy(acquireDBLock),
     execute: Comlink.proxy(execute),
     registerOnTableChange: Comlink.proxy(registerOnTableChange),
     close: Comlink.proxy(() => {

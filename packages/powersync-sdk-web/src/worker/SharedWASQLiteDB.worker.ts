@@ -2,11 +2,11 @@ import '@journeyapps/wa-sqlite';
 
 import _ from 'lodash';
 import * as Comlink from 'comlink';
-import { DBWorkerInterface, InternalDBWorkerInterface, _openDB } from './open-db';
+import { DBWorkerInterface, _openDB } from './open-db';
 
 const _self: SharedWorkerGlobalScope = self as any;
 
-const DBMap = new Map<string, InternalDBWorkerInterface>();
+const DBMap = new Map<string, DBWorkerInterface>();
 
 const openDB = async (dbFileName: string): Promise<DBWorkerInterface> => {
   if (!DBMap.has(dbFileName)) {
