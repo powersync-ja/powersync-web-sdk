@@ -35,10 +35,10 @@
     "@types/lodash": "^4.14.200",
     "@types/uuid": "^9.0.6",
     "typescript": "^5.2.2",
-    "@journeyapps/wa-sqlite": "0.0.1"
+    "@journeyapps/wa-sqlite": "~0.0.2"
   },
   "peerDependencies": {
-    "@journeyapps/wa-sqlite": "0.0.1"
+    "@journeyapps/wa-sqlite": "~0.0.2"
   },
   "dependencies": {
     "@journeyapps/powersync-sdk-common": "0.1.4",
