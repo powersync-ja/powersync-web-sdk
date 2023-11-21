@@ -12,7 +12,7 @@ import {
 import _ from 'lodash';
 import * as Comlink from 'comlink';
 import Logger, { ILogger } from 'js-logger';
-import type { OpenDB, WASQLiteExecuteMethod } from '../../../worker/SharedWASQLiteDB.worker';
+import type { OpenDB, WASQLiteExecuteMethod } from '../../../worker/SharedWASQLiteDB';
 
 /**
  * Adapter for WA-SQLite
