@@ -3,13 +3,36 @@ import {
   AbstractStreamingSyncImplementation,
   PowerSyncBackendConnector,
   SqliteBucketStorage,
-  BucketStorageAdapter
+  BucketStorageAdapter,
+  PowerSyncDatabaseOptions,
+  AbstractStreamingSyncImplementationOptions
 } from '@journeyapps/powersync-sdk-common';
 
 import { WebRemote } from './sync/WebRemote';
-import { WebStreamingSyncImplementation } from './sync//WebStreamingSyncImplementation';
+import { SharedWebStreamingSyncImplementation } from './sync/SharedWebStreamingSyncImplementation';
+import { SSRStreamingSyncImplementation } from './sync/SSRWebStreamingSyncImplementation';
+import { WebStreamingSyncImplementation } from './sync/WebStreamingSyncImplementation';
+
+export interface WebPowerSyncFlags {
+  /**
+   * Enables multi tab support
+   */
+  multiTab?: boolean;
+  /**
+   * Open in SSR placeholder mode. DB operations and Sync operations will be a No-op
+   */
+  ssrMode?: boolean;
+}
+
+export interface WebPowerSyncDatabaseOptions extends PowerSyncDatabaseOptions {
+  flags?: WebPowerSyncFlags;
+}
 
 export class PowerSyncDatabase extends AbstractPowerSyncDatabase {
+  constructor(protected options: WebPowerSyncDatabaseOptions) {
+    super(options);
+  }
+
   async _initialize(): Promise<void> {}
 
   protected generateBucketStorageAdapter(): BucketStorageAdapter {
@@ -21,7 +44,7 @@ export class PowerSyncDatabase extends AbstractPowerSyncDatabase {
   ): AbstractStreamingSyncImplementation {
     const remote = new WebRemote(connector);
 
-    return new WebStreamingSyncImplementation({
+    const syncOptions: AbstractStreamingSyncImplementationOptions = {
       adapter: this.bucketStorageAdapter,
       remote,
       uploadCrud: async () => {
@@ -29,6 +52,17 @@ export class PowerSyncDatabase extends AbstractPowerSyncDatabase {
         await connector.uploadData(this);
       },
       retryDelayMs: this.options.retryDelay
-    });
+    };
+
+    const { flags } = this.options;
+
+    switch (true) {
+      case flags?.ssrMode:
+        return new SSRStreamingSyncImplementation(syncOptions);
+      case flags?.multiTab:
+        return new SharedWebStreamingSyncImplementation(syncOptions);
+      default:
+        return new WebStreamingSyncImplementation(syncOptions);
+    }
   }
 }

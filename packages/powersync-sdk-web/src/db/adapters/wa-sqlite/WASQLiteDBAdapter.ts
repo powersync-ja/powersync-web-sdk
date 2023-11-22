@@ -12,7 +12,7 @@ import {
 import _ from 'lodash';
 import * as Comlink from 'comlink';
 import Logger, { ILogger } from 'js-logger';
-import type { DBWorkerInterface, OpenDB } from '../../../worker/open-db';
+import type { DBWorkerInterface, OpenDB } from '../../../worker/db/open-db';
 
 export type WASQLiteCapabilities = {
   isMultiTab: boolean;
@@ -54,9 +54,9 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
      */
     const openDB = isMultiTab
       ? Comlink.wrap<OpenDB>(
-          new SharedWorker(new URL('../../../worker/SharedWASQLiteDB.worker.js', import.meta.url)).port
+          new SharedWorker(new URL('../../../worker/db/SharedWASQLiteDB.worker.js', import.meta.url)).port
         )
-      : Comlink.wrap<OpenDB>(new Worker(new URL('../../../worker/WASQLiteDB.worker.js', import.meta.url)));
+      : Comlink.wrap<OpenDB>(new Worker(new URL('../../../worker/db/WASQLiteDB.worker.js', import.meta.url)));
 
     this.workerMethods = await openDB(this.options.dbFilename);
 

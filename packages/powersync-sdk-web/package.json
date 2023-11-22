@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "async-mutex": "^0.4.0",
-    "@journeyapps/powersync-sdk-common": "link:/Users/stevenontong/Documents/platform_code/powersync/powersync-react-native-sdk/packages/powersync-sdk-common",
+    "@journeyapps/powersync-sdk-common": "0.0.0-dev-20231122204432",
     "comlink": "^4.4.1",
     "js-logger": "^1.6.1",
     "lodash": "^4.17.21",

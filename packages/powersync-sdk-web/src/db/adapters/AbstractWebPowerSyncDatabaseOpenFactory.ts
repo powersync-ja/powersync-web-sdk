@@ -4,7 +4,7 @@ import {
   PowerSyncDatabaseOptions,
   PowerSyncOpenFactoryOptions
 } from '@journeyapps/powersync-sdk-common';
-import { PowerSyncDatabase } from '../../db/PowerSyncDatabase';
+import { PowerSyncDatabase, WebPowerSyncDatabaseOptions } from '../../db/PowerSyncDatabase';
 import { SSRDBAdapter } from './SSRDBAdapter';
 
 export interface WebPowerSyncOpenFactoryOptions extends PowerSyncOpenFactoryOptions {
@@ -26,7 +26,7 @@ export abstract class AbstractWebPowerSyncDatabaseOpenFactory extends AbstractPo
     super(options);
   }
 
-  generateOptions(): PowerSyncDatabaseOptions {
+  generateOptions(): WebPowerSyncDatabaseOptions {
     const isServerSide = this.isServerSide();
     if (isServerSide && !this.options.disableSSRWarning) {
       console.warn(
@@ -39,7 +39,11 @@ export abstract class AbstractWebPowerSyncDatabaseOpenFactory extends AbstractPo
 
     return {
       database: isServerSide ? new SSRDBAdapter() : this.openDB(),
-      schema: this.schema
+      schema: this.schema,
+      flags: {
+        ssrMode: this.isServerSide(),
+        multiTab: typeof SharedWorker !== 'undefined'
+      }
     };
   }
 
