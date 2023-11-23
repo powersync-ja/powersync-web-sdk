@@ -15,20 +15,19 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## Getting Started
 
 
-Ensure your terminal focussed to this directory.
+In your terminal, switch into the demo's directory:
 
 ```bash
 cd demos/powersync-nextjs-demo
 ```
 
-Setup the Environment variables
+Set up the Environment variables: Copy the `.env.local.template` file:
 
 ```bash
 cp .env.local.template .env.local
 ```
 
-Then insert credentials for Supabase.
-
+And then edit `.env.local` to insert your credentials for Supabase.
 
 Run the development server:
 
@@ -59,15 +58,17 @@ Open a browser on the served URL and install the PWA.
 
 To learn more about Next.js, take a look at the following resources:
 
-- [PowerSync Documentation](https://docs.powersync.co)
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Next.js documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-You can check out [the PowerSync Web SDK GitHub repository](https://github.com/powersync-ja/powersync-web-sdk) - your feedback and contributions are welcome!
+
+Also check out [the PowerSync Web SDK GitHub repository](https://github.com/powersync-ja/powersync-web-sdk) - your feedback and contributions are welcome!
+
+To learn more about PowerSync, see the [PowerSync docs](https://docs.powersync.com).
 
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

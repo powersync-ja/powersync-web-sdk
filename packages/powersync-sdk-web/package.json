@@ -1,6 +1,6 @@
 {
   "name": "@journeyapps/powersync-sdk-web",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A Web SDK for JourneyApps PowerSync",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -35,10 +35,11 @@
     "@journeyapps/wa-sqlite": "0.0.2",
     "@types/lodash": "^4.14.200",
     "@types/uuid": "^9.0.6",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "@journeyapps/wa-sqlite": "~0.0.2"
   },
   "peerDependencies": {
-    "@journeyapps/wa-sqlite": "0.0.2"
+    "@journeyapps/wa-sqlite": "~0.0.2"
   },
   "dependencies": {
     "async-mutex": "^0.4.0",

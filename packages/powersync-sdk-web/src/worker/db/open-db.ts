@@ -1,6 +1,7 @@
+import * as SQLite from '@journeyapps/wa-sqlite';
+import '@journeyapps/wa-sqlite';
 import _ from 'lodash';
 import * as Comlink from 'comlink';
-import * as SQLite from '@journeyapps/wa-sqlite';
 import { v4 as uuid } from 'uuid';
 import { QueryResult } from '@journeyapps/powersync-sdk-common';
 
