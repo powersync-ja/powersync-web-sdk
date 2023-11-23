@@ -8,6 +8,7 @@ export class WebStreamingSyncImplementation extends AbstractStreamingSyncImpleme
         await lockOptions.callback();
       } catch (ex) {
         console.error('caught exception in lock context', ex);
+        throw ex;
       }
     });
   }
