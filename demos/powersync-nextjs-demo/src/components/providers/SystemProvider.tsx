@@ -18,9 +18,17 @@ export const SystemProvider = ({ children }: { children: React.ReactNode }) => {
     new WASQLitePowerSyncDatabaseOpenFactory({
       dbFilename: 'example.db',
       schema: AppSchema,
-      // This is disabled once CSR+SSR functionality is verified to be working correctly
-      disableSSRWarning: true,
-      enableMultiTab: true
+      flags: {
+        // This is disabled once CSR+SSR functionality is verified to be working correctly
+        disableSSRWarning: true,
+        /**
+         * Enabling multitabs uses Shared web workers to co-ordinate DB and sync operations between
+         * tabs.
+         * Using the SDK across multiple tabs without this setting could result in undefined
+         * sync behavior.
+         *  */
+        enableMultiTabs: true
+      }
     }).getInstance()
   );
 

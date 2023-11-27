@@ -7,9 +7,13 @@ import {
 import { PowerSyncDatabase, WebPowerSyncDatabaseOptions } from '../../db/PowerSyncDatabase';
 import { SSRDBAdapter } from './SSRDBAdapter';
 
-export interface WebPowerSyncOpenFactoryOptions extends PowerSyncOpenFactoryOptions {
-  enableMultiTab?: boolean;
+export type WebPowerSyncFlags = {
+  enableMultiTabs?: boolean;
   disableSSRWarning?: boolean;
+};
+
+export interface WebPowerSyncOpenFactoryOptions extends PowerSyncOpenFactoryOptions {
+  flags?: WebPowerSyncFlags;
 }
 
 /**
@@ -29,7 +33,7 @@ export abstract class AbstractWebPowerSyncDatabaseOpenFactory extends AbstractPo
 
   generateOptions(): WebPowerSyncDatabaseOptions {
     const isServerSide = this.isServerSide();
-    if (isServerSide && !this.options.disableSSRWarning) {
+    if (isServerSide && !this.options.flags?.disableSSRWarning) {
       console.warn(
         `
   Running PowerSync in SSR mode.
@@ -43,7 +47,7 @@ export abstract class AbstractWebPowerSyncDatabaseOpenFactory extends AbstractPo
       schema: this.schema,
       flags: {
         ssrMode: this.isServerSide(),
-        multiTab: this.options.enableMultiTab
+        enableMultiTabs: this.options.flags?.enableMultiTabs
       }
     };
   }

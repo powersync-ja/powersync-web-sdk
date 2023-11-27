@@ -20,7 +20,7 @@ export interface WebPowerSyncFlags {
   /**
    * Enables multi tab support
    */
-  multiTab?: boolean;
+  enableMultiTabs?: boolean;
   /**
    * Open in SSR placeholder mode. DB operations and Sync operations will be a No-op
    */
@@ -65,7 +65,7 @@ export class PowerSyncDatabase extends AbstractPowerSyncDatabase {
     switch (true) {
       case flags?.ssrMode:
         return new SSRStreamingSyncImplementation(syncOptions);
-      case flags?.multiTab:
+      case flags?.enableMultiTabs:
         return new SharedWebStreamingSyncImplementation(syncOptions, webSyncOptions);
       default:
         return new WebStreamingSyncImplementation(syncOptions, webSyncOptions);

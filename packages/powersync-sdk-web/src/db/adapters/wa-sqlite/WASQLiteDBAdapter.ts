@@ -15,7 +15,7 @@ import Logger, { ILogger } from 'js-logger';
 import type { DBWorkerInterface, OpenDB } from '../../../worker/db/open-db';
 
 export type WASQLiteFlags = {
-  multiTab?: boolean;
+  enableMultiTabs?: boolean;
 };
 
 export interface WASQLiteDBAdapterOptions extends Omit<PowerSyncOpenFactoryOptions, 'schema'> {
@@ -49,8 +49,8 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
   }
 
   protected async init() {
-    const { multiTab } = this.flags;
-    if (!multiTab) {
+    const { enableMultiTabs } = this.flags;
+    if (!enableMultiTabs) {
       this.logger.warn('Multiple tabs are not supported in this browser');
     }
     /**
@@ -59,7 +59,7 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
      *  This enables multi tab support by default, but falls back if SharedWorker is not available
      *  (in the case of Android)
      */
-    const openDB = multiTab
+    const openDB = enableMultiTabs
       ? Comlink.wrap<OpenDB>(
           new SharedWorker(new URL('../../../worker/db/SharedWASQLiteDB.worker.js', import.meta.url), {
             name: `shared-DB-worker-${this.name}`
@@ -100,7 +100,7 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
   };
 
   close() {
-    if (!this.flags.multiTab) {
+    if (!this.flags.enableMultiTabs) {
       this.workerMethods?.close?.();
     }
   }
