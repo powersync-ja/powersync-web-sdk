@@ -11,7 +11,10 @@ import {
 import { WebRemote } from './sync/WebRemote';
 import { SharedWebStreamingSyncImplementation } from './sync/SharedWebStreamingSyncImplementation';
 import { SSRStreamingSyncImplementation } from './sync/SSRWebStreamingSyncImplementation';
-import { WebStreamingSyncImplementation } from './sync/WebStreamingSyncImplementation';
+import {
+  WebStreamingSyncImplementation,
+  WebStreamingSyncImplementationOptions
+} from './sync/WebStreamingSyncImplementation';
 
 export interface WebPowerSyncFlags {
   /**
@@ -54,15 +57,18 @@ export class PowerSyncDatabase extends AbstractPowerSyncDatabase {
       retryDelayMs: this.options.retryDelay
     };
 
-    const { flags } = this.options;
+    const webSyncOptions: WebStreamingSyncImplementationOptions = {
+      workerIdentifier: this.options.database.name
+    };
 
+    const { flags } = this.options;
     switch (true) {
       case flags?.ssrMode:
         return new SSRStreamingSyncImplementation(syncOptions);
       case flags?.multiTab:
-        return new SharedWebStreamingSyncImplementation(syncOptions);
+        return new SharedWebStreamingSyncImplementation(syncOptions, webSyncOptions);
       default:
-        return new WebStreamingSyncImplementation(syncOptions);
+        return new WebStreamingSyncImplementation(syncOptions, webSyncOptions);
     }
   }
 }

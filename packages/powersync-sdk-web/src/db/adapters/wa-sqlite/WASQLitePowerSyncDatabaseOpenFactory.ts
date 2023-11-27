@@ -5,7 +5,12 @@ import { AbstractWebPowerSyncDatabaseOpenFactory } from '../AbstractWebPowerSync
 
 export class WASQLitePowerSyncDatabaseOpenFactory extends AbstractWebPowerSyncDatabaseOpenFactory {
   protected openDB(): DBAdapter {
-    return new WASQLiteDBAdapter(this.options);
+    return new WASQLiteDBAdapter({
+      ...this.options,
+      flags: {
+        multiTab: this.options.enableMultiTab
+      }
+    });
   }
 
   generateInstance(options: PowerSyncDatabaseOptions): AbstractPowerSyncDatabase {

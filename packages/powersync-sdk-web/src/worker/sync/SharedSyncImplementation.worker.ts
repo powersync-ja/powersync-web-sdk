@@ -9,7 +9,6 @@ const sharedSyncImplementation = new SharedSyncImplementation();
 _self.onconnect = function (event: MessageEvent<string>) {
   const port = event.ports[0];
 
-  console.debug('Exposing db on port', port);
   Comlink.expose(sharedSyncImplementation, port);
 
   sharedSyncImplementation.registerListener({

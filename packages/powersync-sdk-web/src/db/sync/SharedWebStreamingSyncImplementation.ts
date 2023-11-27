@@ -2,7 +2,10 @@ import _ from 'lodash';
 import { v4 as uuid } from 'uuid';
 import { AbstractStreamingSyncImplementationOptions, LockOptions } from '@journeyapps/powersync-sdk-common';
 import * as Comlink from 'comlink';
-import { WebStreamingSyncImplementation } from './WebStreamingSyncImplementation';
+import {
+  WebStreamingSyncImplementation,
+  WebStreamingSyncImplementationOptions
+} from './WebStreamingSyncImplementation';
 import {
   SharedSyncImplementation,
   SharedSyncMessage,
@@ -12,13 +15,19 @@ import {
 
 export class SharedWebStreamingSyncImplementation extends WebStreamingSyncImplementation {
   protected stateManager: Comlink.Remote<SharedSyncImplementation>;
+
+  /**
+   * ID for the tab running this sync implementation
+   */
   protected syncTabId: string;
 
-  constructor(options: AbstractStreamingSyncImplementationOptions) {
-    super(options);
+  constructor(options: AbstractStreamingSyncImplementationOptions, options2: WebStreamingSyncImplementationOptions) {
+    super(options, options2);
 
     this.syncTabId = uuid();
-    const worker = new SharedWorker(new URL('../../worker/sync/SharedSyncImplementation.worker.js', import.meta.url));
+    const worker = new SharedWorker(new URL('../../worker/sync/SharedSyncImplementation.worker.js', import.meta.url), {
+      name: `shared-sync-${this.options2.workerIdentifier}`
+    });
     const { port } = worker;
     this.stateManager = Comlink.wrap<SharedSyncImplementation>(port);
 
@@ -36,20 +45,6 @@ export class SharedWebStreamingSyncImplementation extends WebStreamingSyncImplem
 
     // Load the initial state
     this.stateManager.getState().then((state) => this.internalUpdateStatus(state));
-  }
-
-  /**
-   * Obtains a global lock between tabs for syncing and CRUD
-   * uploads
-   */
-  obtainLock<T>(lockOptions: LockOptions<T>): Promise<T> {
-    return navigator.locks.request(lockOptions.type, async () => {
-      try {
-        await lockOptions.callback();
-      } catch (ex) {
-        console.error('caught exception in lock context', ex);
-      }
-    });
   }
 
   /**

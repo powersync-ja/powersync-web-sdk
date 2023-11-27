@@ -14,9 +14,13 @@ import * as Comlink from 'comlink';
 import Logger, { ILogger } from 'js-logger';
 import type { DBWorkerInterface, OpenDB } from '../../../worker/db/open-db';
 
-export type WASQLiteCapabilities = {
-  isMultiTab: boolean;
+export type WASQLiteFlags = {
+  multiTab?: boolean;
 };
+
+export interface WASQLiteDBAdapterOptions extends Omit<PowerSyncOpenFactoryOptions, 'schema'> {
+  flags?: WASQLiteFlags;
+}
 
 /**
  * Adapter for WA-SQLite
@@ -27,13 +31,8 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
   private dbGetHelpers: DBGetUtils | null;
   private workerMethods: DBWorkerInterface | null;
 
-  capabilities: WASQLiteCapabilities;
-
-  constructor(protected options: Omit<PowerSyncOpenFactoryOptions, 'schema'>) {
+  constructor(protected options: WASQLiteDBAdapterOptions) {
     super();
-    this.capabilities = {
-      isMultiTab: typeof SharedWorker !== 'undefined'
-    };
     this.logger = Logger.get('WASQLite');
     this.dbGetHelpers = null;
     this.workerMethods = null;
@@ -41,9 +40,17 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
     this.dbGetHelpers = this.generateDBHelpers({ execute: this._execute.bind(this) });
   }
 
+  get name() {
+    return this.options.dbFilename;
+  }
+
+  protected get flags(): WASQLiteFlags {
+    return this.options.flags ?? {};
+  }
+
   protected async init() {
-    const { isMultiTab } = this.capabilities;
-    if (!isMultiTab) {
+    const { multiTab } = this.flags;
+    if (!multiTab) {
       this.logger.warn('Multiple tabs are not supported in this browser');
     }
     /**
@@ -52,11 +59,17 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
      *  This enables multi tab support by default, but falls back if SharedWorker is not available
      *  (in the case of Android)
      */
-    const openDB = isMultiTab
+    const openDB = multiTab
       ? Comlink.wrap<OpenDB>(
-          new SharedWorker(new URL('../../../worker/db/SharedWASQLiteDB.worker.js', import.meta.url)).port
+          new SharedWorker(new URL('../../../worker/db/SharedWASQLiteDB.worker.js', import.meta.url), {
+            name: `shared-DB-worker-${this.name}`
+          }).port
         )
-      : Comlink.wrap<OpenDB>(new Worker(new URL('../../../worker/db/WASQLiteDB.worker.js', import.meta.url)));
+      : Comlink.wrap<OpenDB>(
+          new Worker(new URL('../../../worker/db/WASQLiteDB.worker.js', import.meta.url), {
+            name: `DB-worker-${this.name}`
+          })
+        );
 
     this.workerMethods = await openDB(this.options.dbFilename);
 
@@ -87,7 +100,7 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
   };
 
   close() {
-    if (!this.capabilities.isMultiTab) {
+    if (!this.flags.multiTab) {
       this.workerMethods?.close?.();
     }
   }

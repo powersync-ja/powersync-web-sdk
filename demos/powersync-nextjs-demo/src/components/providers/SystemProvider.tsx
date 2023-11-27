@@ -19,7 +19,8 @@ export const SystemProvider = ({ children }: { children: React.ReactNode }) => {
       dbFilename: 'example.db',
       schema: AppSchema,
       // This is disabled once CSR+SSR functionality is verified to be working correctly
-      disableSSRWarning: true
+      disableSSRWarning: true,
+      enableMultiTab: true
     }).getInstance()
   );
 

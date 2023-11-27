@@ -8,6 +8,7 @@ import { PowerSyncDatabase, WebPowerSyncDatabaseOptions } from '../../db/PowerSy
 import { SSRDBAdapter } from './SSRDBAdapter';
 
 export interface WebPowerSyncOpenFactoryOptions extends PowerSyncOpenFactoryOptions {
+  enableMultiTab?: boolean;
   disableSSRWarning?: boolean;
 }
 
@@ -42,7 +43,7 @@ export abstract class AbstractWebPowerSyncDatabaseOpenFactory extends AbstractPo
       schema: this.schema,
       flags: {
         ssrMode: this.isServerSide(),
-        multiTab: typeof SharedWorker !== 'undefined'
+        multiTab: this.options.enableMultiTab
       }
     };
   }
