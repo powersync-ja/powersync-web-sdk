@@ -66,12 +66,19 @@ export const openDatabase = async () => {
   PowerSync = new WASQLitePowerSyncDatabaseOpenFactory({
     schema: AppSchema,
     dbFilename: 'test.sqlite',
-    /**
-     * The SDK will return empty query results in SSR mode.
-     * By default the SDK will warn that it's running in SSR
-     * mode to assist with debugging.
-     */
-    disableSSRWarning: true
+    flags: {
+        // This is disabled once CSR+SSR functionality is verified to be working correctly
+        disableSSRWarning: true,
+        /**
+         * Enabling multitabs uses Shared web workers to co-ordinate DB and sync operations between
+         * tabs.
+         * Using the SDK across multiple tabs without this setting could result in undefined
+         * sync behavior.
+         * This setting should only be enabled in environments which support SharedWebworker.
+         *  - currently not supported on Chrome for Android
+         *  - SharedWebworker is available on Safari, but multitab is currently not supported.
+         *  */
+        enableMultiTabs: !navigator.userAgent.match(/(Android|iPhone|iPod|iPad)/i)
   }).getInstance();
 
   await PowerSync.init();
@@ -104,9 +111,18 @@ export const connectPowerSync = async () => {
 
 React hooks are available in the [@journeyapps/powersync-react](https://www.npmjs.com/package/@journeyapps/powersync-react) package
 
+## Multiple Tab Support
+
+Using PowerSync between multiple tabs is supported on some web browsers. Multiple tab support relies on shared web workers for DB and sync streaming operations. When enabled shared web workers named `shared-sync-[dbFileName]` and `shared-DB-worker-[dbFileName]` will be created. 
+
+The shared database worker will ensure writes to the DB will instantly be available between tabs. 
+
+The shared sync worker will co-ordinate for one active tab to connect to the PowerSync instance and share the latest sync state between tabs. 
+
+Currently using the SDK in multiple tabs without enabling the `enableMultiTabs` flag will spawn a standard web worker per tab for DB operations. These workers are safe to operate on the DB concurrently, however changes from one tab may not update watches on other tabs. Only one tab can sync from the PowerSync instance at a time. The sync status will not be shared between tabs, only the oldest tab will connect and display the latest sync status.
+
+Multiple tab support is not available on Android or Safari.
+
 ## Demo Apps
 
 See our [NextJS Demo App](https://github.com/powersync-ja/powersync-web-sdk/tree/main/demos/powersync-nextjs-demo) for how to use this SDK with NextJS and Supabase. 
-
-# Known Issues
-This initial SDK version uses a `SharedWorker` for DB operations which is not supported on Chrome for Android. Future SDK versions will feature selectable DB Adapters which will increase compatibility. 
