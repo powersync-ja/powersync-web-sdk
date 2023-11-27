@@ -5,7 +5,7 @@ import { AbstractWebPowerSyncDatabaseOpenFactory } from '../AbstractWebPowerSync
 
 export class WASQLitePowerSyncDatabaseOpenFactory extends AbstractWebPowerSyncDatabaseOpenFactory {
   protected openDB(): DBAdapter {
-    return new WASQLiteDBAdapter(this.options);
+    return new WASQLiteDBAdapter({ ...this.options, flags: this.resolveFlags() });
   }
 
   generateInstance(options: PowerSyncDatabaseOptions): AbstractPowerSyncDatabase {

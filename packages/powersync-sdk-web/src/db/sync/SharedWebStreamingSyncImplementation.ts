@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { v4 as uuid } from 'uuid';
-import { AbstractStreamingSyncImplementationOptions, LockOptions } from '@journeyapps/powersync-sdk-common';
 import * as Comlink from 'comlink';
 import {
   WebStreamingSyncImplementation,
@@ -21,12 +20,12 @@ export class SharedWebStreamingSyncImplementation extends WebStreamingSyncImplem
    */
   protected syncTabId: string;
 
-  constructor(options: AbstractStreamingSyncImplementationOptions, options2: WebStreamingSyncImplementationOptions) {
-    super(options, options2);
+  constructor(options: WebStreamingSyncImplementationOptions) {
+    super(options);
 
     this.syncTabId = uuid();
     const worker = new SharedWorker(new URL('../../worker/sync/SharedSyncImplementation.worker.js', import.meta.url), {
-      name: `shared-sync-${this.options2.workerIdentifier}`
+      name: `shared-sync-${this.webOptions.workerIdentifier}`
     });
     const { port } = worker;
     this.stateManager = Comlink.wrap<SharedSyncImplementation>(port);
@@ -44,7 +43,9 @@ export class SharedWebStreamingSyncImplementation extends WebStreamingSyncImplem
     };
 
     // Load the initial state
-    this.stateManager.getState().then((state) => this.internalUpdateStatus(state));
+    this.stateManager.getState().then((state) => {
+      this.internalUpdateStatus(state);
+    });
   }
 
   /**
@@ -52,16 +53,14 @@ export class SharedWebStreamingSyncImplementation extends WebStreamingSyncImplem
    * manager
    */
   protected internalUpdateStatus(state: SharedSyncStatus) {
-    const { lastSyncedAt } = state;
-    return super.updateSyncStatus(state.connected, lastSyncedAt ? new Date(lastSyncedAt) : undefined);
+    return super.updateSyncStatus(state);
   }
 
-  protected updateSyncStatus(connected: boolean, lastSyncedAt?: Date | undefined): void {
-    super.updateSyncStatus(connected, lastSyncedAt);
+  protected updateSyncStatus(state: SharedSyncStatus): void {
+    super.updateSyncStatus(state);
     //Broadcast this update to shared sync manager
     this.stateManager.updateState({
-      connected,
-      lastSyncedAt: lastSyncedAt?.toISOString(),
+      ...state,
       tabId: this.syncTabId
     });
   }

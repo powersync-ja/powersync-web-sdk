@@ -54,11 +54,7 @@ export abstract class AbstractWebPowerSyncDatabaseOpenFactory extends AbstractPo
       );
     }
 
-    const resolvedFlags = _.merge(DEFAULT_POWERSYNC_FLAGS, {
-      ...DEFAULT_POWERSYNC_FLAGS,
-      ssrMode: this.isServerSide(),
-      enableMultiTabs: this.options.flags?.enableMultiTabs
-    });
+    const resolvedFlags = this.resolveFlags();
 
     if (!resolvedFlags.enableMultiTabs) {
       console.warn(
@@ -71,6 +67,14 @@ export abstract class AbstractWebPowerSyncDatabaseOpenFactory extends AbstractPo
       schema: this.schema,
       flags: resolvedFlags
     };
+  }
+
+  protected resolveFlags() {
+    return _.merge(DEFAULT_POWERSYNC_FLAGS, {
+      ...DEFAULT_POWERSYNC_FLAGS,
+      ssrMode: this.isServerSide(),
+      enableMultiTabs: this.options.flags?.enableMultiTabs
+    });
   }
 
   generateInstance(options: PowerSyncDatabaseOptions): AbstractPowerSyncDatabase {

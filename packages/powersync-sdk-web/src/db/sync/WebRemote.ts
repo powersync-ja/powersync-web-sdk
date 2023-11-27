@@ -51,9 +51,6 @@ export class WebRemote extends AbstractRemote {
       body: JSON.stringify(data),
       signal,
       cache: 'no-store'
-    }).catch((ex) => {
-      console.error(`Caught ex when POST streaming to ${path}`, ex);
-      throw ex;
     });
 
     if (!res.ok) {
