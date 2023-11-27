@@ -69,17 +69,7 @@ export const openDatabase = async () => {
     flags: {
         // This is disabled once CSR+SSR functionality is verified to be working correctly
         disableSSRWarning: true,
-        /**
-         * Enabling multitabs uses Shared web workers to co-ordinate DB and sync operations between
-         * tabs.
-         * Using the SDK across multiple tabs without this setting could result in undefined
-         * sync behavior.
-         * This setting should only be enabled in environments which support SharedWebworker.
-         *  - currently not supported on Chrome for Android
-         *  - SharedWebworker is available on Safari, but multitab is currently not supported.
-         *  */
-        enableMultiTabs: !navigator.userAgent.match(/(Android|iPhone|iPod|iPad)/i)
-  }).getInstance();
+  }}).getInstance();
 
   await PowerSync.init();
 
@@ -121,7 +111,24 @@ The shared sync worker will co-ordinate for one active tab to connect to the Pow
 
 Currently using the SDK in multiple tabs without enabling the `enableMultiTabs` flag will spawn a standard web worker per tab for DB operations. These workers are safe to operate on the DB concurrently, however changes from one tab may not update watches on other tabs. Only one tab can sync from the PowerSync instance at a time. The sync status will not be shared between tabs, only the oldest tab will connect and display the latest sync status.
 
-Multiple tab support is not available on Android or Safari.
+Multiple tab support is not currently available on Android or Safari.
+
+Support is enabled by default if available. This can be disabled as below:
+
+```Javascript
+PowerSync = new WASQLitePowerSyncDatabaseOpenFactory({
+    schema: AppSchema,
+    dbFilename: 'test.sqlite',
+    flags: {
+        // This is disabled once CSR+SSR functionality is verified to be working correctly
+        disableSSRWarning: true,
+        /**
+         * Multiple tab support is enabled by default if available. This can be disabled by
+         * setting this flag to false.
+         */
+        enableMultiTabs: false
+  }}).getInstance();
+```
 
 ## Demo Apps
 
