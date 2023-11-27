@@ -42,6 +42,12 @@ export abstract class AbstractWebPowerSyncDatabaseOpenFactory extends AbstractPo
       );
     }
 
+    if (!this.options.flags?.enableMultiTabs) {
+      console.warn(
+        'Multiple tab support is not enabled. Using this site across multiple tabs may not function correctly.'
+      );
+    }
+
     return {
       database: isServerSide ? new SSRDBAdapter() : this.openDB(),
       schema: this.schema,
