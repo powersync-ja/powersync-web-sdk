@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
   AbstractPowerSyncDatabase,
   AbstractPowerSyncDatabaseOpenFactory,
@@ -15,6 +16,17 @@ export type WebPowerSyncFlags = {
 export interface WebPowerSyncOpenFactoryOptions extends PowerSyncOpenFactoryOptions {
   flags?: WebPowerSyncFlags;
 }
+
+export const DEFAULT_POWERSYNC_FLAGS: WebPowerSyncFlags = {
+  /**
+   * Multiple tabs are by default not supported on Android, iOS and Safari.
+   * Other platforms will have multiple tabs enabled by default.
+   */
+  enableMultiTabs:
+    typeof globalThis.navigator !== 'undefined' && // For SSR purposes
+    !navigator.userAgent.match(/(Android|iPhone|iPod|iPad)/i) &&
+    !(window as any).safari
+};
 
 /**
  * Intermediate PowerSync Database Open factory for Web which uses a mock
@@ -42,7 +54,13 @@ export abstract class AbstractWebPowerSyncDatabaseOpenFactory extends AbstractPo
       );
     }
 
-    if (!this.options.flags?.enableMultiTabs) {
+    const resolvedFlags = _.merge(DEFAULT_POWERSYNC_FLAGS, {
+      ...DEFAULT_POWERSYNC_FLAGS,
+      ssrMode: this.isServerSide(),
+      enableMultiTabs: this.options.flags?.enableMultiTabs
+    });
+
+    if (!resolvedFlags.enableMultiTabs) {
       console.warn(
         'Multiple tab support is not enabled. Using this site across multiple tabs may not function correctly.'
       );
@@ -51,10 +69,7 @@ export abstract class AbstractWebPowerSyncDatabaseOpenFactory extends AbstractPo
     return {
       database: isServerSide ? new SSRDBAdapter() : this.openDB(),
       schema: this.schema,
-      flags: {
-        ssrMode: this.isServerSide(),
-        enableMultiTabs: this.options.flags?.enableMultiTabs
-      }
+      flags: resolvedFlags
     };
   }
 

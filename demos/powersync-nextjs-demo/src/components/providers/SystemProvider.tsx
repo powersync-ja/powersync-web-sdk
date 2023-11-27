@@ -20,17 +20,7 @@ export const SystemProvider = ({ children }: { children: React.ReactNode }) => {
       schema: AppSchema,
       flags: {
         // This is disabled once CSR+SSR functionality is verified to be working correctly
-        disableSSRWarning: true,
-        /**
-         * Enabling multitabs uses Shared web workers to co-ordinate DB and sync operations between
-         * tabs.
-         * Using the SDK across multiple tabs without this setting could result in undefined
-         * sync behavior.
-         * This setting should only be enabled in environments which support SharedWebworker.
-         *  - currently not supported on Chrome for Android
-         *  - SharedWebworker is available on Safari, but multitab is currently not supported.
-         *  */
-        enableMultiTabs: !navigator.userAgent.match(/(Android|iPhone|iPod|iPad)/i)
+        disableSSRWarning: true
       }
     }).getInstance()
   );

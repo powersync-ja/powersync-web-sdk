@@ -5,7 +5,7 @@ import {
   LockOptions
 } from '@journeyapps/powersync-sdk-common';
 
-export interface WebStreamingSyncImplementationOptions {
+export interface WebStreamingSyncImplementationOptions extends AbstractStreamingSyncImplementationOptions {
   /**
    * An identifier for which PowerSync DB this sync implementation is
    * linked to. Most commonly DB name, but not restricted to DB name.
@@ -14,21 +14,26 @@ export interface WebStreamingSyncImplementationOptions {
 }
 
 export class WebStreamingSyncImplementation extends AbstractStreamingSyncImplementation {
-  constructor(
-    options: AbstractStreamingSyncImplementationOptions,
-    protected options2: WebStreamingSyncImplementationOptions
-  ) {
+  constructor(options: WebStreamingSyncImplementationOptions) {
+    // Super will store and provide default values for options
     super(options);
   }
 
+  get webOptions(): WebStreamingSyncImplementationOptions {
+    return this.options as WebStreamingSyncImplementationOptions;
+  }
+
   obtainLock<T>(lockOptions: LockOptions<T>): Promise<T> {
-    return navigator.locks.request(`streaming-sync-${lockOptions.type}-${this.options2.workerIdentifier}`, async () => {
-      try {
-        await lockOptions.callback();
-      } catch (ex) {
-        console.error('caught exception in lock context', ex);
-        throw ex;
+    return navigator.locks.request(
+      `streaming-sync-${lockOptions.type}-${this.webOptions.workerIdentifier}`,
+      async () => {
+        try {
+          await lockOptions.callback();
+        } catch (ex) {
+          console.error('caught exception in lock context', ex);
+          throw ex;
+        }
       }
-    });
+    );
   }
 }

@@ -47,17 +47,14 @@ export class PowerSyncDatabase extends AbstractPowerSyncDatabase {
   ): AbstractStreamingSyncImplementation {
     const remote = new WebRemote(connector);
 
-    const syncOptions: AbstractStreamingSyncImplementationOptions = {
+    const syncOptions: WebStreamingSyncImplementationOptions = {
       adapter: this.bucketStorageAdapter,
       remote,
       uploadCrud: async () => {
         await this.waitForReady();
         await connector.uploadData(this);
       },
-      retryDelayMs: this.options.retryDelay
-    };
-
-    const webSyncOptions: WebStreamingSyncImplementationOptions = {
+      retryDelayMs: this.options.retryDelay,
       workerIdentifier: this.options.database.name
     };
 
@@ -66,9 +63,9 @@ export class PowerSyncDatabase extends AbstractPowerSyncDatabase {
       case flags?.ssrMode:
         return new SSRStreamingSyncImplementation(syncOptions);
       case flags?.enableMultiTabs:
-        return new SharedWebStreamingSyncImplementation(syncOptions, webSyncOptions);
+        return new SharedWebStreamingSyncImplementation(syncOptions);
       default:
-        return new WebStreamingSyncImplementation(syncOptions, webSyncOptions);
+        return new WebStreamingSyncImplementation(syncOptions);
     }
   }
 }

@@ -51,7 +51,7 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
   protected async init() {
     const { enableMultiTabs } = this.flags;
     if (!enableMultiTabs) {
-      this.logger.warn('Multiple tabs are not supported in this browser');
+      this.logger.warn('Multiple tabs are not enabled in this browser');
     }
     /**
      *  Webpack V5 can bundle the worker automatically if the full Worker constructor syntax is used

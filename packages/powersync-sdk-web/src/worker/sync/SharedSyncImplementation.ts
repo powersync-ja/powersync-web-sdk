@@ -1,13 +1,10 @@
-import { BaseListener, BaseObserver } from '@journeyapps/powersync-sdk-common';
+import { BaseListener, BaseObserver, SyncStatusOptions } from '@journeyapps/powersync-sdk-common';
 
 export enum SharedSyncMessageType {
   UPDATE = 'sync-status-update'
 }
 
-export type SharedSyncStatus = {
-  connected: boolean;
-  lastSyncedAt?: string;
-  //   The tab which posted the status update
+export type SharedSyncStatus = SyncStatusOptions & {
   tabId?: string;
 };
 
