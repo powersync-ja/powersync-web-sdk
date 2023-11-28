@@ -5,19 +5,19 @@ import {
   PowerSyncDatabaseOptions,
   PowerSyncOpenFactoryOptions
 } from '@journeyapps/powersync-sdk-common';
-import { PowerSyncDatabase, WebPowerSyncDatabaseOptions } from '../../db/PowerSyncDatabase';
+import { PowerSyncDatabase, WebPowerSyncDatabaseOptions, WebPowerSyncFlags } from '../../db/PowerSyncDatabase';
 import { SSRDBAdapter } from './SSRDBAdapter';
 
-export type WebPowerSyncFlags = {
+export type WebPowerSyncOpenFlags = {
   enableMultiTabs?: boolean;
   disableSSRWarning?: boolean;
 };
 
 export interface WebPowerSyncOpenFactoryOptions extends PowerSyncOpenFactoryOptions {
-  flags?: WebPowerSyncFlags;
+  flags?: WebPowerSyncOpenFlags;
 }
 
-export const DEFAULT_POWERSYNC_FLAGS: WebPowerSyncFlags = {
+export const DEFAULT_POWERSYNC_FLAGS: WebPowerSyncOpenFlags = {
   /**
    * Multiple tabs are by default not supported on Android, iOS and Safari.
    * Other platforms will have multiple tabs enabled by default.
@@ -54,7 +54,8 @@ export abstract class AbstractWebPowerSyncDatabaseOpenFactory extends AbstractPo
       );
     }
 
-    const resolvedFlags = this.resolveFlags();
+    // Resolve flags for PowerSync DB client
+    const resolvedFlags = this.resolveDBFlags();
 
     if (!resolvedFlags.enableMultiTabs) {
       console.warn(
@@ -69,9 +70,8 @@ export abstract class AbstractWebPowerSyncDatabaseOpenFactory extends AbstractPo
     };
   }
 
-  protected resolveFlags() {
-    return _.merge(DEFAULT_POWERSYNC_FLAGS, {
-      ...DEFAULT_POWERSYNC_FLAGS,
+  protected resolveDBFlags(): WebPowerSyncFlags {
+    return _.merge({}, DEFAULT_POWERSYNC_FLAGS, {
       ssrMode: this.isServerSide(),
       enableMultiTabs: this.options.flags?.enableMultiTabs
     });
