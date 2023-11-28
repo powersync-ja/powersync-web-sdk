@@ -24,16 +24,11 @@ export class WebStreamingSyncImplementation extends AbstractStreamingSyncImpleme
   }
 
   obtainLock<T>(lockOptions: LockOptions<T>): Promise<T> {
-    return navigator.locks.request(
-      `streaming-sync-${lockOptions.type}-${this.webOptions.workerIdentifier}`,
-      async () => {
-        try {
-          await lockOptions.callback();
-        } catch (ex) {
-          console.error('caught exception in lock context', ex);
-          throw ex;
-        }
-      }
-    );
+    const identifier = `streaming-sync-${lockOptions.type}-${this.webOptions.workerIdentifier}`;
+    this.logger.debug('requesting lock for ', identifier);
+    return navigator.locks.request(identifier, { signal: lockOptions.signal }, async () => {
+      this.logger.debug('obtained lock for', identifier);
+      await lockOptions.callback();
+    });
   }
 }

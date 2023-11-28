@@ -58,7 +58,7 @@ export class SharedWebStreamingSyncImplementation extends WebStreamingSyncImplem
 
   protected updateSyncStatus(state: SharedSyncStatus): void {
     super.updateSyncStatus(state);
-    //Broadcast this update to shared sync manager
+    // Broadcast this update to shared sync manager
     this.stateManager.updateState({
       ...state,
       tabId: this.syncTabId
