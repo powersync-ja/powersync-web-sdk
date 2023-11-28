@@ -14,7 +14,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^5.0.8",
-    "@journeyapps/powersync-react": "0.0.0-dev-20231127232703",
+    "@journeyapps/powersync-react": "0.0.0-dev-20231128003049",
     "@journeyapps/powersync-sdk-web": "workspace:*",
     "@journeyapps/wa-sqlite": "~0.0.2",
     "@mui/icons-material": "^5.14.16",

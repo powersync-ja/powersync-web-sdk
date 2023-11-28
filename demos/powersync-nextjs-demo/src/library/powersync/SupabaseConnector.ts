@@ -118,7 +118,7 @@ export class SupabaseConnector extends BaseObserver<SupabaseConnectorListener> i
   }
 
   async uploadData(database: AbstractPowerSyncDatabase): Promise<void> {
-    const transaction = await database.getNextCrudTransaction();
+    const transaction = await database.getCrudBatch(1000);
 
     if (!transaction) {
       return;
