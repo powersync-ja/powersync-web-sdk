@@ -30,8 +30,8 @@ importers:
         specifier: ^5.0.8
         version: 5.0.8
       '@journeyapps/powersync-react':
-        specifier: 0.0.0-dev-20231128212850
-        version: 0.0.0-dev-20231128212850(react@18.0.0)
+        specifier: 0.0.0-dev-20231128232955
+        version: 0.0.0-dev-20231128232955(react@18.0.0)
       '@journeyapps/powersync-sdk-web':
         specifier: workspace:*
         version: link:../../packages/powersync-sdk-web
@@ -106,8 +106,8 @@ importers:
   packages/powersync-sdk-web:
     dependencies:
       '@journeyapps/powersync-sdk-common':
-        specifier: link:../../../powersync-react-native-sdk/packages/powersync-sdk-common/
-        version: link:../../../powersync-react-native-sdk/packages/powersync-sdk-common
+        specifier: 0.0.0-dev-20231128232955
+        version: 0.0.0-dev-20231128232955
       async-mutex:
         specifier: ^0.4.0
         version: 0.4.0
@@ -1714,17 +1714,17 @@ packages:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
     dev: true
 
-  /@journeyapps/powersync-react@0.0.0-dev-20231128212850(react@18.0.0):
-    resolution: {integrity: sha512-+0YxkZlK/XrKuBBVxEQVmmp6X2woPe9X9BkAdI8nytNDQp86DlV+9BAf8Q+Bj6ibjdruK/53Zd0J8Xg6mhUalQ==}
+  /@journeyapps/powersync-react@0.0.0-dev-20231128232955(react@18.0.0):
+    resolution: {integrity: sha512-QL1eKuZ25shfO7S/GzBL/TxIewGJiyex9AZIdiY0MvmPrGpq9Kn3fOn4JR5cYSeOoLxluu5We4npQRv+j0Ca9A==}
     peerDependencies:
       react: '*'
     dependencies:
-      '@journeyapps/powersync-sdk-common': 0.0.0-dev-20231128212850
+      '@journeyapps/powersync-sdk-common': 0.0.0-dev-20231128232955
       react: 18.0.0
     dev: false
 
-  /@journeyapps/powersync-sdk-common@0.0.0-dev-20231128212850:
-    resolution: {integrity: sha512-EEt3NoYU7UNaFioU8eZr8vA95S7BX9o2mPzIz+bzhgbzTMsHGSAYuNtE6hEhqtXR8T503PDYHDSh/cUNsBvmgw==}
+  /@journeyapps/powersync-sdk-common@0.0.0-dev-20231128232955:
+    resolution: {integrity: sha512-mnKz7KawGn+u+EBEXjQMl1/hQ2CLw1IpXiphM2OJ5V+iC0aHm2n3aeKEkrxZZRyXTzdsMYWop04nlq93MS4Wuw==}
     dependencies:
       async-mutex: 0.4.0
       can-ndjson-stream: 1.0.2
