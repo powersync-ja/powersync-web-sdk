@@ -41,7 +41,7 @@
     "@journeyapps/wa-sqlite": "~0.0.2"
   },
   "dependencies": {
-    "@journeyapps/powersync-sdk-common": "0.0.0-dev-20231128183250",
+    "@journeyapps/powersync-sdk-common": "link:../../../powersync-react-native-sdk/packages/powersync-sdk-common/",
     "async-mutex": "^0.4.0",
     "comlink": "^4.4.1",
     "js-logger": "^1.6.1",

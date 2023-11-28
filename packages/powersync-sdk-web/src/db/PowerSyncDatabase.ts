@@ -48,13 +48,13 @@ export class PowerSyncDatabase extends AbstractPowerSyncDatabase {
     const remote = new WebRemote(connector);
 
     const syncOptions: WebStreamingSyncImplementationOptions = {
+      ...this.options,
       adapter: this.bucketStorageAdapter,
       remote,
       uploadCrud: async () => {
         await this.waitForReady();
         await connector.uploadData(this);
       },
-      retryDelayMs: this.options.retryDelay,
       workerIdentifier: this.options.database.name
     };
 
