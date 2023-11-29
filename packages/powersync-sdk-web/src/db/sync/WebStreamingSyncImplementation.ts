@@ -27,17 +27,6 @@ export class WebStreamingSyncImplementation extends AbstractStreamingSyncImpleme
   obtainLock<T>(lockOptions: LockOptions<T>): Promise<T> {
     const identifier = `streaming-sync-${lockOptions.type}-${this.webOptions.workerIdentifier}`;
     lockOptions.type == LockType.SYNC && console.debug('requesting lock for ', identifier);
-    return navigator.locks.request(identifier, { signal: lockOptions.signal }, async () => {
-      return new Promise((resolve, reject) => {
-        // TODO, the fetch and ndjson streams don't work well with being aborted via a signal
-        // Currently there is a "DOMException: BodyStreamBuffer was aborted" error that is
-        // thrown when the signal is aborted, but this error does not seem to be catchable
-        lockOptions.signal?.addEventListener('abort', () => {
-          reject(new Error('Abort signal received'));
-        });
-
-        lockOptions.callback().then(resolve).catch(reject);
-      });
-    });
+    return navigator.locks.request(identifier, { signal: lockOptions.signal }, lockOptions.callback);
   }
 }
