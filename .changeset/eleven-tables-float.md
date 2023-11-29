@@ -1,5 +1,5 @@
 ---
-'@journeyapps/powersync-sdk-web': patch
+'@journeyapps/powersync-sdk-web': minor
 ---
 
 Added mock SSR implementation for sync stream client. 
