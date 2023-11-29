@@ -16,7 +16,6 @@ export type DBWorkerInterface = {
   //   Close is only exposed when used in a single non shared webworker
   close?: () => void;
   execute: WASQLiteExecuteMethod;
-  acquireDBLock: (callback: () => Promise<void>) => Promise<void>;
   registerOnTableChange: (callback: OnTableChangeCallback) => void;
 };
 
@@ -119,14 +118,7 @@ export async function _openDB(dbFileName: string): Promise<DBWorkerInterface> {
     });
   };
 
-  const acquireDBLock = async (callback: () => Promise<void>) => {
-    return navigator.locks.request(`db-lock-${dbFileName}`, async () => {
-      return callback();
-    });
-  };
-
   return {
-    acquireDBLock: Comlink.proxy(acquireDBLock),
     execute: Comlink.proxy(execute),
     registerOnTableChange: Comlink.proxy(registerOnTableChange),
     close: Comlink.proxy(() => {
