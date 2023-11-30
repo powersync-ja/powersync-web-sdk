@@ -2,8 +2,8 @@
 
 [PowerSync](https://powersync.co) is a service and set of SDKs that keeps Postgres databases in sync with on-device SQLite databases.
 
-## Alpha Release
-This SDK package is currently in an alpha release.
+## Beta Release
+The web SDK package is currently in a Beta release.
 
 # Installation
 
