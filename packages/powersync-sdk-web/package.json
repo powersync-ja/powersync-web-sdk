@@ -32,13 +32,13 @@
   "author": "JOURNEYAPPS",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@journeyapps/wa-sqlite": "~0.0.2",
+    "@journeyapps/wa-sqlite": "~0.1.0",
     "@types/lodash": "^4.14.200",
     "@types/uuid": "^9.0.6",
     "typescript": "^5.2.2"
   },
   "peerDependencies": {
-    "@journeyapps/wa-sqlite": "~0.0.2"
+    "@journeyapps/wa-sqlite": "~0.1.0"
   },
   "dependencies": {
     "@journeyapps/powersync-sdk-common": "1.0.0",
