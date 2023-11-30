@@ -30,8 +30,8 @@ importers:
         specifier: ^5.0.8
         version: 5.0.8
       '@journeyapps/powersync-react':
-        specifier: 0.0.0-dev-20231128232955
-        version: 0.0.0-dev-20231128232955(react@18.0.0)
+        specifier: 1.0.0
+        version: 1.0.0(react@18.0.0)
       '@journeyapps/powersync-sdk-web':
         specifier: workspace:*
         version: link:../../packages/powersync-sdk-web
@@ -106,8 +106,8 @@ importers:
   packages/powersync-sdk-web:
     dependencies:
       '@journeyapps/powersync-sdk-common':
-        specifier: 0.0.0-dev-20231128232955
-        version: 0.0.0-dev-20231128232955
+        specifier: 1.0.0
+        version: 1.0.0
       async-mutex:
         specifier: ^0.4.0
         version: 0.4.0
@@ -1714,17 +1714,17 @@ packages:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
     dev: true
 
-  /@journeyapps/powersync-react@0.0.0-dev-20231128232955(react@18.0.0):
-    resolution: {integrity: sha512-QL1eKuZ25shfO7S/GzBL/TxIewGJiyex9AZIdiY0MvmPrGpq9Kn3fOn4JR5cYSeOoLxluu5We4npQRv+j0Ca9A==}
+  /@journeyapps/powersync-react@1.0.0(react@18.0.0):
+    resolution: {integrity: sha512-WMSIScA4cZbBBFAD9p/v6vn/0ixv0tLaVMcx84pIkUSy9FNn8gI0G9ciwUIcyGSNI1sMnCjyH76NwXo48WtY5w==}
     peerDependencies:
       react: '*'
     dependencies:
-      '@journeyapps/powersync-sdk-common': 0.0.0-dev-20231128232955
+      '@journeyapps/powersync-sdk-common': 1.0.0
       react: 18.0.0
     dev: false
 
-  /@journeyapps/powersync-sdk-common@0.0.0-dev-20231128232955:
-    resolution: {integrity: sha512-mnKz7KawGn+u+EBEXjQMl1/hQ2CLw1IpXiphM2OJ5V+iC0aHm2n3aeKEkrxZZRyXTzdsMYWop04nlq93MS4Wuw==}
+  /@journeyapps/powersync-sdk-common@1.0.0:
+    resolution: {integrity: sha512-mVyIsWiSQPMvAcQ715x+qomYp9C2LZKi/k+w7ZMpWN3KrwIPNWskF6DYHGOwnl9J0uaDC74T9yrwmVganEa3JQ==}
     dependencies:
       async-mutex: 0.4.0
       can-ndjson-stream: 1.0.2
