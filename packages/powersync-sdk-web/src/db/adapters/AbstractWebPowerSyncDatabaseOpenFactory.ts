@@ -24,6 +24,7 @@ export const DEFAULT_POWERSYNC_FLAGS: WebPowerSyncOpenFlags = {
    */
   enableMultiTabs:
     typeof globalThis.navigator !== 'undefined' && // For SSR purposes
+    typeof SharedWorker !== 'undefined' &&
     !navigator.userAgent.match(/(Android|iPhone|iPod|iPad)/i) &&
     !(window as any).safari
 };
