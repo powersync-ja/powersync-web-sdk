@@ -1,5 +1,14 @@
 # @journeyapps/powersync-sdk-web
 
+## 0.1.0
+
+### Minor Changes
+
+- 1fa25e6: Added mock SSR implementation for sync stream client.
+  Added better worker and multiple tabs support.
+  Added support for Android (without multiple tab support).
+  Fixed race conditions in Safari by disabling Shared web workers (multiple tab support).
+
 ## 0.0.3
 
 ### Patch Changes
