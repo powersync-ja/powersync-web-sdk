@@ -1,5 +1,13 @@
 # @journeyapps/powersync-nextjs-demo
 
+## 0.1.4
+
+### Patch Changes
+
+- 1fa25e6: Added uploading and downloading status indicator.
+- Updated dependencies [1fa25e6]
+  - @journeyapps/powersync-sdk-web@0.1.0
+
 ## 0.1.3
 
 ### Patch Changes
