@@ -1,12 +1,10 @@
 import * as SQLite from '@journeyapps/wa-sqlite';
 import '@journeyapps/wa-sqlite';
-
 import _ from 'lodash';
 import * as Comlink from 'comlink';
-import { QueryResult } from '@journeyapps/powersync-sdk-common';
 import { v4 as uuid } from 'uuid';
+import { QueryResult } from '@journeyapps/powersync-sdk-common';
 
-// The item function cannot be returned over Comlink bridge
 export type WASQLExecuteResult = Omit<QueryResult, 'rows'> & {
   rows: {
     _array: any[];
@@ -14,22 +12,19 @@ export type WASQLExecuteResult = Omit<QueryResult, 'rows'> & {
   };
 };
 
-export type WASQLiteExecuteMethod = (sql: string, params?: any[]) => Promise<WASQLExecuteResult>;
-export type OnTableChangeCallback = (opType: number, tableName: string, rowId: number) => void;
-export type OpenDB = (dbFileName: string) => Promise<DBWorkerInterface>;
-
 export type DBWorkerInterface = {
+  //   Close is only exposed when used in a single non shared webworker
+  close?: () => void;
   execute: WASQLiteExecuteMethod;
   registerOnTableChange: (callback: OnTableChangeCallback) => void;
 };
 
-export type InternalDBWorkerInterface = DBWorkerInterface & {
-  close: () => void;
-};
+export type WASQLiteExecuteMethod = (sql: string, params?: any[]) => Promise<WASQLExecuteResult>;
 
-const _self: SharedWorkerGlobalScope = self as any;
+export type OnTableChangeCallback = (opType: number, tableName: string, rowId: number) => void;
+export type OpenDB = (dbFileName: string) => DBWorkerInterface;
 
-async function _openDB(dbFileName: string): Promise<InternalDBWorkerInterface> {
+export async function _openDB(dbFileName: string): Promise<DBWorkerInterface> {
   const { default: moduleFactory } = await import('@journeyapps/wa-sqlite/dist/wa-sqlite-async.mjs');
   const module = await moduleFactory();
   const sqlite3 = SQLite.Factory(module);
@@ -58,7 +53,7 @@ async function _openDB(dbFileName: string): Promise<InternalDBWorkerInterface> {
    */
   const execute = async (sql: string | TemplateStringsArray, bindings?: any[]): Promise<WASQLExecuteResult> => {
     // Running multiple statements on the same connection concurrently should not be allowed
-    return navigator.locks.request('DBExecute', async () => {
+    return navigator.locks.request(`db-execute-${dbFileName}`, async () => {
       const results = [];
       for await (const stmt of sqlite3.statements(db, sql as string)) {
         let columns;
@@ -126,30 +121,8 @@ async function _openDB(dbFileName: string): Promise<InternalDBWorkerInterface> {
   return {
     execute: Comlink.proxy(execute),
     registerOnTableChange: Comlink.proxy(registerOnTableChange),
-    close: () => {
+    close: Comlink.proxy(() => {
       sqlite3.close(db);
-    }
+    })
   };
 }
-
-const DBMap = new Map<string, InternalDBWorkerInterface>();
-
-const openDB = async (dbFileName: string): Promise<DBWorkerInterface> => {
-  if (!DBMap.has(dbFileName)) {
-    DBMap.set(dbFileName, await _openDB(dbFileName));
-  }
-  return Comlink.proxy(DBMap.get(dbFileName)!);
-};
-
-_self.onconnect = function (event: MessageEvent<string>) {
-  const port = event.ports[0];
-
-  console.debug('Exposing db on port', port);
-  Comlink.expose(openDB, port);
-};
-
-addEventListener('beforeunload', (event) => {
-  Array.from(DBMap.values()).forEach((db) => {
-    db.close();
-  });
-});

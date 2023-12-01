@@ -1,8 +1,8 @@
 # PowerSync + Supabase NextJS Demo: Todo List 
 
-## Note: Alpha Release
+## Note: Beta Release
 
-This package is currently in a alpha release.
+This package is currently in a beta release.
 
 ## Overview
 

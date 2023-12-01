@@ -12,7 +12,15 @@ import {
 import _ from 'lodash';
 import * as Comlink from 'comlink';
 import Logger, { ILogger } from 'js-logger';
-import type { OpenDB, WASQLiteExecuteMethod } from '../../../worker/SharedWASQLiteDB.worker';
+import type { DBWorkerInterface, OpenDB } from '../../../worker/db/open-db';
+
+export type WASQLiteFlags = {
+  enableMultiTabs?: boolean;
+};
+
+export interface WASQLiteDBAdapterOptions extends Omit<PowerSyncOpenFactoryOptions, 'schema'> {
+  flags?: WASQLiteFlags;
+}
 
 /**
  * Adapter for WA-SQLite
@@ -21,26 +29,52 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
   private initialized: Promise<void>;
   private logger: ILogger;
   private dbGetHelpers: DBGetUtils | null;
-  private _workerExecute: WASQLiteExecuteMethod | null;
+  private workerMethods: DBWorkerInterface | null;
 
-  constructor(protected options: Omit<PowerSyncOpenFactoryOptions, 'schema'>) {
+  constructor(protected options: WASQLiteDBAdapterOptions) {
     super();
     this.logger = Logger.get('WASQLite');
     this.dbGetHelpers = null;
-    this._workerExecute = null;
+    this.workerMethods = null;
     this.initialized = this.init();
     this.dbGetHelpers = this.generateDBHelpers({ execute: this._execute.bind(this) });
   }
 
+  get name() {
+    return this.options.dbFilename;
+  }
+
+  protected get flags(): WASQLiteFlags {
+    return this.options.flags ?? {};
+  }
+
   protected async init() {
-    const worker = new SharedWorker(new URL('../../../worker/SharedWASQLiteDB.worker.js', import.meta.url));
-    const openDB = Comlink.wrap<OpenDB>(worker.port);
+    const { enableMultiTabs } = this.flags;
+    if (!enableMultiTabs) {
+      this.logger.warn('Multiple tabs are not enabled in this browser');
+    }
+    /**
+     *  Webpack V5 can bundle the worker automatically if the full Worker constructor syntax is used
+     *  https://webpack.js.org/guides/web-workers/
+     *  This enables multi tab support by default, but falls back if SharedWorker is not available
+     *  (in the case of Android)
+     */
+    const openDB = enableMultiTabs
+      ? Comlink.wrap<OpenDB>(
+          new SharedWorker(new URL('../../../worker/db/SharedWASQLiteDB.worker.js', import.meta.url), {
+            name: `shared-DB-worker-${this.name}`
+          }).port
+        )
+      : Comlink.wrap<OpenDB>(
+          new Worker(new URL('../../../worker/db/WASQLiteDB.worker.js', import.meta.url), {
+            name: `DB-worker-${this.name}`
+          })
+        );
 
-    const { execute, registerOnTableChange } = await openDB(this.options.dbFilename);
-    this._workerExecute = execute;
+    this.workerMethods = await openDB(this.options.dbFilename);
 
-    registerOnTableChange(
-      Comlink.proxy((opType, tableName, rowId) => {
+    this.workerMethods.registerOnTableChange(
+      Comlink.proxy((opType: number, tableName: string, rowId: number) => {
         this.iterateListeners((cb) => cb.tablesUpdated?.({ opType, table: tableName, rowId }));
       })
     );
@@ -55,7 +89,7 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
    */
   private _execute = async (sql: string, bindings?: any[]): Promise<QueryResult> => {
     await this.initialized;
-    const result = await this._workerExecute!(sql, bindings);
+    const result = await this.workerMethods!.execute!(sql, bindings);
     return {
       ...result,
       rows: {
@@ -66,12 +100,9 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
   };
 
   close() {
-    /**
-     * TODO improve DB closing logic in shared worker.
-     * Cannot close a DB from a single browser tab, as multiple may be using
-     * the same connection.
-     * The shared worker will close connections once it closes
-     * */
+    if (!this.flags.enableMultiTabs) {
+      this.workerMethods?.close?.();
+    }
   }
 
   async getAll<T>(sql: string, parameters?: any[] | undefined): Promise<T[]> {
@@ -92,9 +123,7 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
   async readLock<T>(fn: (tx: LockContext) => Promise<T>, options?: DBLockOptions | undefined): Promise<T> {
     await this.initialized;
     return new Promise((resolve, reject) => {
-      // This implementation currently only uses a single connection. Locking is ensured by navigator locks
-      // TODO add concurrent connections
-      navigator.locks.request('DBLock', async () => {
+      this.acquireLock(async () => {
         try {
           const res = await fn(this.generateDBHelpers({ execute: this._execute }));
           resolve(res);
@@ -105,11 +134,11 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
     });
   }
 
-  writeLock<T>(fn: (tx: LockContext) => Promise<T>, options?: DBLockOptions | undefined): Promise<T> {
+  async writeLock<T>(fn: (tx: LockContext) => Promise<T>, options?: DBLockOptions | undefined): Promise<T> {
+    await this.initialized;
     return new Promise((resolve, reject) => {
       // This implementation currently only uses a single connection. Locking is ensured by navigator locks
-      // TODO add concurrent connections
-      navigator.locks.request('DBLock', async () => {
+      this.acquireLock(async () => {
         try {
           const res = await fn(this.generateDBHelpers({ execute: this._execute }));
           resolve(res);
@@ -118,6 +147,10 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
         }
       });
     });
+  }
+
+  protected acquireLock(callback: () => Promise<any>): Promise<any> {
+    return navigator.locks.request(`db-lock-${this.options.dbFilename}`, callback);
   }
 
   async readTransaction<T>(fn: (tx: Transaction) => Promise<T>, options?: DBLockOptions | undefined): Promise<T> {

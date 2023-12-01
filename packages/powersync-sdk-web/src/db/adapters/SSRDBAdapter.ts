@@ -20,11 +20,13 @@ const MOCK_QUERY_RESPONSE: QueryResult = {
  * server rendered views to initially generate scaffolding components
  */
 export class SSRDBAdapter extends BaseObserver<DBAdapterListener> implements DBAdapter {
+  name: string;
   readMutex: Mutex;
   writeMutex: Mutex;
 
   constructor() {
     super();
+    this.name = 'SSR DB';
     this.readMutex = new Mutex();
     this.writeMutex = new Mutex();
   }

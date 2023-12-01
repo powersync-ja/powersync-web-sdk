@@ -51,18 +51,48 @@ export class WebRemote extends AbstractRemote {
       body: JSON.stringify(data),
       signal,
       cache: 'no-store'
-    }).catch((ex) => {
-      console.error(`Caught ex when POST streaming to ${path}`, ex);
-      throw ex;
     });
 
-    if (!res.ok) {
+    if (!res.ok || !res.body) {
       const text = await res.text();
       console.error(`Could not POST streaming to ${path} - ${res.status} - ${res.statusText}: ${text}`);
       const error: any = new Error(`HTTP ${res.statusText}: ${text}`);
       error.status = res.status;
       throw error;
     }
-    return res.body;
+
+    /**
+     * The can-ndjson-stream does not handle aborted streams well on web.
+     * This will intercept the readable stream and close the stream if
+     * aborted.
+     */
+    const reader = res.body.getReader();
+    const outputStream = new ReadableStream({
+      start(controller) {
+        return processStream();
+
+        async function processStream(): Promise<void> {
+          if (signal?.aborted) {
+            controller.close();
+          }
+          try {
+            const { done, value } = await reader.read();
+            // When no more data needs to be consumed, close the stream
+            if (done) {
+              controller.close();
+              return;
+            }
+            // Enqueue the next data chunk into our target stream
+            controller.enqueue(value);
+            return processStream();
+          } catch (ex) {
+            controller.close();
+          }
+        }
+      }
+    });
+
+    // Create a new response out of the intercepted stream
+    return new Response(outputStream).body;
   }
 }

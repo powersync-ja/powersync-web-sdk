@@ -22,6 +22,8 @@ import SignalWifiOffIcon from '@mui/icons-material/SignalWifiOff';
 import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import TerminalIcon from '@mui/icons-material/Terminal';
+import NorthIcon from '@mui/icons-material/North';
+import SouthIcon from '@mui/icons-material/South';
 
 import { usePowerSync } from '@journeyapps/powersync-react';
 import { useRouter } from 'next/navigation';
@@ -33,7 +35,7 @@ export default function ViewsLayout({ children }: { children: React.ReactNode })
   const router = useRouter();
   const supabase = useSupabase();
 
-  const [connected, setConnected] = React.useState(powerSync.connected);
+  const [syncStatus, setSyncStatus] = React.useState(powerSync.currentStatus);
   const [openDrawer, setOpenDrawer] = React.useState(false);
   const [title, setTitle] = React.useState('');
 
@@ -63,7 +65,11 @@ export default function ViewsLayout({ children }: { children: React.ReactNode })
   );
 
   React.useEffect(() => {
-    const l = powerSync.registerListener({ statusChanged: (status) => setConnected(status.connected) });
+    const l = powerSync.registerListener({
+      statusChanged: (status) => {
+        setSyncStatus(status);
+      }
+    });
     return () => l?.();
   }, [powerSync]);
 
@@ -83,7 +89,12 @@ export default function ViewsLayout({ children }: { children: React.ReactNode })
           <Box sx={{ flexGrow: 1 }}>
             <Typography>{title}</Typography>
           </Box>
-          {connected ? <WifiIcon /> : <SignalWifiOffIcon />}
+          <NorthIcon
+            sx={{ marginRight: '-10px' }}
+            color={syncStatus?.dataFlowStatus.uploading ? 'primary' : 'inherit'}
+          />
+          <SouthIcon color={syncStatus?.dataFlowStatus.downloading ? 'primary' : 'inherit'} />
+          {syncStatus?.connected ? <WifiIcon /> : <SignalWifiOffIcon />}
         </Toolbar>
       </S.TopBar>
       <Drawer anchor={'left'} open={openDrawer} onClose={() => setOpenDrawer(false)}>
