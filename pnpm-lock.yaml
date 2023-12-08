@@ -14,9 +14,6 @@ importers:
       prettier:
         specifier: ^3.0.3
         version: 3.0.3
-      typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
 
   demos/example-vite:
     dependencies:
@@ -168,6 +165,9 @@ importers:
       '@types/uuid':
         specifier: ^9.0.6
         version: 9.0.6
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
 
 packages:
 
