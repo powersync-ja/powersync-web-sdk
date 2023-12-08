@@ -15,5 +15,6 @@
     "@types/webpack": "^5.28.5",
     "serve": "^14.2.1",
     "html-webpack-plugin": "^5.5.3"
-  }
+  },
+  "version": null
 }

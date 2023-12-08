@@ -1,5 +1,11 @@
 # @journeyapps/powersync-sdk-web
 
+## 0.1.1
+
+### Patch Changes
+
+- 0e17713: Added ignore directives for Vite to enable bundling the workers correctly.
+
 ## 0.1.0
 
 ### Minor Changes
