@@ -83,7 +83,8 @@ export default function ViewsLayout({ children }: { children: React.ReactNode })
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
-            onClick={() => setOpenDrawer(!openDrawer)}>
+            onClick={() => setOpenDrawer(!openDrawer)}
+          >
             <MenuIcon />
           </IconButton>
           <Box sx={{ flexGrow: 1 }}>
@@ -108,7 +109,8 @@ export default function ViewsLayout({ children }: { children: React.ReactNode })
                   await item.beforeNavigate?.();
                   router.push(item.path);
                   setOpenDrawer(false);
-                }}>
+                }}
+              >
                 <ListItemIcon>{item.icon()}</ListItemIcon>
                 <ListItemText primary={item.title} />
               </ListItemButton>

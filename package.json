@@ -4,12 +4,13 @@
   "description": "Monorepo for PowerSync Web SDK",
   "private": true,
   "scripts": {
-    "build:all": "pnpm run -r build",
+    "build": "pnpm run -r build",
     "build:packages": "pnpm run --filter './packages/**' -r build",
     "ci:version": "changeset version && pnpm install --no-frozen-lockfile",
     "ci:publish": "changeset publish && git push --follow-tags",
     "clean": "pnpm run -r clean",
-    "watch": "pnpm run --parallel  watch"
+    "watch": "pnpm run --parallel  watch",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx}\" --ignore-path .gitignore  --ignore-path ./demos/powersync-nextjs-demo/.gitignore"
   },
   "keywords": [],
   "author": "JOURNEYAPPS",

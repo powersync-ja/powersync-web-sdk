@@ -48,6 +48,8 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
     return this.options.flags ?? {};
   }
 
+  getWorker() {}
+
   protected async init() {
     const { enableMultiTabs } = this.flags;
     if (!enableMultiTabs) {
@@ -62,12 +64,16 @@ export class WASQLiteDBAdapter extends BaseObserver<DBAdapterListener> implement
     const openDB = enableMultiTabs
       ? Comlink.wrap<OpenDB>(
           new SharedWorker(new URL('../../../worker/db/SharedWASQLiteDB.worker.js', import.meta.url), {
-            name: `shared-DB-worker-${this.name}`
+            /* @vite-ignore */
+            name: `shared-DB-worker-${this.name}`,
+            type: 'module'
           }).port
         )
       : Comlink.wrap<OpenDB>(
           new Worker(new URL('../../../worker/db/WASQLiteDB.worker.js', import.meta.url), {
-            name: `DB-worker-${this.name}`
+            /* @vite-ignore */
+            name: `DB-worker-${this.name}`,
+            type: 'module'
           })
         );
 
