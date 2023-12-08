@@ -55,7 +55,8 @@ export const LoginDetailsWidget: React.FC<LoginDetailsWidgetProps> = (props) => 
               setSubmitting(false);
               setFieldError('password', ex.message);
             }
-          }}>
+          }}
+        >
           {({ values, errors, handleChange, handleBlur, isSubmitting, handleSubmit }) => (
             <form onSubmit={handleSubmit}>
               <FormGroup>
@@ -93,7 +94,8 @@ export const LoginDetailsWidget: React.FC<LoginDetailsWidgetProps> = (props) => 
                       disabled={isSubmitting}
                       onClick={() => {
                         action.onClick(values);
-                      }}>
+                      }}
+                    >
                       {action.title}
                     </Button>
                   );

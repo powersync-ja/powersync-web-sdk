@@ -23,7 +23,8 @@ export const ListItemWidget: React.FC<ListItemWidgetProps> = (props) => {
               aria-label="delete"
               onClick={(event) => {
                 props.onDelete();
-              }}>
+              }}
+            >
               <DeleteIcon />
             </IconButton>
             <IconButton
@@ -31,11 +32,13 @@ export const ListItemWidget: React.FC<ListItemWidgetProps> = (props) => {
               aria-label="proceed"
               onClick={(event) => {
                 props.onPress();
-              }}>
+              }}
+            >
               <RightIcon />
             </IconButton>
           </Box>
-        }>
+        }
+      >
         <ListItemAvatar>
           <Avatar>
             <ListIcon />

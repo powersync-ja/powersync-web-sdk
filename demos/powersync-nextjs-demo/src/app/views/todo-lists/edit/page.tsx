@@ -121,7 +121,8 @@ const TodoEditSection = () => {
           open={showPrompt}
           onClose={() => setShowPrompt(false)}
           aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description">
+          aria-describedby="alert-dialog-description"
+        >
           <DialogTitle id="alert-dialog-title">{'Create Todo Item'}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">Enter a description for a new todo item</DialogContentText>
@@ -133,7 +134,8 @@ const TodoEditSection = () => {
               onClick={async () => {
                 await createNewTodo(nameInputRef.current!.value);
                 setShowPrompt(false);
-              }}>
+              }}
+            >
               Create
             </Button>
           </DialogActions>
