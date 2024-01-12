@@ -2,8 +2,7 @@
 
 This is a simple CRDT text collaboration demo powered by [Yjs](https://github.com/yjs/yjs) and [Tiptap](https://tiptap.dev/) which uses [PowerSync](https://www.powersync.com/) as both the persistence and connection provider. This means that the Yjs CRDT data structures are stored in Postgres. Conflicts are automatically resolved using CRDTs. 
 
-https://github.com/powersync-ja/powersync-supabase-yjs-text-collab-demo/assets/93317/97c6bec0-d0ec-4719-8df1-797264b9b789
-
+https://github.com/powersync-ja/powersync-web-sdk/assets/93317/fc0c2b2f-feb7-441b-895a-94893db46563
 
 This demo is built using [Next.js](https://nextjs.org/) and the [PowerSync JS web SDK](https://docs.powersync.com/client-sdk-references/js-web).
 
@@ -109,7 +108,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to try out
 
 To try out the collaborative editing, copy and paste the URL of the page and open it in another browser (or another browser window).
 
-<img width="1135" src="https://github.com/powersync-ja/powersync-supabase-yjs-text-collab-demo/assets/93317/a55d5ee5-0da9-4ab6-a584-1741fb97de9f">
+<img width="1135" alt="295090638-a55d5ee5-0da9-4ab6-a584-1741fb97de9f" src="https://github.com/powersync-ja/powersync-web-sdk/assets/93317/a10257d8-c614-4818-818a-2e722cd69d67">
 
 
 ### (Optional) Supabase edge function for merging document updates
