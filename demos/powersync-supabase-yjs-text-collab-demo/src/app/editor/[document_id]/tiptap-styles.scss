@@ -1,5 +1,8 @@
 /* Basic editor styles */
 .tiptap {
+  outline: 1px solid #eee;
+  border-radius: 1px;
+
   > * + * {
     margin-top: 0.75em;
   }
