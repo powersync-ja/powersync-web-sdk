@@ -5,7 +5,7 @@ module.exports = withImages({
   images: {
     disableStaticImages: true
   },
-  webpack: (config, { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack }) => {
+  webpack: (config, { isServer }) => {
     if (isServer) {
       return config;
     }
@@ -16,7 +16,11 @@ module.exports = withImages({
         rules: [
           ...config.module.rules,
           {
-            test: /\.scss$/,
+            test: /\.css/,
+            use: ['style-loader', 'css-loader']
+          },
+          {
+            test: /\.scss/,
             use: ['style-loader', 'css-loader', 'sass-loader']
           }
         ]

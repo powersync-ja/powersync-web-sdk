@@ -1,32 +1,15 @@
 'use client';
 
-import _ from 'lodash';
-import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useSupabase } from '@/components/providers/SystemProvider';
 import { usePowerSync, usePowerSyncWatchedQuery } from '@journeyapps/powersync-react';
-import {
-  Box,
-  Button,
-  Container,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  List,
-  TextField,
-  Typography,
-  styled
-} from '@mui/material';
-import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
+import { Box, Container, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 import { b64ToUint8Array, Uint8ArrayTob64 } from '@/library/binary-utils';
 
 import * as Y from 'yjs';
 import Collaboration from '@tiptap/extension-collaboration';
-import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
 import Highlight from '@tiptap/extension-highlight';
 import TaskItem from '@tiptap/extension-task-item';
 import TaskList from '@tiptap/extension-task-list';
