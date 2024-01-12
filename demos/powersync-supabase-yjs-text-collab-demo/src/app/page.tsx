@@ -5,7 +5,6 @@ import { CircularProgress, Grid, styled } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { useSupabase } from '@/components/providers/SystemProvider';
 
-
 export default function EntryPage() {
   const router = useRouter();
   const connector = useSupabase();
@@ -24,18 +23,22 @@ export default function EntryPage() {
         return;
       }
       // otherwise, create a new document
-      const { data, error } = await connector.client.from('documents').insert({
-        title: "Test Document " + (1000 + Math.floor(Math.random() * 8999))
-      }).select().single();
+      const { data, error } = await connector.client
+        .from('documents')
+        .insert({
+          title: 'Test Document ' + (1000 + Math.floor(Math.random() * 8999))
+        })
+        .select()
+        .single();
 
       // redirect user to the document
       lastDocumentId = data.id;
       window.localStorage.setItem('lastDocumentId', lastDocumentId || '');
       router.push('/editor/' + lastDocumentId);
-    }
+    };
 
     if (!connector.ready) {
-      console.log('PowerSync<>Supabase connector not yet ready; registering listener')
+      console.log('PowerSync<>Supabase connector not yet ready; registering listener');
       const listener = connector.registerListener({
         initialized: () => {
           redirectToDocument();
@@ -45,7 +48,6 @@ export default function EntryPage() {
     }
 
     redirectToDocument();
-
   }, []);
 
   return (

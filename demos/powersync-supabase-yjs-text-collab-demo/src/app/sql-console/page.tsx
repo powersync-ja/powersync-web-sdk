@@ -52,7 +52,8 @@ export default function SQLConsolePage() {
               if (queryInput) {
                 setQuery(queryInput);
               }
-            }}>
+            }}
+          >
             Execute Query
           </Button>
         </S.CenteredGrid>

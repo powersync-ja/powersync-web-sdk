@@ -58,9 +58,11 @@
     "eslint": "^8",
     "eslint-config-next": "14.0.0",
     "postcss": "^8.0.0",
+    "style-loader": "^3.3.4",
+    "css-loader": "^6.9.0",
+    "sass-loader": "^13.3.3",
     "sass": "^1.49.7",
     "supabase": "1.127.4",
-    "tailwindcss": "^3.3.5",
-    "typescript": "^5"
+    "tailwindcss": "^3.3.5"
   }
 }
