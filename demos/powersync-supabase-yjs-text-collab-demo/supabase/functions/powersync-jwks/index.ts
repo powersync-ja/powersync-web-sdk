@@ -14,9 +14,9 @@ serve((_req) => {
   return new Response(
     JSON.stringify({
       keys: [
-        powerSyncPublicKey,
+        powerSyncPublicKey
         // Additional keys could be added here if desired
-      ],
+      ]
     }),
     { headers: { 'Content-Type': 'application/json' } }
   );

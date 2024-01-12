@@ -34,7 +34,7 @@ import type { Metadata } from 'next';
 import { ThemeProviderContainer } from '@/components/providers/ThemeProviderContainer';
 import { DynamicSystemProvider } from '@/components/providers/DynamicSystemProvider';
 
-import './globals.css';
+import './globals.scss';
 
 import { Lato } from 'next/font/google';
 

@@ -6,9 +6,16 @@ import {
   UpdateType
 } from '@journeyapps/powersync-sdk-web';
 
-import { SupabaseClient, createClient, PostgrestError, FunctionsHttpError, FunctionsRelayError, FunctionsFetchError } from '@supabase/supabase-js';
+import {
+  SupabaseClient,
+  createClient,
+  PostgrestError,
+  FunctionsHttpError,
+  FunctionsRelayError,
+  FunctionsFetchError
+} from '@supabase/supabase-js';
 
-import { b64ToHex } from '@/library/binary-utils'
+import { b64ToHex } from '@/library/binary-utils';
 
 export type SupabaseConfig = {
   supabaseUrl: string;
