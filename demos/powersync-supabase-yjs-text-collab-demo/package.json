@@ -28,6 +28,7 @@
     "@tiptap/extension-task-list": "2.1.13",
     "@tiptap/react": "2.1.13",
     "@tiptap/starter-kit": "2.1.13",
+    "lato-font": "^3.0.0",
     "d3": "^7.3.0",
     "fast-glob": "^3.2.11",
     "formik": "^2.4.5",
