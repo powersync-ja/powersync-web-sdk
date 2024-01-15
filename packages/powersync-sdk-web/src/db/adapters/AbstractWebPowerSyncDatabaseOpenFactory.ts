@@ -65,6 +65,7 @@ export abstract class AbstractWebPowerSyncDatabaseOpenFactory extends AbstractPo
     }
 
     return {
+      ...this.options,
       database: isServerSide ? new SSRDBAdapter() : this.openDB(),
       schema: this.schema,
       flags: resolvedFlags

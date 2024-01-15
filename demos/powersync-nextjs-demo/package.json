@@ -1,6 +1,6 @@
 {
   "name": "@journeyapps/powersync-nextjs-demo",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "private": true,
   "scripts": {
     "build": "next build",
@@ -14,7 +14,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^5.0.8",
-    "@journeyapps/powersync-react": "1.0.0",
+    "@journeyapps/powersync-react": "1.0.1",
     "@journeyapps/powersync-sdk-web": "workspace:*",
     "@journeyapps/wa-sqlite": "~0.1.0",
     "@mui/icons-material": "^5.14.16",
