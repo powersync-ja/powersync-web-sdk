@@ -147,8 +147,8 @@ importers:
         specifier: ^5.0.8
         version: 5.0.8
       '@journeyapps/powersync-react':
-        specifier: 1.0.0
-        version: 1.0.0(react@18.0.0)
+        specifier: ^1.0.1
+        version: 1.0.1(react@18.0.0)
       '@journeyapps/powersync-sdk-web':
         specifier: workspace:*
         version: link:../../packages/powersync-sdk-web
