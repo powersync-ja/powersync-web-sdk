@@ -126,7 +126,7 @@ const TodoEditSection = () => {
           <DialogTitle id="alert-dialog-title">{'Create Todo Item'}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">Enter a description for a new todo item</DialogContentText>
-            <TextField sx={{ marginTop: '10px' }} fullWidth inputRef={nameInputRef} label="Name" />
+            <TextField sx={{ marginTop: '10px' }} fullWidth inputRef={nameInputRef} autoFocus label="Name" />
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setShowPrompt(false)}>Cancel</Button>
