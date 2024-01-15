@@ -1,119 +1,74 @@
 'use client';
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useSupabase } from '@/components/providers/SystemProvider';
 import { usePowerSync, usePowerSyncWatchedQuery } from '@journeyapps/powersync-react';
-import { Box, Container, Typography } from '@mui/material';
-import { useRouter } from 'next/navigation';
-import { v4 as uuidv4 } from 'uuid';
-import { b64ToUint8Array, Uint8ArrayTob64 } from '@/library/binary-utils';
+import {
+  Box,
+  Container,
+  Typography
+} from '@mui/material';
+import {
+  useEffect,
+  useMemo,
+  useState
+} from 'react';
 
-import * as Y from 'yjs';
+import MenuBar from '@/components/widgets/MenuBar';
+import { setupPowerSyncDoc } from '@/library/powersync/powersyncYjs';
 import Collaboration from '@tiptap/extension-collaboration';
 import Highlight from '@tiptap/extension-highlight';
 import TaskItem from '@tiptap/extension-task-item';
 import TaskList from '@tiptap/extension-task-list';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import MenuBar from '@/components/widgets/MenuBar';
+import * as Y from 'yjs';
 import './tiptap-styles.scss';
-
-const ydoc = new Y.Doc();
-let seenDocUpdates = new Set();
 
 export default function EditorPage({ params }: { params: { document_id: string } }) {
   const powerSync = usePowerSync();
-  const supabase = useSupabase();
-  const router = useRouter();
-
-  const [totalDocUpdates, setTotalDocUpdates] = useState(0);
-
-  const tipTapEventListenerSet = useRef(false);
+  const documentId = params.document_id;
 
   // cache the last edited document ID in local storage
-  const documentId = params.document_id;
   if (window.localStorage.getItem('lastDocumentId') != documentId) {
     window.localStorage.setItem('lastDocumentId', documentId);
   }
 
-  // watch for total number of document updates changing to update the counter
-  const docUpdatesCount = usePowerSyncWatchedQuery(
-    'SELECT COUNT(*) as total_updates FROM document_updates WHERE document_id=?',
-    [documentId]
-  );
+  const [totalDocUpdates, setTotalDocUpdates] = useState(0);
+
+  const ydoc = useMemo(() => {
+    return new Y.Doc();
+  }, [params.document_id]);
+
+  useEffect(() => {
+    return setupPowerSyncDoc(ydoc, powerSync, documentId);
+  }, [ydoc, powerSync]);
+
+  // watch for total number of document updates changing to update the counter 
+  const docUpdatesCount = usePowerSyncWatchedQuery('SELECT COUNT(*) as total_updates FROM document_updates WHERE document_id=?', [documentId]);
   useMemo(() => {
-    if (docUpdatesCount.length > 0) setTotalDocUpdates(docUpdatesCount[0].total_updates);
+    if (docUpdatesCount.length > 0)
+      setTotalDocUpdates(docUpdatesCount[0].total_updates);
   }, [docUpdatesCount]);
-
-  // watch the database for updates to the document
-  const docUpdatesQueryResult = usePowerSyncWatchedQuery('SELECT * FROM document_updates WHERE document_id = ?', [
-    documentId
-  ]);
-  const applyDocumentUpdates = async function () {
-    for (let update of docUpdatesQueryResult) {
-      if (!seenDocUpdates.has(update.id)) {
-        seenDocUpdates.add(update.id);
-        // apply the update from the database to the doc
-        Y.applyUpdateV2(ydoc, b64ToUint8Array(update.update_b64), 'db');
-      }
-    }
-  };
-  useEffect(() => {
-    applyDocumentUpdates();
-  }, [docUpdatesQueryResult]);
-
-  // listen for updates to the document and automatically persist them
-  useEffect(() => {
-    if (!tipTapEventListenerSet.current) {
-      ydoc.on('updateV2', async (update, origin) => {
-        if (origin == 'db') {
-          // update originated from the database / PowerSync - ignore
-          return;
-        }
-        // update originated from elsewhere - save to the database
-        const docUpdateId = uuidv4();
-        seenDocUpdates.add(docUpdateId);
-        await powerSync.execute('INSERT INTO document_updates(id, document_id, update_b64) VALUES(?, ?, ?)', [
-          docUpdateId,
-          documentId,
-          Uint8ArrayTob64(update)
-        ]);
-      });
-      tipTapEventListenerSet.current = true;
-    }
-  }, []);
 
   // tiptap editor setup
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
-        history: false
+        history: false,
       }),
       Highlight,
       TaskList,
       TaskItem,
       Collaboration.configure({
-        document: ydoc
+        document: ydoc,
       })
-    ]
-  });
+    ],
+  })
 
   return (
     <Container maxWidth="md" sx={{ mt: 5 }}>
       <Box>
         <h2>PowerSync Yjs CRDT Document Collaboration Demo</h2>
-        <p>
-          Edit text below and it will sync in to other users who have this page URL open in their browser. Conflicts are
-          automatically resolved using CRDTs. Powered by{' '}
-          <a href="https://github.com/yjs/yjs" target="_blank">
-            Yjs
-          </a>{' '}
-          and{' '}
-          <a href="https://tiptap.dev/" target="_blank">
-            Tiptap
-          </a>
-          .
-        </p>
+        <p>Edit text below and it will sync in to other users who have this page URL open in their browser. Conflicts are automatically resolved using CRDTs. Powered by <a href="https://github.com/yjs/yjs" target="_blank">Yjs</a> and <a href="https://tiptap.dev/" target="_blank">Tiptap</a>.</p>
       </Box>
       <div className="editor">
         {editor && <MenuBar editor={editor} />}
@@ -127,3 +82,4 @@ export default function EditorPage({ params }: { params: { document_id: string }
     </Container>
   );
 }
+
