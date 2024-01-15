@@ -1,5 +1,12 @@
 # @journeyapps/powersync-sdk-web
 
+## 0.1.2
+
+### Patch Changes
+
+- 7fb9df2: Fix bug where opening multiple WA-SQLite instances would erase DB table change watches.
+- 7fb9df2: Update common SDK dependency to v1.0.1: Improved connector CRUD uploads to be triggered whenever an internal CRUD operation change is triggered. Improved CRUD upload debouncing to rather use a throttled approach - executing multiple continuous write/CRUD operations will now trigger a connector upload at most (every) 1 second (by default).
+
 ## 0.1.1
 
 ### Patch Changes

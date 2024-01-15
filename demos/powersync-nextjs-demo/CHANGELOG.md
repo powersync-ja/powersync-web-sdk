@@ -1,5 +1,14 @@
 # @journeyapps/powersync-nextjs-demo
 
+## 0.1.6
+
+### Patch Changes
+
+- 7fb9df2: Autofocus inputs in creation dialogs for a better UX.
+- Updated dependencies [7fb9df2]
+- Updated dependencies [7fb9df2]
+  - @journeyapps/powersync-sdk-web@0.1.2
+
 ## 0.1.5
 
 ### Patch Changes
