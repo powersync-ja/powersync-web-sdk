@@ -41,7 +41,7 @@
     "@journeyapps/wa-sqlite": "~0.1.0"
   },
   "dependencies": {
-    "@journeyapps/powersync-sdk-common": "1.0.0",
+    "@journeyapps/powersync-sdk-common": "1.0.1",
     "async-mutex": "^0.4.0",
     "comlink": "^4.4.1",
     "js-logger": "^1.6.1",
