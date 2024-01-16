@@ -24,8 +24,6 @@ export type WASQLiteExecuteMethod = (sql: string, params?: any[]) => Promise<WAS
 export type OnTableChangeCallback = (opType: number, tableName: string, rowId: number) => void;
 export type OpenDB = (dbFileName: string) => DBWorkerInterface;
 
-const listeners = new Map<string, OnTableChangeCallback>();
-
 export async function _openDB(dbFileName: string): Promise<DBWorkerInterface> {
   const { default: moduleFactory } = await import('@journeyapps/wa-sqlite/dist/wa-sqlite-async.mjs');
   const module = await moduleFactory();
@@ -36,6 +34,11 @@ export async function _openDB(dbFileName: string): Promise<DBWorkerInterface> {
   sqlite3.vfs_register(vfs, true);
 
   const db = await sqlite3.open_v2(dbFileName);
+
+  /**
+   * Listeners are exclusive to the DB connection.
+   */
+  const listeners = new Map<string, OnTableChangeCallback>();
 
   sqlite3.register_table_onchange_hook(db, (opType: number, tableName: string, rowId: number) => {
     Array.from(listeners.values()).forEach((l) => l(opType, tableName, rowId));

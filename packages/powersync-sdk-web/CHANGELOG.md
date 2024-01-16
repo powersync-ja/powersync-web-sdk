@@ -1,5 +1,11 @@
 # @journeyapps/powersync-sdk-web
 
+## 0.1.3
+
+### Patch Changes
+
+- 412937f: Fixed watched queries not updating due to race condition when opening multiple WA-SQLite connections due to initiating multiple PowerSync instances simultaneously.
+
 ## 0.1.2
 
 ### Patch Changes
