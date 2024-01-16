@@ -1,16 +1,8 @@
 'use client';
 
 import { usePowerSync, usePowerSyncWatchedQuery } from '@journeyapps/powersync-react';
-import {
-  Box,
-  Container,
-  Typography
-} from '@mui/material';
-import {
-  useEffect,
-  useMemo,
-  useState
-} from 'react';
+import { Box, Container, Typography } from '@mui/material';
+import { useEffect, useMemo, useState } from 'react';
 
 import MenuBar from '@/components/widgets/MenuBar';
 import { PowerSyncYjsProvider } from '@/library/powersync/PowerSyncYjsProvider';
@@ -42,36 +34,49 @@ export default function EditorPage({ params }: { params: { document_id: string }
     const provider = new PowerSyncYjsProvider(ydoc, powerSync, documentId);
     return () => {
       provider.destroy();
-    }
+    };
   }, [ydoc, powerSync]);
 
-  // watch for total number of document updates changing to update the counter 
-  const docUpdatesCount = usePowerSyncWatchedQuery('SELECT COUNT(*) as total_updates FROM document_updates WHERE document_id=?', [documentId]);
+  // watch for total number of document updates changing to update the counter
+  const docUpdatesCount = usePowerSyncWatchedQuery(
+    'SELECT COUNT(*) as total_updates FROM document_updates WHERE document_id=?',
+    [documentId]
+  );
   useMemo(() => {
-    if (docUpdatesCount.length > 0)
-      setTotalDocUpdates(docUpdatesCount[0].total_updates);
+    if (docUpdatesCount.length > 0) setTotalDocUpdates(docUpdatesCount[0].total_updates);
   }, [docUpdatesCount]);
 
   // tiptap editor setup
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
-        history: false,
+        history: false
       }),
       Highlight,
       TaskList,
       TaskItem,
       Collaboration.configure({
-        document: ydoc,
+        document: ydoc
       })
-    ],
-  })
+    ]
+  });
 
   return (
     <Container maxWidth="md" sx={{ mt: 5 }}>
       <Box>
         <h2>PowerSync Yjs CRDT Document Collaboration Demo</h2>
-        <p>Edit text below and it will sync in to other users who have this page URL open in their browser. Conflicts are automatically resolved using CRDTs. Powered by <a href="https://github.com/yjs/yjs" target="_blank">Yjs</a> and <a href="https://tiptap.dev/" target="_blank">Tiptap</a>.</p>
+        <p>
+          Edit text below and it will sync in to other users who have this page URL open in their browser. Conflicts are
+          automatically resolved using CRDTs. Powered by{' '}
+          <a href="https://github.com/yjs/yjs" target="_blank">
+            Yjs
+          </a>{' '}
+          and{' '}
+          <a href="https://tiptap.dev/" target="_blank">
+            Tiptap
+          </a>
+          .
+        </p>
       </Box>
       <div className="editor">
         {editor && <MenuBar editor={editor} />}
@@ -85,4 +90,3 @@ export default function EditorPage({ params }: { params: { document_id: string }
     </Container>
   );
 }
-

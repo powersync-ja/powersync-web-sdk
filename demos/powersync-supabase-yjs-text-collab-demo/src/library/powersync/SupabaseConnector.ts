@@ -6,7 +6,14 @@ import {
   UpdateType
 } from '@journeyapps/powersync-sdk-web';
 
-import { SupabaseClient, createClient, PostgrestError, FunctionsHttpError, FunctionsRelayError, FunctionsFetchError } from '@supabase/supabase-js';
+import {
+  SupabaseClient,
+  createClient,
+  PostgrestError,
+  FunctionsHttpError,
+  FunctionsRelayError,
+  FunctionsFetchError
+} from '@supabase/supabase-js';
 
 export type SupabaseConfig = {
   supabaseUrl: string;

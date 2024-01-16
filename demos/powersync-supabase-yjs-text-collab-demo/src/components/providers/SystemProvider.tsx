@@ -15,13 +15,15 @@ export const useSupabase = () => React.useContext(SupabaseContext);
 
 export const SystemProvider = ({ children }: { children: React.ReactNode }) => {
   const [connector] = React.useState(new SupabaseConnector());
-  const [powerSync] = React.useState(new WASQLitePowerSyncDatabaseOpenFactory({
-    dbFilename: 'powersync2.db',
-    schema: AppSchema,
-    flags: {
-      disableSSRWarning: true
-    }
-  }).getInstance());
+  const [powerSync] = React.useState(
+    new WASQLitePowerSyncDatabaseOpenFactory({
+      dbFilename: 'powersync2.db',
+      schema: AppSchema,
+      flags: {
+        disableSSRWarning: true
+      }
+    }).getInstance()
+  );
 
   const router = useRouter();
 

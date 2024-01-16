@@ -15,8 +15,6 @@ export const AppSchema = new Schema([
       new Column({ name: 'document_id', type: ColumnType.TEXT }),
       new Column({ name: 'update_b64', type: ColumnType.TEXT })
     ],
-    indexes: [
-      new Index({ name: 'by_document', columns: [new IndexedColumn({name: 'document_id'})]})
-    ]
+    indexes: [new Index({ name: 'by_document', columns: [new IndexedColumn({ name: 'document_id' })] })]
   })
 ]);
