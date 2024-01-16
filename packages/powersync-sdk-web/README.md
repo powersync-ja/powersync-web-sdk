@@ -132,4 +132,4 @@ PowerSync = new WASQLitePowerSyncDatabaseOpenFactory({
 
 ## Demo Apps
 
-See our [NextJS Demo App](https://github.com/powersync-ja/powersync-web-sdk/tree/main/demos/powersync-nextjs-demo) for how to use this SDK with NextJS and Supabase. 
+See the [list of demo apps](https://github.com/powersync-ja/powersync-web-sdk/?tab=readme-ov-file#demos) in the repo README.
