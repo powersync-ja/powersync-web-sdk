@@ -10,7 +10,7 @@
     "ci:publish": "changeset publish && git push --follow-tags",
     "clean": "pnpm run -r clean",
     "watch": "pnpm run --parallel  watch",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx}\" --ignore-path .gitignore  --ignore-path ./demos/powersync-nextjs-demo/.gitignore"
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx}\" --ignore-path .gitignore  --ignore-path ./demos/powersync-nextjs-demo/.gitignore --ignore-path ./demos/powersync-supabase-yjs-text-collab-demo/.gitignore"
   },
   "keywords": [],
   "author": "JOURNEYAPPS",

@@ -8,7 +8,8 @@ This monorepo contains the packages for PowerSync's Web SDK.
 
 Demo applications are located in the `/demos/` directory.
 
- - [demos/powersync-nextjs-demo](./demos/powersync-nextjs-demo/README.md): A NextJS 14 Todo list application.
+ - [demos/powersync-nextjs-demo](./demos/powersync-nextjs-demo/README.md): A Next.js 14 to-do list example application.
+ - [demos/powersync-supabase-yjs-text-collab-demo](./demos/powersync-supabase-yjs-text-collab-demo/README.md): A Next.js real-time text editing collaboration example app powered by [Yjs]((https://github.com/yjs/yjs)) CRDTs and [Tiptap](https://tiptap.dev/).
  - [demos/example-webpack](./demos/example-webpack/README.md) contains a minimal example demonstrating bundling with Webpack.
  - [demos/example-vite](./demos/example-vite/README.md) contains a minimal example demonstrating bundling with Vite.
 
