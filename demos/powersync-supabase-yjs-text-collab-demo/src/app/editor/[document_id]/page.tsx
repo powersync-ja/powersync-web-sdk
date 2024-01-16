@@ -13,7 +13,7 @@ import {
 } from 'react';
 
 import MenuBar from '@/components/widgets/MenuBar';
-import { setupPowerSyncDoc } from '@/library/powersync/powersyncYjs';
+import { PowerSyncYjsProvider } from '@/library/powersync/PowerSyncYjsProvider';
 import Collaboration from '@tiptap/extension-collaboration';
 import Highlight from '@tiptap/extension-highlight';
 import TaskItem from '@tiptap/extension-task-item';
@@ -39,7 +39,10 @@ export default function EditorPage({ params }: { params: { document_id: string }
   }, [params.document_id]);
 
   useEffect(() => {
-    return setupPowerSyncDoc(ydoc, powerSync, documentId);
+    const provider = new PowerSyncYjsProvider(ydoc, powerSync, documentId);
+    return () => {
+      provider.destroy();
+    }
   }, [ydoc, powerSync]);
 
   // watch for total number of document updates changing to update the counter 

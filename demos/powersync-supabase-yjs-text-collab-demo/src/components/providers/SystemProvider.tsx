@@ -13,17 +13,15 @@ import { CircularProgress } from '@mui/material';
 const SupabaseContext = React.createContext<SupabaseConnector | null>(null);
 export const useSupabase = () => React.useContext(SupabaseContext);
 
-const powersync = new WASQLitePowerSyncDatabaseOpenFactory({
-  dbFilename: 'powersync2.db',
-  schema: AppSchema,
-  flags: {
-    disableSSRWarning: true
-  }
-}).getInstance();
-
 export const SystemProvider = ({ children }: { children: React.ReactNode }) => {
   const [connector] = React.useState(new SupabaseConnector());
-  const [powerSync] = React.useState(powersync);
+  const [powerSync] = React.useState(new WASQLitePowerSyncDatabaseOpenFactory({
+    dbFilename: 'powersync2.db',
+    schema: AppSchema,
+    flags: {
+      disableSSRWarning: true
+    }
+  }).getInstance());
 
   const router = useRouter();
 
