@@ -15,6 +15,7 @@ In the repo directory, use [pnpm](https://pnpm.io/installation) to install depen
 
 ```bash
 pnpm install
+pnpm build:packages
 ```
 
 
@@ -113,7 +114,7 @@ To try out the collaborative editing, copy and paste the URL of the page and ope
 
 ### (Optional) Supabase edge function for merging document updates
 
-The more edits are made to a document, the longer the Yjs CRDT updates history becomes. There is currently a very basic edge function available to merge updates into a single update row.
+The more edits are made to a document, the longer the Yjs CRDT update history becomes. There is currently a [very basic edge function](supabase/functions/merge-document-updates/index.ts) available to merge updates into a single update row.
 
 You can deploy it using the following command:
 
@@ -135,13 +136,16 @@ Note that this is not a production-grade implementation of merging updates – t
 ## Demo App Roadmap
 
 To-do
-- [ ] Add user sessions. For ease of demoing, still allow anonymously signing in, but keep track of session data so that each user has a unique `user_id` which we can associate with edits to the document.
+- [ ] Add user sessions. For ease of demoing, still allow anonymously signing in (perhaps using [this Supabase workaround](https://github.com/supabase/gotrue/issues/68)), but keep track of session data so that each user has a unique `user_id` which we can associate with edits to the document.
 - [ ] Improve sync rules: Use a many-to-many relationship between users and documents, so that all documents and their updates are not synced to all users. Dependent on user sessions.
+- [ ] Add suggested RLS rules for Supabase. Dependent on user sessions.
 - [ ] Add live cursor support; allow user to set their name,  prepopulate with auto-generated name if none set. Dependent on user sessions.
 - [ ] Show PowerSync connection status; allow user to toggle offline/online for testing purposes
 - [ ] Add button to the UI allowing the user to merge the Yjs edits i.e. `document_update` rows. Invoke `merge-document-updates` edge function in Supabase.
 - [ ] Prepopulate sample text into newly created documents.
-- [ ] Improve performance / rework inefficient parts of implementation: Optimize the 'seen updates' approach to filter the `SELECT` query for updates that have not yet been seen — perhaps based on `created_at` timestamp generated on the Postgres side. For the watch query — watch for certain tables instead of watching a query. This will allow querying `document_updates` with a dynamic parameter.
+- [ ] Improve performance / rework inefficient parts of implementation:
+    - [ ] Optimize the 'seen updates' approach to filter the `SELECT` query for updates that have not yet been seen — perhaps based on `created_at` timestamp generated on the Postgres side. For the watch query — watch for certain tables instead of watching a query. This will allow querying `document_updates` with a dynamic parameter.
+    - [ ] Flush 'seen updates' when `document_updates` are merged.
 
 Done 
 - [x] Show number of edits (rows in `document_updates`) on the document 
