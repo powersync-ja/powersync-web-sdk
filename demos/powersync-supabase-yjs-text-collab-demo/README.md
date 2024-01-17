@@ -15,6 +15,7 @@ In the repo directory, use [pnpm](https://pnpm.io/installation) to install depen
 
 ```bash
 pnpm install
+pnpm build:packages
 ```
 
 
