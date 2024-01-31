@@ -58,7 +58,7 @@ Then, in the [PowerSync dashboard](https://powersync.journeyapps.com/), create a
 2. Pick a name for the instance e.g. "Yjs Demo Test" and proceed.
 3. In the "Edit Instance" dialog that follows, click on the "Connections" tab.
 4. Click on the "+" button to create a new database connection.
-5. Input the credentials from the project you created in Supabase. In the Supabase dashboard, under your project you can go to "Project Settings" and then "Database" and choose "URI" under "Connection string" and then copy & paste the connection string into the PowerSync dashboard "URI" field, and then enter your database password at the "Password" field. 
+5. Input the credentials from the project you created in Supabase. In the Supabase dashboard, under your project you can go to "Project Settings" and then "Database" and choose "URI" under "Connection string", untick the "Use connection pooling" option, and then copy & paste the connection string into the PowerSync dashboard "URI" field, and then enter your database password at the "Password" field. 
 6. Click the "Test connection" button and you should see "Connection success!"
 7. Click on the "Credentials" tab of the "Edit Instance" dialog.
 8. Tick the "Use Supabase Auth" checkbox
