@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  '@journeyapps/wa-sqlite': link:../wa-sqlite
+
 importers:
 
   .:
@@ -62,14 +65,14 @@ importers:
         specifier: ^5.0.8
         version: 5.0.8
       '@journeyapps/powersync-react':
-        specifier: 1.0.1
-        version: 1.0.1(react@18.0.0)
+        specifier: 1.0.3
+        version: 1.0.3(react@18.0.0)
       '@journeyapps/powersync-sdk-web':
         specifier: workspace:*
         version: link:../../packages/powersync-sdk-web
       '@journeyapps/wa-sqlite':
-        specifier: ~0.1.0
-        version: 0.1.0
+        specifier: link:../../../wa-sqlite
+        version: link:../../../wa-sqlite
       '@mui/icons-material':
         specifier: ^5.14.16
         version: 5.14.16(@mui/material@5.14.16)(@types/react@18.0.0)(react@18.0.0)
@@ -147,14 +150,14 @@ importers:
         specifier: ^5.0.8
         version: 5.0.8
       '@journeyapps/powersync-react':
-        specifier: ^1.0.1
-        version: 1.0.1(react@18.0.0)
+        specifier: 1.0.3
+        version: 1.0.3(react@18.0.0)
       '@journeyapps/powersync-sdk-web':
         specifier: workspace:*
         version: link:../../packages/powersync-sdk-web
       '@journeyapps/wa-sqlite':
-        specifier: ~0.1.0
-        version: 0.1.0
+        specifier: link:../../../wa-sqlite
+        version: link:../../../wa-sqlite
       '@lexical/react':
         specifier: ^0.11.1
         version: 0.11.3(lexical@0.11.3)(react-dom@18.0.0)(react@18.0.0)(yjs@13.6.10)
@@ -304,8 +307,8 @@ importers:
   packages/powersync-sdk-web:
     dependencies:
       '@journeyapps/powersync-sdk-common':
-        specifier: 1.0.1
-        version: 1.0.1
+        specifier: 1.2.0
+        version: 1.2.0
       async-mutex:
         specifier: ^0.4.0
         version: 0.4.0
@@ -323,8 +326,8 @@ importers:
         version: 9.0.1
     devDependencies:
       '@journeyapps/wa-sqlite':
-        specifier: ~0.1.0
-        version: 0.1.0
+        specifier: link:../../../wa-sqlite
+        version: link:../../../wa-sqlite
       '@types/lodash':
         specifier: ^4.14.200
         version: 4.14.200
@@ -2113,17 +2116,17 @@ packages:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
     dev: true
 
-  /@journeyapps/powersync-react@1.0.1(react@18.0.0):
-    resolution: {integrity: sha512-0DCF4C2OijDnxT03dEsrnP2Qhn4k/XwOzdQeLJR7aPS6vr3TTbn//TFSPO8caJmWfZnh3a65uSVlXOvodfpfXQ==}
+  /@journeyapps/powersync-react@1.0.3(react@18.0.0):
+    resolution: {integrity: sha512-hTpeQ6TvqiqvC6RVqa7fwhhE1xtanxMu8InWPf0uL7nR7b5GNdvpIcs38V99j7k0oWEFP+mnc0i/OeMY2Lx3MQ==}
     peerDependencies:
       react: '*'
     dependencies:
-      '@journeyapps/powersync-sdk-common': 1.0.1
+      '@journeyapps/powersync-sdk-common': 1.2.0
       react: 18.0.0
     dev: false
 
-  /@journeyapps/powersync-sdk-common@1.0.1:
-    resolution: {integrity: sha512-MTAAHyL3jbvknXBuroDheoNDvyntH1Wt/HPLopnaFupg13eJRx/1vvAPd5KRmMwpPpGL+j7P5zMJ+YgvRYIXzw==}
+  /@journeyapps/powersync-sdk-common@1.2.0:
+    resolution: {integrity: sha512-R6gkDXMCMLh8T8xvgcCxt4/djMYfjL4r1opmrUVFTxk/Kbs/P3nqinlcF6sE8ZEYtv+UZoc168hA6NDpJp47xA==}
     dependencies:
       async-mutex: 0.4.0
       can-ndjson-stream: 1.0.2
@@ -2133,9 +2136,6 @@ packages:
       object-hash: 3.0.0
       uuid: 3.4.0
     dev: false
-
-  /@journeyapps/wa-sqlite@0.1.0:
-    resolution: {integrity: sha512-XvSNX6eDBoQZGnyolL41lHOp1f9bBcPcp9wt+qfww6ea1kg5B/DUiNtzBMSXVeABcvJv+SigHRy/+JTY222gSg==}
 
   /@jridgewell/gen-mapping@0.3.3:
     resolution: {integrity: sha512-HLhSWOLRi875zjjMG/r+Nv0oCW8umGb0BgEhyX3dDX3egwZtB8PqLnjz3yedt8R5StBrzcg4aBpnh8UA9D1BoQ==}

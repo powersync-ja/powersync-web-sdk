@@ -6,13 +6,7 @@ import {
   LockType
 } from '@journeyapps/powersync-sdk-common';
 
-export interface WebStreamingSyncImplementationOptions extends AbstractStreamingSyncImplementationOptions {
-  /**
-   * An identifier for which PowerSync DB this sync implementation is
-   * linked to. Most commonly DB name, but not restricted to DB name.
-   */
-  workerIdentifier: string;
-}
+export interface WebStreamingSyncImplementationOptions extends AbstractStreamingSyncImplementationOptions {}
 
 export class WebStreamingSyncImplementation extends AbstractStreamingSyncImplementation {
   constructor(options: WebStreamingSyncImplementationOptions) {
@@ -25,7 +19,7 @@ export class WebStreamingSyncImplementation extends AbstractStreamingSyncImpleme
   }
 
   obtainLock<T>(lockOptions: LockOptions<T>): Promise<T> {
-    const identifier = `streaming-sync-${lockOptions.type}-${this.webOptions.workerIdentifier}`;
+    const identifier = `streaming-sync-${lockOptions.type}-${this.webOptions.identifier}`;
     lockOptions.type == LockType.SYNC && console.debug('requesting lock for ', identifier);
     return navigator.locks.request(identifier, { signal: lockOptions.signal }, lockOptions.callback);
   }
