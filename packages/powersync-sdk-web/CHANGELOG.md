@@ -1,5 +1,11 @@
 # @journeyapps/powersync-sdk-web
 
+## 0.2.0
+
+### Minor Changes
+
+- d20386c: Updated common SDK. Changes https://github.com/powersync-ja/powersync-react-native-sdk/pull/46
+
 ## 0.1.3
 
 ### Patch Changes
