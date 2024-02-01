@@ -4,9 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  '@journeyapps/wa-sqlite': link:../wa-sqlite
-
 importers:
 
   .:
@@ -71,8 +68,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/powersync-sdk-web
       '@journeyapps/wa-sqlite':
-        specifier: link:../../../wa-sqlite
-        version: link:../../../wa-sqlite
+        specifier: ~0.1.1
+        version: 0.1.1
       '@mui/icons-material':
         specifier: ^5.14.16
         version: 5.14.16(@mui/material@5.14.16)(@types/react@18.0.0)(react@18.0.0)
@@ -156,8 +153,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/powersync-sdk-web
       '@journeyapps/wa-sqlite':
-        specifier: link:../../../wa-sqlite
-        version: link:../../../wa-sqlite
+        specifier: ~0.1.1
+        version: 0.1.1
       '@lexical/react':
         specifier: ^0.11.1
         version: 0.11.3(lexical@0.11.3)(react-dom@18.0.0)(react@18.0.0)(yjs@13.6.10)
@@ -326,8 +323,8 @@ importers:
         version: 9.0.1
     devDependencies:
       '@journeyapps/wa-sqlite':
-        specifier: link:../../../wa-sqlite
-        version: link:../../../wa-sqlite
+        specifier: ~0.1.1
+        version: 0.1.1
       '@types/lodash':
         specifier: ^4.14.200
         version: 4.14.200
@@ -2136,6 +2133,9 @@ packages:
       object-hash: 3.0.0
       uuid: 3.4.0
     dev: false
+
+  /@journeyapps/wa-sqlite@0.1.1:
+    resolution: {integrity: sha512-cLPddbJYBpzII7ZBAA4fNKW2yLf3H03cGrz+JteXCfSjzxbYhnflAGD8WjefmeLXQUr2vcOYm3SgC82LJYZyzQ==}
 
   /@jridgewell/gen-mapping@0.3.3:
     resolution: {integrity: sha512-HLhSWOLRi875zjjMG/r+Nv0oCW8umGb0BgEhyX3dDX3egwZtB8PqLnjz3yedt8R5StBrzcg4aBpnh8UA9D1BoQ==}
