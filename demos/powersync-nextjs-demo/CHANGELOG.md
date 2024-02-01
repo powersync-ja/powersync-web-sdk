@@ -1,5 +1,12 @@
 # @journeyapps/powersync-nextjs-demo
 
+## 0.1.8
+
+### Patch Changes
+
+- Updated dependencies [d20386c]
+  - @journeyapps/powersync-sdk-web@0.2.0
+
 ## 0.1.7
 
 ### Patch Changes
