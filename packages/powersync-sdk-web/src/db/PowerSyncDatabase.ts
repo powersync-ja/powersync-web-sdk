@@ -55,7 +55,7 @@ export class PowerSyncDatabase extends AbstractPowerSyncDatabase {
         await this.waitForReady();
         await connector.uploadData(this);
       },
-      workerIdentifier: this.options.database.name
+      identifier: this.options.database.name
     };
 
     const { flags } = this.options;

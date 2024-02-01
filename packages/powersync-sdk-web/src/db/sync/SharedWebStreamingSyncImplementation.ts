@@ -26,7 +26,7 @@ export class SharedWebStreamingSyncImplementation extends WebStreamingSyncImplem
     this.syncTabId = uuid();
     const worker = new SharedWorker(new URL('../../worker/sync/SharedSyncImplementation.worker.js', import.meta.url), {
       /* @vite-ignore */
-      name: `shared-sync-${this.webOptions.workerIdentifier}`,
+      name: `shared-sync-${this.webOptions.identifier}`,
       type: 'module'
     });
 
